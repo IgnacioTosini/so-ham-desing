@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import type { AccessoryType } from "@/generated/prisma/enums";
+import type { AccessoryType } from "@prisma/client";
 import { uploadBase64ImageToCloudinary } from "@/lib/services/cloudinary.service";
 import { deleteProjectImagesFromCloudinary, uploadImages } from "@/lib/services";
 
