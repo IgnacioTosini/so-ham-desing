@@ -14,8 +14,8 @@ interface CreateYourPieceProps {
 
 export const CreateYourPiece = ({ stones }: CreateYourPieceProps) => {
   const [selectedPiece, setSelectedPiece] = useState<PieceType>('BRACELET');
-  const [selectedStoneIds, setSelectedStoneIds] = useState<string[]>([stones[0].id]);
-  const [selectedStoneNames, setSelectedStoneNames] = useState<string[]>([stones[0].name]);
+  const [selectedStoneIds, setSelectedStoneIds] = useState<string[]>(stones[0] ? [stones[0].id] : []);
+  const [selectedStoneNames, setSelectedStoneNames] = useState<string[]>(stones[0] ? [stones[0].name] : []);
 
   const toggleStoneSelection = (stoneId: string) => {
     setSelectedStoneIds((currentSelectedStoneIds) =>
