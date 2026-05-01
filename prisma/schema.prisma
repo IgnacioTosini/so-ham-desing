@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccessoryType {
+  BRACELET
+  NECKLACE
+}
+
+model Stone {
+  id          String @id @default(uuid())
+  name        String // "Amatista"
+  description String // "Calma mental, intuición y protección espiritual."
+  imageUrl    String
+
+  // opcional pero útil a futuro
+  energyTags String[] // ["calma", "protección", "intuición"]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relación con productos armados
+  products ProductStone[]
+  images   StoneImage[]
+}
+
+model Product {
+  id          String  @id @default(uuid())
+  name        String // "Claridad"
+  description String? // opcional si querés agregar más adelante
+  price       Int // 13000 (en pesos, sin formato)
+  imageUrl    String
+
+  type AccessoryType // BRACELET o NECKLACE
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relación con piedras
+  stones ProductStone[]
+  images ProductImage[]
+}
+
+model ProductStone {
+  id String @id @default(uuid())
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  stone   Stone  @relation(fields: [stoneId], references: [id])
+  stoneId String
+
+  @@unique([productId, stoneId])
+}
+
+model Image {
+  id    String  @id @default(cuid())
+  url   String
+  alt   String?
+  order Int     @default(0)
+
+  stones   StoneImage[]
+  products ProductImage[]
+}
+
+model StoneImage {
+  id String @id @default(uuid())
+
+  stone   Stone  @relation(fields: [stoneId], references: [id], onDelete: Cascade)
+  stoneId String
+
+  image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  imageId String
+
+  @@unique([stoneId, imageId])
+  @@index([stoneId])
+  @@index([imageId])
+}
+
+model ProductImage {
+  id String @id @default(uuid())
+
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+
+  image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  imageId String
+
+  @@unique([productId, imageId])
+  @@index([productId])
+  @@index([imageId])
+}

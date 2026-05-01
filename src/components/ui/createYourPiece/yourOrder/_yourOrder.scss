@@ -1,0 +1,100 @@
+@use '@/styles/variables' as *;
+
+.yourOrder {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: $color-primary;
+    padding: 1rem;
+    width: 100%;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .yourOrderContainerHeader {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: .5rem;
+
+        .yourOrderTitle {
+            font-family: $font-family-primary;
+            font-size: $font-size-xsmall;
+            font-weight: $font-weight-regular;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .selectedPiece {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            .piece {
+                font-family: $font-family-secondary;
+                font-size: $font-size-large;
+                font-weight: $font-weight-regular;
+                line-height: 28px;
+                text-align: center;
+            }
+
+            .selectedStones {
+                display: flex;
+                gap: 0.5rem;
+
+                @media (max-width: 768px) {
+                    gap: 0.25rem;
+                    overflow-x: auto;
+                    max-width: 200px;
+                }
+
+                .stone {
+                    display: flex;
+                    align-items: center;
+                    text-align: center;
+                    font-family: $font-family-primary;
+                    font-size: $font-size-small;
+                    font-weight: $font-weight-regular;
+                    background-color: $color-button-secondary;
+                    padding: 0.25rem 0.5rem;
+                    border-radius: $radius-xl;
+                }
+            }
+        }
+    }
+
+    .yourOrderButton {
+        display: flex;
+        align-items: center;
+        align-self: center;
+        justify-content: center;
+        text-decoration: none;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 1.25rem;
+        line-height: 1;
+        background-color: $color-accent;
+        color: $color-text-primary;
+        border: none;
+        border-radius: $radius-2xl;
+        cursor: pointer;
+        letter-spacing: .2em;
+        text-transform: uppercase;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        font-weight: $font-weight-regular;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: $color-hover-primary;
+        }
+
+        @media (max-width: 768px) {
+            font-size: $font-size-xsmall;
+        }
+    }
+}

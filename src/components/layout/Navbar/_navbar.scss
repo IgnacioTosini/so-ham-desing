@@ -1,0 +1,55 @@
+@use '@/styles/variables' as *;
+
+.navbar {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background-color: $color-secondary;
+    opacity: 0.95;
+    backdrop-filter: blur(100px);
+    z-index: 1000;
+
+    .navbarLinks {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+
+        .navbarLink {
+            position: relative;
+            font-family: $font-family-primary;
+            font-size: $font-size-small;
+            font-weight: $font-weight-regular;
+            color: $color-text-secondary;
+            text-decoration: none;
+            transition: color 0.3s;
+            line-height: 20px;
+
+            &:hover {
+                color: $color-hover-primary;
+            }
+
+            &:hover::after,
+            &.active::after {
+                transform: scaleX(1);
+            }
+
+            &.active {
+                color: $color-hover-primary;
+            }
+        }
+    }
+
+    .navbarTitle {
+        font-family: $font-family-secondary;
+        font-size: $font-size-small;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: $font-weight-bold;
+        color: $color-text-primary;
+    }
+}

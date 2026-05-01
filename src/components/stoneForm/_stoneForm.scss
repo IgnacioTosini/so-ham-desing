@@ -1,0 +1,163 @@
+@use '@/styles/variables' as *;
+
+.stoneForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: min(100%, 640px);
+    background-color: $color-secondary;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-card;
+    padding: 1.5rem;
+
+    .stoneFormField {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        .stoneDropzone {
+            width: 100%;
+            border: 1px dashed rgba($color-text-secondary, 0.35);
+            background-color: rgba($color-accent, 0.3);
+            border-radius: $radius-xl;
+            min-height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+
+            &.active {
+                border-color: $color-text-tertiary;
+                background-color: rgba($color-accent, 0.45);
+            }
+
+            p {
+                margin: 0;
+                text-align: center;
+                color: $color-text-secondary;
+                font-family: $font-family-primary;
+                font-size: $font-size-normal;
+            }
+
+            .stoneDropzonePreview {
+                width: 100%;
+                max-height: 260px;
+                object-fit: cover;
+                border-radius: calc($radius-xl - 4px);
+            }
+        }
+
+        .stoneFileInput {
+            display: none;
+        }
+
+        .stoneClearImageButton {
+            border: none;
+            border-radius: $radius-xl;
+            background-color: $color-button-secondary;
+            color: $color-text-primary;
+            font-family: $font-family-primary;
+            font-size: $font-size-small;
+            padding: 0.5rem 0.75rem;
+            width: fit-content;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $color-hover-primary;
+            }
+        }
+
+        label {
+            color: $color-text-primary;
+            font-family: $font-family-secondary;
+            font-size: $font-size-medium;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: 1px solid rgba($color-text-secondary, 0.25);
+            background-color: rgba($color-accent, 0.45);
+            color: $color-text-primary;
+            border-radius: $radius-xl;
+            padding: 0.75rem 1rem;
+            font-family: $font-family-primary;
+            font-size: $font-size-normal;
+            outline: none;
+
+            &:focus {
+                border-color: $color-text-tertiary;
+            }
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        small {
+            color: $color-text-secondary;
+            font-size: $font-size-small;
+            font-family: $font-family-primary;
+        }
+    }
+
+    .stoneFormError {
+        margin: 0;
+        color: $color-error;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+    }
+
+    .stoneFormActions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+
+        .stoneFormButton {
+            border: none;
+            border-radius: $radius-xl;
+            text-decoration: none;
+            font-family: $font-family-primary;
+            font-size: $font-size-normal;
+            cursor: pointer;
+            padding: 0.65rem 1rem;
+            transition: background-color 0.2s ease, opacity 0.2s ease;
+
+            &.secondary {
+                background-color: $color-button-secondary;
+                color: $color-text-primary;
+            }
+
+            &.primary {
+                background-color: $color-button;
+                color: $color-text-primary;
+            }
+
+            &:hover {
+                background-color: $color-hover-primary;
+            }
+
+            &:disabled {
+                cursor: not-allowed;
+                opacity: 0.65;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+
+        .stoneFormActions {
+            flex-direction: column-reverse;
+
+            .stoneFormButton {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    }
+}

@@ -1,0 +1,56 @@
+@use '@/styles/variables' as *;
+
+.aboutBrand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    background: $color-accent;
+    color: $color-text-primary;
+    padding: 4rem 1rem;
+    margin: 0 auto;
+    min-height: 50dvh;
+
+    @media (max-width: 768px) {
+        .titleContainer {
+            align-items: center;
+
+            .subTitle {
+                text-align: center;
+            }
+        }
+    }
+
+    .aboutBrandContent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        max-width: 1200px;
+        gap: 3rem;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .aboutBrandTextContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+
+            .aboutBrandText {
+                font-size: $font-size-normal;
+                line-height: 1.5;
+                color: $color-text-primary;
+                font-family: $font-family-primary;
+
+                &.accent {
+                    font-style: italic;
+                    color: $color-text-tertiary;
+                }
+            }
+        }
+    }
+}

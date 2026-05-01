@@ -1,0 +1,151 @@
+@use '@/styles/variables' as *;
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: $color-secondary;
+    color: $color-text-secondary;
+    text-align: center;
+    padding: 2rem 1rem;
+    border-top: 1px solid $color-border;
+
+    .footerContent {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+        max-width: 1200px;
+
+        @media (max-width: 768px) {
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .footerTitle {
+            font-family: $font-family-secondary;
+            font-size: $font-size-medium;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: $font-weight-regular;
+            color: $color-text-primary;
+        }
+
+        .footerContentInfo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            font-family: $font-family-primary;
+            font-size: $font-size-small;
+
+            p {
+                margin-top: 1rem;
+                font-size: $font-size-small;
+                color: $color-text-secondary;
+                font-family: $font-family-primary;
+            }
+
+            @media (max-width: 768px) {
+                align-items: center;
+            }
+        }
+
+        .footerContentInfoLinks {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: $font-family-primary;
+            font-size: $font-size-small;
+
+            a {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: $color-text-secondary;
+                text-decoration: none;
+                font-size: $font-size-xsmall;
+                font-weight: $font-weight-regular;
+                transition: all .3s ease;
+                letter-spacing: .2em;
+                text-transform: uppercase;
+
+                &:hover {
+                    color: $color-hover-primary;
+                }
+
+                svg {
+                    font-size: $font-size-large;
+                    color: $color-hover-primary;
+                    transition: all .3s ease;
+
+                    &:hover {
+                        color: $color-button;
+                    }
+                }
+            }
+
+            .instagram {
+                &:hover {
+                    color: $color-instagram;
+
+                    svg {
+                        color: $color-instagram;
+                    }
+                }
+            }
+
+            .whatsapp {
+                &:hover {
+                    color: $color-whatsapp;
+
+                    svg {
+                        color: $color-whatsapp;
+                    }
+                }
+            }
+
+            .tiktok {
+                &:hover {
+                    color: $color-tiktok;
+
+                    svg {
+                        color: $color-tiktok;
+                    }
+                }
+            }
+        }
+    }
+
+    .footerContentFooter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin: 2rem 0;
+
+        .city {
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            font-family: $font-family-primary;
+            font-size: $font-size-xsmall;
+            color: $color-text-secondary;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: $font-size-medium;
+            font-weight: $font-weight-regular;
+            font-family: $font-family-secondary;
+            line-height: 28px;
+        }
+
+        .creator {
+            font-family: $font-family-primary;
+            font-size: $font-size-xsmall;
+            color: $color-text-secondary;
+        }
+    }
+}

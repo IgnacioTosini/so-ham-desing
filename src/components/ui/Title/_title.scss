@@ -1,0 +1,29 @@
+@use '@/styles/variables' as *;
+
+.titleContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    margin-top: 2rem;
+    gap: .5rem;
+    width: 100%;
+
+    .title {
+        font-family: $font-family-primary;
+        font-size: clamp($font-size-small, 2.5vw, $font-size-normal);
+        color: $color-text-secondary;
+        line-height: 20px;
+        text-transform: uppercase;
+        letter-spacing: .25em;
+    }
+
+    .subTitle {
+        font-size: clamp($font-size-xlarge, 4vw, $font-size-xxlarge);
+        text-wrap: balance;
+        font-family: $font-family-secondary;
+        font-weight: $font-weight-regular;
+        letter-spacing: -.01em;
+        max-width: 880px;
+    }
+}

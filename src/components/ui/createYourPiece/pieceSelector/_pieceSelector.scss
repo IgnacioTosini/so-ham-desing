@@ -1,0 +1,41 @@
+@use '@/styles/variables' as *;
+
+.pieceSelector {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem;
+    border-radius: $radius-2xl;
+
+    .selectorButton {
+        appearance: none;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: transparent;
+        color: $color-text-primary;
+        padding: 0.9rem 1.5rem;
+        min-width: 8rem;
+        border-radius: $radius-2xl;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        font-weight: $font-weight-medium;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+        }
+
+        &.isActive {
+            background: $color-button;
+            border-color: $color-text-primary;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+        }
+    }
+}

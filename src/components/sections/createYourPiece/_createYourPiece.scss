@@ -1,0 +1,53 @@
+@use '@/styles/variables' as *;
+
+.createYourPiece {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    background: $color-secondary;
+    color: $color-text-primary;
+    padding: 4rem 1rem;
+    margin: 0 auto;
+    min-height: 100dvh;
+
+    .createYourPieceContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2rem;
+        width: 100%;
+        max-width: 72rem;
+
+        .description {
+            color: $color-text-secondary;
+            font-family: $font-family-primary;
+            font-size: clamp($font-size-normal, 2vw, $font-size-medium);
+            line-height: 1.7;
+        }
+
+        .stoneList {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .createYourPiece {
+        padding: 4rem 1rem;
+
+        .pieceSelector {
+            width: 100%;
+        }
+
+        .selectorButton {
+            flex: 1;
+            min-width: 0;
+            letter-spacing: 0.18em;
+            padding-inline: 1rem;
+        }
+    }
+}

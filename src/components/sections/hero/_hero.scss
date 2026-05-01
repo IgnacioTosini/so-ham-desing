@@ -1,0 +1,116 @@
+@use '@/styles/variables' as *;
+@use 'sass:color';
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('/heroImage.jpg');
+    min-height: 100dvh;
+    background-size: cover;
+    background-position: center;
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .heroContent {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        max-width: 950px;
+        z-index: 1;
+        padding: 2rem;
+
+        .heroSpan {
+            margin-bottom: 0.5rem;
+            color: $color-text-secondary;
+            font-size: $font-size-xsmall;
+            font-family: $font-family-primary;
+            font-weight: $font-weight-medium;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .heroTitle {
+            margin-bottom: 1rem;
+            color: $color-text-primary;
+            font-size: clamp($font-size-xlarge, 5vw, $font-size-xxxlarge);
+            font-family: $font-family-secondary;
+            font-weight: $font-weight-regular;
+            text-align: center;
+        }
+
+        .heroSubtitle {
+            margin-bottom: 1.5rem;
+            color: $color-text-primary;
+            font-size: clamp($font-size-medium, 3vw, $font-size-xlarge);
+            font-family: $font-family-primary;
+            font-weight: $font-weight-regular;
+            text-align: center;
+        }
+
+        .heroDescription {
+            margin-bottom: 2rem;
+            color: $color-text-secondary;
+            font-size: clamp($font-size-normal, 2.5vw, $font-size-medium);
+            font-family: $font-family-primary;
+            font-weight: $font-weight-regular;
+            text-align: center;
+        }
+
+        .buttonsContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+
+            .primaryButton,
+            .secondaryButton {
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                border-radius: $radius-2xl;
+                transition: background-color 0.3s ease;
+                padding: 1rem 1.75rem;
+            }
+
+            .primaryButton {
+                background-color: $color-primary;
+                color: #fff;
+                font-size: $font-size-small;
+                font-family: $font-family-primary;
+                font-weight: $font-weight-medium;
+                border: none;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: color.scale($color-primary, $lightness: -20%);
+                }
+            }
+
+            .secondaryButton {
+                background-color: transparent;
+                color: $color-text-primary;
+                font-size: $font-size-small;
+                font-family: $font-family-primary;
+                font-weight: $font-weight-medium;
+                border: 2px solid $color-text-primary;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: $color-hover-secondary;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
