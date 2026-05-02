@@ -3,6 +3,7 @@ import { Inter, Cormorant_Garamond } from "next/font/google";
 import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
 import { ToastContainer } from "react-toastify";
+import { Analytics } from "@vercel/analytics/next";
 import 'react-toastify/dist/ReactToastify.css';
 import "./globals.css";
 
@@ -16,8 +17,10 @@ const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
 });
 
+const metadataBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://so-ham-desing.vercel.app";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://so-ham-desing.vercel.app"),
+  metadataBase: new URL(metadataBaseUrl),
   title: {
     default: "So Ham Design | Joyas artesanales con piedras naturales",
     template: "%s | So Ham Design",
@@ -46,15 +49,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_AR",
-    url: "/",
+    url: metadataBaseUrl,
     siteName: "So Ham Design",
     title: "So Ham Design | Joyas artesanales con piedras naturales",
     description: "Descubre piezas únicas y crea joyas personalizadas con piedras naturales.",
     images: [
       {
-        url: "/soHamDesign.png",
-        width: 512,
-        height: 512,
+        url: `${metadataBaseUrl}/soHamDesign.png`,
+        width: 1215,
+        height: 630,
         alt: "Logo de So Ham Design",
       },
     ],
@@ -63,7 +66,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "So Ham Design | Joyas artesanales con piedras naturales",
     description: "Descubre piezas únicas y crea joyas personalizadas con piedras naturales.",
-    images: ["/soHamDesign.png"],
+    images: [`${metadataBaseUrl}/soHamDesign.png`],
   },
   robots: {
     index: true,
@@ -82,6 +85,7 @@ export default function RootLayout({
         <Navbar />
         {children}
         <ToastContainer position="top-right" autoClose={2500} />
+        <Analytics />
         <Footer />
       </body>
     </html>

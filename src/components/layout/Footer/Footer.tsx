@@ -25,7 +25,7 @@ export default function Footer() {
     <footer ref={footerRef} className="footer">
       <div className='footerContent'>
         <div className='footerContentInfoBrand'>
-          <Image src="/soHamDesign.png" alt="Crear Pieza" width={50} height={50} />
+          <Image src="/soHamDesignLogo.png" alt="Crear Pieza" width={50} height={50} />
           <h1 className="footerTitle">So Ham Design</h1>
         </div>
         <div className='footerContentInfo'>

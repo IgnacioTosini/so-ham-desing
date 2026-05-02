@@ -52,6 +52,7 @@ export default function Navbar() {
         if (pathname !== '/') return
 
         const sectionElements = navigationItems
+            .filter(({ id }) => id !== 'top')
             .map(({ id }) => document.getElementById(id))
             .filter((section): section is HTMLElement => section !== null)
 
