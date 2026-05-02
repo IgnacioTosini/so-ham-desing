@@ -116,7 +116,7 @@ export default function Navbar() {
                     </Link>
                 ))}
             </div>
-            <h1 className="navbarTitle">So Ham Desing</h1>
+            <h1 className="navbarTitle">So Ham Design</h1>
         </nav>
     )
 }

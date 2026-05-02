@@ -25,8 +25,8 @@ export default function Footer() {
     <footer ref={footerRef} className="footer">
       <div className='footerContent'>
         <div className='footerContentInfoBrand'>
-          <Image src="/soHamDesing.png" alt="Crear Pieza" width={50} height={50} />
-          <h1 className="footerTitle">So Ham Desing</h1>
+          <Image src="/soHamDesign.png" alt="Crear Pieza" width={50} height={50} />
+          <h1 className="footerTitle">So Ham Design</h1>
         </div>
         <div className='footerContentInfo'>
           <p>Lo que llega a vos no es casualidad. Escribinos y creemos juntas tu pieza.</p>
@@ -46,7 +46,7 @@ export default function Footer() {
       </div>
       <div className='footerContentFooter'>
         <p className='city'>Mar del Plata, Argentina</p>
-        <h1>© {new Date().getFullYear()} So Ham Desing — Hecho con intención.</h1>
+        <h1>© {new Date().getFullYear()} So Ham Design — Hecho con intención.</h1>
         <p className='creator'>Diseñado por Ignacio Tosini</p>
       </div>
     </footer>

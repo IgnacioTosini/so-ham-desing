@@ -9,7 +9,7 @@ export const Hero = () => {
       <div className='overlay' />
       <div className='heroContent'>
         <span className='heroSpan'>Hecho a mano · Con intención</span>
-        <h1 className='heroTitle'>So Ham Desing</h1>
+        <h1 className='heroTitle'>So Ham Design</h1>
         <h2 className='heroSubtitle'>Lo que llega a vos no es casualidad.</h2>
         <p className='heroDescription'>Pulseras y collares creados uno a uno con piedras y cristales naturales.</p>
         <div className='buttonsContainer'>

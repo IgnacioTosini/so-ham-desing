@@ -17,7 +17,7 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://so-ham-desing.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://so-ham-design.vercel.app"),
   title: {
     default: "So Ham Design | Joyas artesanales con piedras naturales",
     template: "%s | So Ham Design",
@@ -37,11 +37,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/soHamDesing.jpg", type: "image/jpeg" },
-      { url: "/soHamDesing.jpg", type: "image/jpeg" },
+      { url: "/soHamDesign.png", type: "image/png" },
+      { url: "/soHamDesign.png", type: "image/png" },
     ],
-    shortcut: "/soHamDesing.jpg",
-    apple: "/soHamDesing.jpg",
+    shortcut: "/soHamDesign.png",
+    apple: "/soHamDesign.png",
   },
   openGraph: {
     type: "website",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     description: "Descubre piezas únicas y crea joyas personalizadas con piedras naturales.",
     images: [
       {
-        url: "/soHamDesing.jpg",
+        url: "/soHamDesign.png",
         width: 512,
         height: 512,
         alt: "Logo de So Ham Design",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "So Ham Design | Joyas artesanales con piedras naturales",
     description: "Descubre piezas únicas y crea joyas personalizadas con piedras naturales.",
-    images: ["/soHamDesing.jpg"],
+    images: ["/soHamDesign.png"],
   },
   robots: {
     index: true,
