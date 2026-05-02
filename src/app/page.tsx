@@ -6,7 +6,7 @@ import { AboutBrand, CreateYourPiece, Hero, ViewPieces } from "@/components/sect
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: "Inicio",
+  title: "So Ham Design | Joyas artesanales con piedras naturales",
   description: "Descubre piezas artesanales y crea tu joya personalizada con piedras naturales en So Ham Design.",
   alternates: {
     canonical: "/",
