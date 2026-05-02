@@ -1,8 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getStones } from "@/actions/stone.action";
 import { requireAdminSession } from "@/lib/adminAuth";
 import ProductForm from "@/components/productForm/ProductForm";
 import "../_adminProductPage.scss";
+
+export const metadata: Metadata = {
+    title: "Nuevo producto",
+    description: "Crear un nuevo producto en el panel de administración.",
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
 
 export default async function NewProductPage() {
     await requireAdminSession();

@@ -1,8 +1,18 @@
+import type { Metadata } from "next";
 import { getStones } from "@/actions/stone.action";
 import { requireAdminSession } from "@/lib/adminAuth";
 import StoneCard from "../../../components/stoneCard/StoneCard";
 import Link from "next/link";
 import "./_adminStonePage.scss";
+
+export const metadata: Metadata = {
+    title: "Admin piedras",
+    description: "Listado y gestión de piedras en el panel de administración.",
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
 
 export default async function AdminStonesPage() {
     await requireAdminSession();

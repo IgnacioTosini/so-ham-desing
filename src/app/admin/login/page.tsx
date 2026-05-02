@@ -1,6 +1,16 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { hasAdminSession } from "@/lib/adminAuth";
 import "./_adminLogin.scss";
+
+export const metadata: Metadata = {
+    title: "Login admin",
+    description: "Acceso al área de administración de So Ham Design.",
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
 
 type AdminLoginPageProps = {
     searchParams: Promise<Record<string, string | string[] | undefined>>;

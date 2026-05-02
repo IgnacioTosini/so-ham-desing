@@ -1,7 +1,7 @@
 import { Title } from '@/components/ui/Title/Title';
 import { CompletedItem } from '@/components/ui/viewPieces/completedItem/CompletedItem';
-import './_viewPieces.scss';
 import { Products } from '@/types';
+import './_viewPieces.scss';
 
 interface ViewPiecesProps {
   products: Products;

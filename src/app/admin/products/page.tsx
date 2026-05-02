@@ -1,8 +1,18 @@
+import type { Metadata } from "next";
 import { getProducts } from "@/actions/product.action";
 import { requireAdminSession } from "@/lib/adminAuth";
 import ProductCard from "../../../components/productCard/ProductCard";
 import Link from "next/link";
 import "./_adminProductPage.scss";
+
+export const metadata: Metadata = {
+    title: "Admin productos",
+    description: "Listado y gestión de productos en el panel de administración.",
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
 
 export default async function AdminProductsPage() {
     await requireAdminSession();

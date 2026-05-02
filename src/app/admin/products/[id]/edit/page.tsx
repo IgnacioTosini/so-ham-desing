@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProductById } from "@/actions/product.action";
@@ -8,6 +9,23 @@ import "../../_adminProductPage.scss";
 
 interface EditProductPageProps {
     params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: EditProductPageProps): Promise<Metadata> {
+    const { id } = await params;
+    const product = await getProductById(id);
+    const productName = product?.name?.trim();
+
+    return {
+        title: productName ? `Editar ${productName}` : "Editar producto",
+        description: productName
+            ? `Editar el producto ${productName} desde el panel de administración.`
+            : "Editar un producto existente desde el panel de administración.",
+        robots: {
+            index: false,
+            follow: false,
+        },
+    };
 }
 
 export default async function EditProductPage({ params }: EditProductPageProps) {

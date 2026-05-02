@@ -1,6 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { requireAdminSession } from "@/lib/adminAuth";
 import "./_admin.scss";
+
+export const metadata: Metadata = {
+    title: "Panel de administración",
+    description: "Panel de administración de So Ham Design para gestionar piedras y productos.",
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
 
 export default async function AdminStonesPage() {
     await requireAdminSession();

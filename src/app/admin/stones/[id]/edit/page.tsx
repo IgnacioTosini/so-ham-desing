@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getStoneById } from "@/actions/stone.action";
@@ -7,6 +8,23 @@ import "../../_adminStonePage.scss";
 
 interface EditStonePageProps {
     params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: EditStonePageProps): Promise<Metadata> {
+    const { id } = await params;
+    const stone = await getStoneById(id);
+    const stoneName = stone?.name?.trim();
+
+    return {
+        title: stoneName ? `Editar ${stoneName}` : "Editar piedra",
+        description: stoneName
+            ? `Editar la piedra ${stoneName} desde el panel de administración.`
+            : "Editar una piedra existente desde el panel de administración.",
+        robots: {
+            index: false,
+            follow: false,
+        },
+    };
 }
 
 export default async function EditStonePage({ params }: EditStonePageProps) {
