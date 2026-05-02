@@ -17,7 +17,7 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://so-ham-design.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://so-ham-desing.vercel.app"),
   title: {
     default: "So Ham Design | Joyas artesanales con piedras naturales",
     template: "%s | So Ham Design",
