@@ -1,0 +1,32 @@
+@use '@/styles/variables' as *;
+
+.previewByCodePage {
+    background: $color-secondary;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+
+    .backLink {
+        position: absolute;
+        top: 10rem;
+        left: 2rem;
+        font-size: $font-size-normal;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        text-decoration: none;
+        z-index: 2;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            top: 8.5rem;
+            left: 1rem;
+            font-size: $font-size-small;
+        }
+    }
+}

@@ -27,7 +27,7 @@ export const StoneItem = ({ stone, selectedStoneIds, toggleStoneSelection }: Pro
                         <span className='stoneMarkerCheck'>✓</span>
                     </span>
                 </div>
-                <p className='stoneCharacteristics'>{stone.description}</p>
+                <p className='stoneCharacteristics'>{stone.energyTags.join(', ')}</p>
             </div>
         </button>
     )

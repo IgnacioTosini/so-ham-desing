@@ -103,3 +103,11 @@ model ProductImage {
   @@index([productId])
   @@index([imageId])
 }
+
+model SharedDesign {
+  id        String        @id @default(uuid())
+  shareCode String        @unique
+  type      AccessoryType
+  beads     Json
+  createdAt DateTime      @default(now())
+}

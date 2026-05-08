@@ -17,7 +17,11 @@ const nextConfig: NextConfig = {
         hostname: 'res.cloudinary.com'
       }
     ]
-  }
+  },
+  serverExternalPackages: ['@prisma/client'],
+  outputFileTracingExcludes: {
+    '*': ['./postgres/**'],
+  },
 };
 
 export default nextConfig;

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getProducts } from "@/actions/product.action";
 import { getStones } from "@/actions/stone.action";
 import { AboutBrand, CreateYourPiece, Hero, ViewPieces } from "@/components/sections";
+import { Simulator } from "@/components/sections/simulator/Simulator";
 
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +22,7 @@ export default async function Home() {
         <Hero />
         <ViewPieces products={products} />
         <CreateYourPiece stones={stones} />
+        <Simulator stones={stones} />
         <AboutBrand />
     </main>
   );

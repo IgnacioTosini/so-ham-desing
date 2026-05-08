@@ -33,10 +33,8 @@
             width: 100%;
         }
     }
-}
 
-@media (max-width: 640px) {
-    .createYourPiece {
+    @media (max-width: 640px) {
         padding: 4rem 1rem;
 
         .pieceSelector {
@@ -48,6 +46,11 @@
             min-width: 0;
             letter-spacing: 0.18em;
             padding-inline: 1rem;
+        }
+
+        .stoneList {
+            align-items: center;
+            justify-content: center;
         }
     }
 }
