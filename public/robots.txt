@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+Sitemap: https://so-ham-desing.vercel.app/sitemap.xml

@@ -46,7 +46,7 @@ export const Simulator = ({ stones = [] }: Props) => {
         setIsSending(true);
         try {
             const design = await createSharedDesign({ type: selectedPiece, beadStones });
-            const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? window.location.origin;
+            const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://so-ham-desing.vercel.app';
             const previewUrl = `${siteUrl}/preview/${design.shareCode}`;
             const whatsappUrl = buildWhatsappMessagePreview({ piece: selectedPiece, previewUrl });
             window.open(whatsappUrl, '_blank');
