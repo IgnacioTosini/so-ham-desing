@@ -1,5 +1,6 @@
 "use server";
 
+import { unstable_cache, revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import type { AccessoryType } from "@prisma/client";
 import { uploadBase64ImageToCloudinary } from "@/lib/services/cloudinary.service";
@@ -111,6 +112,8 @@ const createProductWithRetry = async (data: Parameters<typeof prisma.product.cre
     }
 };
 
+const PRODUCTS_TAG = "products";
+
 const isMainImageUrlReferenced = async (url: string, excludeProductId?: string): Promise<boolean> => {
     if (!url) return false;
 
@@ -132,14 +135,25 @@ const isMainImageUrlReferenced = async (url: string, excludeProductId?: string):
     return productsUsingUrl > 0 || stonesUsingUrl > 0 || imageRowsUsingUrl > 0;
 };
 
-export async function getProducts() {
-    try {
-        const products = await prisma.product.findMany({
+const revalidateProductData = async () => {
+    revalidateTag(PRODUCTS_TAG, "max");
+    revalidatePath("/");
+};
+
+const getProductsCached = unstable_cache(
+    async () => {
+        return prisma.product.findMany({
             include: productInclude,
             orderBy: { createdAt: "desc" },
         });
+    },
+    ["products-list"],
+    { revalidate: 3600, tags: [PRODUCTS_TAG] }
+);
 
-        return products;
+export async function getProducts() {
+    try {
+        return await getProductsCached();
     } catch (error) {
         console.error(error);
         throw new Error("Error al obtener los productos");
@@ -209,6 +223,8 @@ export async function createProduct(input: CreateProductInput) {
                 : {}),
         });
 
+        await revalidateProductData();
+
         return product;
     } catch (error) {
         console.error(error);
@@ -267,6 +283,8 @@ export async function deleteProduct(id: string) {
         if (cloudinaryUrlsToDelete.size > 0) {
             await deleteProjectImagesFromCloudinary(Array.from(cloudinaryUrlsToDelete));
         }
+
+        await revalidateProductData();
     } catch (error) {
         console.error(error);
         throw new Error("Error al eliminar el producto");
@@ -390,6 +408,8 @@ export async function updateProduct(id: string, input: CreateProductInput) {
                 await deleteProjectImagesFromCloudinary([previousProduct.imageUrl]);
             }
         }
+
+        await revalidateProductData();
 
         return product;
     } catch (error) {

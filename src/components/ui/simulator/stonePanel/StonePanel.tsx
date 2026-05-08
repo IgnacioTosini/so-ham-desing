@@ -11,7 +11,6 @@ export const StonePanel = ({ stones, onStoneClick }: Props) => {
     return (
         <div className="stonePanel">
             <p className="stonePanelTitle">PIEDRAS</p>
-
             <div className="stonePanelGrid">
                 {stones.map((stone) => (
                     <button
@@ -33,7 +32,6 @@ export const StonePanel = ({ stones, onStoneClick }: Props) => {
                     </button>
                 ))}
             </div>
-
             <p className="stonePanelTip">
                 Tip: tocá un lugar del círculo y luego una piedra, o al revés.
             </p>

@@ -64,6 +64,33 @@
             justify-content: center;
             align-items: stretch;
             gap: 1.5rem;
+            overflow-y: scroll;
+            max-height: 28rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.08);
+            scrollbar-gutter: stable;
+
+            &::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.08);
+                border-radius: 6px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.35);
+                border-radius: 6px;
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.5);
+            }
+
+            @media (max-width: 768px) {
+                max-height: 20rem;
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ import { getStones } from "@/actions/stone.action";
 import { AboutBrand, CreateYourPiece, Hero, ViewPieces } from "@/components/sections";
 import { Simulator } from "@/components/sections/simulator/Simulator";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "So Ham Design | Joyas artesanales con piedras naturales",

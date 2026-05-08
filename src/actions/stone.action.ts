@@ -1,5 +1,6 @@
 "use server";
 
+import { unstable_cache, revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { uploadBase64ImageToCloudinary } from "@/lib/services/cloudinary.service";
 import { deleteProjectImagesFromCloudinary, uploadImages } from "@/lib/services";
@@ -54,6 +55,8 @@ const resolveMainImageUrl = async (imageUrl: string | undefined, fallbackUrl: st
     return trimmedImageUrl || fallbackUrl || "";
 };
 
+const STONES_TAG = "stones";
+
 const isDatabaseConnectionError = (error: unknown): boolean => {
     if (!(error instanceof Error)) return false;
 
@@ -62,6 +65,11 @@ const isDatabaseConnectionError = (error: unknown): boolean => {
         error.message.includes("P1001") ||
         error.name === "PrismaClientInitializationError"
     );
+};
+
+const revalidateStoneData = async () => {
+    revalidateTag(STONES_TAG, "max");
+    revalidatePath("/");
 };
 
 const createStoneWithRetry = async (
@@ -113,9 +121,9 @@ const createStoneWithRetry = async (
     }
 };
 
-export async function getStones() {
-    try {
-        const stones = await prisma.stone.findMany({
+const getStonesCached = unstable_cache(
+    async () => {
+        return prisma.stone.findMany({
             orderBy: { name: "asc" },
             include: {
                 images: {
@@ -125,8 +133,14 @@ export async function getStones() {
                 },
             },
         });
+    },
+    ["stones-list"],
+    { revalidate: 3600, tags: [STONES_TAG] }
+);
 
-        return stones;
+export async function getStones() {
+    try {
+        return await getStonesCached();
     } catch (error) {
         console.error(error);
         throw new Error("Error al obtener las piedras");
@@ -172,6 +186,8 @@ export async function createStone(input: CreateStoneInput) {
                 }
                 : {}),
         });
+
+        await revalidateStoneData();
 
         return stone;
     } catch (error) {
@@ -259,6 +275,8 @@ export async function deleteStone(id: string) {
         if (cloudinaryUrlsToDelete.size > 0) {
             await deleteProjectImagesFromCloudinary(Array.from(cloudinaryUrlsToDelete));
         }
+
+        await revalidateStoneData();
     } catch (error) {
         console.error(error);
         throw new Error("Error al eliminar la piedra");
@@ -376,6 +394,8 @@ export async function updateStone(id: string, input: CreateStoneInput) {
         if (previousStone.imageUrl !== stone.imageUrl) {
             await deleteProjectImagesFromCloudinary([previousStone.imageUrl]);
         }
+
+        await revalidateStoneData();
 
         return stone;
     } catch (error) {
