@@ -20,7 +20,7 @@ export const ShareDesignItem = ({ design, canDelete }: Props) => {
     };
     return (
         <Link key={design.id} href={`/preview/${design.shareCode}`} className="previewListItem">
-            <span className="previewPiece">{design.type === 'BRACELET' ? 'Pulsera' : 'Collar'}</span>
+            <span className="previewPiece">{design.type === 'BRACELET' ? 'Pulsera' : 'Collar'} - {design.name}</span>
             <span className="previewDate">{new Date(design.createdAt).toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' })}</span>
             {canDelete && (
                 <button

@@ -27,6 +27,7 @@ const revalidateSharedDesignsData = async () => {
 export async function createSharedDesign(params: {
     type: PieceType;
     beadStones: Record<number, string>;
+    name: string;
 }) {
     const total = BEAD_COUNT[params.type];
     const beads = Array.from({ length: total }, (_, i) => params.beadStones[i] ?? null);
@@ -36,7 +37,7 @@ export async function createSharedDesign(params: {
 
         try {
             const design = await prisma.sharedDesign.create({
-                data: { shareCode, type: params.type, beads },
+                data: { shareCode, type: params.type, beads, name: params.name },
             });
 
             await revalidateSharedDesignsData();
@@ -57,13 +58,14 @@ export async function getAllSharedDesigns(): Promise<SharedDesign[]> {
     return designs.map(d => ({
         ...d,
         beads: d.beads as (string | null)[],
+        name: d.name || 'Diseño sin nombre',
     }));
 }
 
 export async function deleteSharedDesign(shareCode: string) {
     const isAdmin = await hasAdminSession();
     if (!isAdmin) {
-        throw new Error("No autorizado para eliminar disenos compartidos.");
+        throw new Error("No autorizado para eliminar diseños compartidos.");
     }
 
     await prisma.sharedDesign.delete({

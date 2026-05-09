@@ -25,6 +25,7 @@ export const Simulator = ({ stones = [] }: Props) => {
     const [selectedBeadIndex, setSelectedBeadIndex] = useState<number | null>(0);
     const [beadStones, setBeadStones] = useState<Record<number, string>>({});
     const [isSending, setIsSending] = useState(false);
+    const [designName, setDesignName] = useState('');
 
     useEffect(() => {
         if (!sectionRef.current) return;
@@ -58,7 +59,7 @@ export const Simulator = ({ stones = [] }: Props) => {
     const handleSendWhatsapp = async () => {
         setIsSending(true);
         try {
-            const design = await createSharedDesign({ type: selectedPiece, beadStones });
+            const design = await createSharedDesign({ type: selectedPiece, beadStones, name: designName  || 'Diseño sin nombre' });
             const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://so-ham-desing.vercel.app';
             const previewUrl = `${siteUrl}/preview/${design.shareCode}`;
             const whatsappUrl = buildWhatsappMessagePreview({ piece: selectedPiece, previewUrl });
@@ -89,15 +90,28 @@ export const Simulator = ({ stones = [] }: Props) => {
                         onStoneClick={handleStoneClick}
                     />
                 </div>
-                <button
-                    type="button"
-                    className={`simulatorWhatsappButton ${isSending || Object.keys(beadStones).length < BEAD_COUNT[selectedPiece] ? 'disabled' : ''}`}
-                    onClick={handleSendWhatsapp}
-                    disabled={isSending || Object.keys(beadStones).length < BEAD_COUNT[selectedPiece]}
-                >
-                    <span>{isSending ? 'Generando...' : 'Enviar diseño por WhatsApp'}</span>
-                    <IoLogoWhatsapp />
-                </button>
+                <div className="simulatorFooter">
+                    <div className="designNameContainer">
+                        <label htmlFor="designName">Nombra el diseño o pon tu nombre!</label>
+                        <input
+                            type="text"
+                            name="designName"
+                            id="designName"
+                            className="designNameInput"
+                            value={designName}
+                            onChange={(e) => setDesignName(e.target.value)}
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        className={`simulatorWhatsappButton ${isSending || Object.keys(beadStones).length < BEAD_COUNT[selectedPiece] || !designName.trim() ? 'disabled' : ''}`}
+                        onClick={handleSendWhatsapp}
+                        disabled={isSending || Object.keys(beadStones).length < BEAD_COUNT[selectedPiece] || !designName.trim()}
+                    >
+                        <span>{isSending ? 'Generando...' : 'Enviar diseño por WhatsApp'}</span>
+                        <IoLogoWhatsapp />
+                    </button>
+                </div>
             </div>
         </div>
     );

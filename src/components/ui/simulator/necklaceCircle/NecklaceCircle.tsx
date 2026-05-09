@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { PieceType, Stone } from "@/types";
 import { BEAD_COUNT } from "@/utils/bead_count";
+import "./_necklaceCircle.scss";
 
 const SVG_SIZE = 800;
 const CENTER = SVG_SIZE / 2;
@@ -45,7 +46,7 @@ export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick =
             width={SVG_SIZE}
             height={SVG_SIZE}
             viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`}
-            style={{ maxWidth: "100%", height: "auto" }}
+            className="necklaceCircleSvg"
         >
             {/* Definimos un clipPath circular por cada bolita */}
             <defs>
@@ -65,7 +66,7 @@ export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick =
                 const isSelected = selectedBeadIndex === bead.id;
 
                 return (
-                    <g key={bead.id} onClick={() => onBeadClick(bead.id)} style={{ cursor: "pointer" }}>
+                    <g key={bead.id} className="necklaceCircleBead" onClick={() => onBeadClick(bead.id)}>
                         {/* Aro de selección — detrás de todo */}
                         {isSelected && (
                             <circle
@@ -110,6 +111,7 @@ export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick =
                 x={CENTER}
                 y={SVG_SIZE - 30}
                 textAnchor="middle"
+                className="necklaceCircleCounter"
                 fill="#9CA3AF"
                 fontSize={13}
                 letterSpacing={2}

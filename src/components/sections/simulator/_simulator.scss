@@ -5,6 +5,19 @@
     padding: 4rem 1rem;
     min-height: 100dvh;
 
+    @media (max-width: 768px) {
+        padding: 2rem 0rem;
+
+        .titleContainer {
+            align-items: center;
+            text-align: center;
+        }
+
+        .stonePanel {
+            padding: 2rem;
+        }
+    }
+
     .simulatorContainer {
         max-width: 72rem;
         margin: 0 auto;
@@ -48,47 +61,118 @@
 
             @media (max-width: 768px) {
                 flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+                z-index: 1000;
+
+                > :first-child {
+                    position: sticky;
+                    top: 0rem;
+                    z-index: 2;
+                    align-self: center;
+                    background: linear-gradient(to bottom,
+                            rgba(64, 51, 41, 0.98) 0%,
+                            rgba(64, 51, 41, 0.92) 72%,
+                            rgba(64, 51, 41, 0) 100%);
+                    overflow: hidden;
+
+                    svg {
+                        display: block;
+                        width: 100%;
+                        height: auto;
+                    }
+                }
+
+                .stonePanel {
+                    width: 100%;
+                    min-width: 0;
+                    margin-top: -0.25rem;
+                }
             }
         }
 
-        .simulatorWhatsappButton {
+        .simulatorFooter {
             display: flex;
             align-items: center;
-            align-self: center;
             justify-content: center;
-            text-decoration: none;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            padding: 1.25rem;
-            line-height: 1;
-            background-color: $color-accent;
-            color: $color-text-primary;
-            border: none;
-            border-radius: $radius-2xl;
-            cursor: pointer;
-            letter-spacing: .2em;
-            text-transform: uppercase;
+            flex-direction: column;
+            gap: 1rem;
             font-family: $font-family-primary;
-            font-size: $font-size-small;
-            font-weight: $font-weight-regular;
-            transition: all 0.3s ease;
-
-            &:hover {
-                background-color: $color-hover-primary;
-            }
+            font-size: $font-size-xsmall;
+            color: $color-text-secondary;
 
             @media (max-width: 768px) {
-                font-size: $font-size-xsmall;
+                text-align: center;
+            }
+
+            .designNameContainer {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+
+                .designNameInput {
+                    padding: 0.5rem;
+                    border: 1px solid $color-border;
+                    border-radius: $radius-xl;
+                    font-family: $font-family-primary;
+                    font-size: $font-size-xsmall;
+                    color: $color-text-primary;
+                    background-color: transparent;
+                    width: 100%;
+                    max-width: 20rem;
+
+                    &::placeholder {
+                        color: $color-text-secondary;
+                    }
+
+                    &:focus {
+                        outline: none;
+                        border-color: $color-accent;
+                    }
+                }
+            }
+
+            .simulatorWhatsappButton {
+                display: flex;
+                align-items: center;
+                align-self: center;
+                justify-content: center;
+                text-decoration: none;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                padding: 1.25rem;
+                line-height: 1;
+                background-color: $color-accent;
+                color: $color-text-primary;
+                border: none;
+                border-radius: $radius-2xl;
+                cursor: pointer;
+                letter-spacing: .2em;
+                text-transform: uppercase;
+                font-family: $font-family-primary;
+                font-size: $font-size-small;
+                font-weight: $font-weight-regular;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background-color: $color-hover-primary;
+                }
+
+                @media (max-width: 768px) {
+                    font-size: $font-size-xsmall;
+                }
+            }
+
+            .disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+
+                &:hover {
+                    background-color: rgba($color-accent, 0.5);
+                }
             }
         }
     }
 
-    .disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-
-        &:hover {
-            background-color: $color-accent;
-        }
-    }
 }

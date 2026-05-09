@@ -5,5 +5,6 @@ export interface SharedDesign {
     shareCode: string;
     type: PieceType;
     beads: (string | null)[];
+    name: string;
     createdAt: Date;
 }

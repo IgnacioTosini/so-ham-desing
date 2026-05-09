@@ -106,6 +106,7 @@ model ProductImage {
 
 model SharedDesign {
   id        String        @id @default(uuid())
+  name      String
   shareCode String        @unique
   type      AccessoryType
   beads     Json

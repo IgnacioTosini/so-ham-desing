@@ -1,0 +1,25 @@
+@use '@/styles/variables' as *;
+
+.necklaceCircleSvg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+
+    .necklaceCircleBead {
+        cursor: pointer;
+    }
+
+    .necklaceCircleCounter {
+        font-size: $font-size-medium;
+        letter-spacing: 2px;
+        fill: #9CA3AF;
+        font-family: system-ui, sans-serif;
+    }
+
+    @media (max-width: 768px) {
+        .necklaceCircleCounter {
+            font-size: $font-size-medium;
+            letter-spacing: 2.5px;
+        }
+    }
+}
