@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { IoLogoInstagram, IoLogoWhatsapp } from 'react-icons/io';
-/* import { animateFooter } from '@/components/animations/gsap/footerAnimations';*/
+import { animateFooter } from '@/components/animations/gsap';
 import { IoLogoTiktok } from 'react-icons/io5';
 import Image from 'next/image';
 import './_footer.scss';
@@ -15,7 +15,7 @@ export default function Footer() {
     if (!footerRef.current) return;
 
     const ctx = gsap.context(() => {
-      // animateFooter(footerRef.current!);
+      animateFooter(footerRef.current!);
     }, footerRef.current);
 
     return () => ctx.revert();

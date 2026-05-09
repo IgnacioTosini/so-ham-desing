@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 import gsap from 'gsap';
-/* import { animateNavbarEntrance } from '@/components/animations/gsap/navbarAnimations'; */
+import { animateNavbarEntrance } from '@/components/animations/gsap';
 import { navigationItems, scrollSection } from "@/utils";
 import "./_navbar.scss";
 
@@ -23,7 +23,7 @@ export default function Navbar() {
     useEffect(() => {
         if (!navbarRef.current) return;
         const ctx = gsap.context(() => {
-            /* animateNavbarEntrance(navbarRef.current!); */
+            animateNavbarEntrance(navbarRef.current!);
         }, navbarRef.current);
         return () => ctx.revert();
     }, []);

@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { animateSimulatorSection } from '@/components/animations/gsap';
 import { Title } from '@/components/ui/Title/Title';
 import { NecklaceCircle } from '@/components/ui/simulator/necklaceCircle/NecklaceCircle';
 import { PieceSelector } from '@/components/ui/createYourPiece/pieceSelector/PieceSelector';
@@ -18,10 +20,21 @@ interface Props {
 }
 
 export const Simulator = ({ stones = [] }: Props) => {
+    const sectionRef = useRef<HTMLDivElement>(null);
     const [selectedPiece, setSelectedPiece] = useState<PieceType>('NECKLACE');
     const [selectedBeadIndex, setSelectedBeadIndex] = useState<number | null>(0);
     const [beadStones, setBeadStones] = useState<Record<number, string>>({});
     const [isSending, setIsSending] = useState(false);
+
+    useEffect(() => {
+        if (!sectionRef.current) return;
+
+        const ctx = gsap.context(() => {
+            animateSimulatorSection(sectionRef.current!);
+        }, sectionRef);
+
+        return () => ctx.revert();
+    }, []);
 
     const handleBeadClick = (index: number) => {
         // Si clickeás la misma bolita dos veces, la deseleccionás
@@ -56,7 +69,7 @@ export const Simulator = ({ stones = [] }: Props) => {
     };
 
     return (
-        <div className='simulator'>
+        <div className='simulator' ref={sectionRef} id='simulator'>
             <div className='simulatorContainer'>
                 <Title title={'Simulador'} subTitle={'Armá tu pieza piedra por piedra.'} />
                 <div className="simulatorPieceSelector">

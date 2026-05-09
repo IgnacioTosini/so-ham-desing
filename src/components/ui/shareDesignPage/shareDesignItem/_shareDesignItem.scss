@@ -7,8 +7,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     text-decoration: none;
     color: inherit;
+    gap: 1rem;
+    width: 100%;
 
     .previewPiece {
         font-weight: bold;
@@ -18,6 +21,7 @@
     .previewDate {
         font-size: 0.875rem;
         color: $color-text-secondary;
+        margin-left: auto;
     }
 
     .previewDeleteButton {
@@ -27,10 +31,28 @@
         font-family: $font-family-secondary;
         cursor: pointer;
         font-size: 1.25rem;
+        margin-left: auto;
         transition: color 0.3s ease;
 
         &:hover {
             color: $color-accent;
+        }
+    }
+
+    @media (max-width: 768px) {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.45rem;
+
+        .previewDate {
+            font-size: 0.8rem;
+            margin-left: 0;
+        }
+
+        .previewDeleteButton {
+            padding: 0;
+            font-size: 1rem;
+            margin-left: 0;
         }
     }
 }

@@ -4,6 +4,7 @@ import { getStones } from "@/actions/stone.action";
 import { PieceType } from "@/types";
 import { PreviewCanvas } from "../previewCanvas/PreviewCanvas";
 import Link from "next/link";
+import { PreviewByCodeClient } from "./PreviewByCodeClient";
 import "./_previewByCodePage.scss";
 
 interface Props {
@@ -30,7 +31,7 @@ export default async function PreviewByCodePage({ params }: Props) {
     });
 
     return (
-        <>
+            <PreviewByCodeClient>
             <div className="previewByCodePage">
                 <Link href="/preview" className="backLink">← Volver a la lista de diseños</Link>
                 <PreviewCanvas
@@ -39,6 +40,6 @@ export default async function PreviewByCodePage({ params }: Props) {
                     stones={stones}
                 />
             </div>
-        </>
+            </PreviewByCodeClient>
     );
 }

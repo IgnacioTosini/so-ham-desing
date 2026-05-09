@@ -1,11 +1,26 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { animateHeroSection } from '@/components/animations/gsap'
 import { scrollSection } from '@/utils'
 import './_hero.scss'
 
 export const Hero = () => {
+  const heroRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!heroRef.current) return
+
+    const ctx = gsap.context(() => {
+      animateHeroSection(heroRef.current!)
+    }, heroRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <div className='hero'>
+    <div className='hero' ref={heroRef}>
       <div className='overlay' />
       <div className='heroContent'>
         <span className='heroSpan'>Hecho a mano · Con intención</span>
