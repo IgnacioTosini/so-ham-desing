@@ -17,7 +17,8 @@ const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
 });
 
-const metadataBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://so-ham-desing.vercel.app";
+const metadataBaseUrl = "https://so-ham-desing.vercel.app";
+const ogImageUrl = "/soHamDesign.png?v=2";
 
 export const metadata: Metadata = {
   metadataBase: new URL(metadataBaseUrl),
@@ -55,7 +56,7 @@ export const metadata: Metadata = {
     description: "Descubre piezas únicas y crea joyas personalizadas con piedras naturales.",
     images: [
       {
-        url: `${metadataBaseUrl}/soHamDesign.png`,
+        url: ogImageUrl,
         width: 1215,
         height: 630,
         alt: "Logo de So Ham Design",
@@ -66,7 +67,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "So Ham Design | Joyas artesanales con piedras naturales",
     description: "Descubre piezas únicas y crea joyas personalizadas con piedras naturales.",
-    images: [`${metadataBaseUrl}/soHamDesign.png`],
+    images: [ogImageUrl],
   },
   robots: {
     index: true,
