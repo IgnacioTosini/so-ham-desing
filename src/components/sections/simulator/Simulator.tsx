@@ -14,6 +14,7 @@ import { BEAD_COUNT } from '@/utils/bead_count';
 import { createSharedDesign } from '@/actions/design.action';
 import Link from 'next/link';
 import './_simulator.scss';
+import { toast } from 'react-toastify';
 
 interface Props {
     stones: Stone[];
@@ -57,13 +58,29 @@ export const Simulator = ({ stones = [] }: Props) => {
     }
 
     const handleSendWhatsapp = async () => {
+        // iOS Safari can block popups opened after an async gap.
+        // Open the tab immediately from the click event, then navigate it later.
+        const whatsappTab = window.open('', '_blank', 'noopener,noreferrer');
+
         setIsSending(true);
         try {
             const design = await createSharedDesign({ type: selectedPiece, beadStones, name: designName  || 'Diseño sin nombre' });
             const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://so-ham-desing.vercel.app';
             const previewUrl = `${siteUrl}/preview/${design.shareCode}`;
             const whatsappUrl = buildWhatsappMessagePreview({ piece: selectedPiece, previewUrl });
-            window.open(whatsappUrl, '_blank');
+
+            if (whatsappTab) {
+                whatsappTab.location.href = whatsappUrl;
+            } else {
+                window.location.href = whatsappUrl;
+            }
+
+            setDesignName('');
+            setBeadStones({});
+            setSelectedBeadIndex(0);
+        } catch {
+            whatsappTab?.close();
+            toast.error('No se pudo crear/enviar el diseño por WhatsApp');
         } finally {
             setIsSending(false);
         }
