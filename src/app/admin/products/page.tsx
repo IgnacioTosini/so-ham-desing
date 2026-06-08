@@ -20,7 +20,7 @@ export default async function AdminProductsPage() {
 
     return (
         <div className="adminProductsPage">
-            <Link href="/admin" className="backLink">← Volver al panel de administración</Link>
+            <Link href="/admin" className="backLink">← Volver</Link>
             <div className="adminProductsPageContainer">
                 <h1>Admin - Gestión de productos</h1>
 

@@ -22,7 +22,7 @@ export const CompletedItem = ({ item }: Props) => {
         <div className='viewPiecesItemInfo'>
           <div>
             <h3>{item.name}</h3>
-            <p>{item.description}</p>
+            <p className='viewPiecesItemDescription'>{item.description}</p>
           </div>
           <p className='viewPiecesItemPrice'>${item.price}</p>
         </div>

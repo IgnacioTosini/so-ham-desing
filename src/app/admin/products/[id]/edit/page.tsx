@@ -42,7 +42,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
 
     return (
         <div className="adminProductsPage">
-            <Link href="/admin/products" className="backLink">← Volver a productos</Link>
+            <Link href="/admin/products" className="backLink">← Volver</Link>
             <div className="adminProductsPageContainer">
                 <h1>Admin - Editar producto</h1>
                 <ProductForm

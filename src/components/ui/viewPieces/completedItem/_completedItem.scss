@@ -5,8 +5,10 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    width: calc(33.333% - 1.33rem);
-    max-width: 360px;
+    width: 100%;
+    max-width: 350px;
+    height: 100%;
+    max-height: 500px;
 
     &:hover {
         .viewPiecesItemImage {
@@ -28,7 +30,7 @@
         .viewPiecesItemImage {
             width: 100%;
             max-width: 360px;
-            height: auto;
+            height: 290px;
             object-fit: cover;
             transition: all 0.3s ease-in-out;
         }
@@ -42,10 +44,12 @@
 
         .viewPiecesItemInfo {
             display: flex;
+            flex-direction: column;
             align-items: flex-start;
             justify-content: space-between;
             gap: 1rem;
             width: 100%;
+            height: 100%;
             text-align: start;
 
             h3 {
@@ -56,14 +60,35 @@
                 font-weight: $font-weight-regular;
                 font-family: $font-family-primary;
                 margin-bottom: .5rem;
+                height: 20px;
             }
 
-            p {
-                font-size: $font-size-large;
+            .viewPiecesItemDescription {
+                font-size: $font-size-medium;
                 color: $color-text-primary;
                 font-weight: $font-weight-regular;
                 font-family: $font-family-secondary;
                 margin-bottom: 1rem;
+                overflow: auto;
+                height: 80px;
+
+                /* Custom scrollbar styles */
+                &::-webkit-scrollbar {
+                    width: 2px;
+                }
+
+                &::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background-color: $color-text-primary;
+                    border-radius: 10px;
+                }
+
+                    /* Firefox scrollbar styles */
+                scrollbar-width: thin;
+                scrollbar-color: $color-text-primary transparent;
             }
 
             .viewPiecesItemPrice {
@@ -71,6 +96,7 @@
                 color: $color-text-primary;
                 font-weight: $font-weight-regular;
                 font-family: $font-family-secondary;
+                width: fit-content;
             }
         }
 

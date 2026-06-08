@@ -20,7 +20,7 @@ export default async function AdminStonesPage() {
 
     return (
         <div className="adminStonesPage">
-            <Link href="/admin" className="backLink">← Volver al panel de administración</Link>
+            <Link href="/admin" className="backLink">← Volver</Link>
             <div className="adminStonesPageContainer">
                 <h1>Admin - Gestión de piedras</h1>
 

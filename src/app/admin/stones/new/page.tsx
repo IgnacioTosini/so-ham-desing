@@ -18,7 +18,7 @@ export default async function NewStonePage() {
 
     return (
         <div className="adminStonesPage">
-            <Link href="/admin/stones" className="backLink">← Volver a piedras</Link>
+            <Link href="/admin/stones" className="backLink">← Volver</Link>
             <div className="adminStonesPageContainer">
                 <h1>Admin - Nueva piedra</h1>
                 <StoneForm mode="create" />
