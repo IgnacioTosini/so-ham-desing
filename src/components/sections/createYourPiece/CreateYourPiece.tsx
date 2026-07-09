@@ -7,6 +7,7 @@ import { Title } from '@/components/ui/Title/Title';
 import { PieceSelector } from '@/components/ui/createYourPiece/pieceSelector/PieceSelector';
 import { StoneItem } from '@/components/ui/createYourPiece/stoneItem/StoneItem';
 import { YourOrder } from '@/components/ui/createYourPiece/yourOrder/YourOrder';
+import { BraceletSizeGuide } from '@/components/ui/braceletSizeGuide/BraceletSizeGuide';
 import { PieceType, Stones } from '@/types';
 import './_createYourPiece.scss';
 
@@ -66,6 +67,7 @@ export const CreateYourPiece = ({ stones }: CreateYourPieceProps) => {
             />
           ))}
         </div>
+        {selectedPiece === 'BRACELET' && <BraceletSizeGuide />}
         <YourOrder selectedPiece={selectedPiece} selectedStoneNames={selectedStoneNames} />
       </div>
     </div>

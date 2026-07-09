@@ -18,13 +18,15 @@
 .pieceDetailHero {
     display: grid;
     grid-template-columns: minmax(0, 1.04fr) minmax(20rem, 0.96fr);
-    align-items: stretch;
+    align-items: start;
     gap: clamp(1.25rem, 4vw, 3rem);
 }
 
 .pieceDetailMedia {
     overflow: hidden;
-    min-height: clamp(28rem, 58vw, 42rem);
+    aspect-ratio: 4 / 5;
+    min-height: 0;
+    max-height: clamp(28rem, 58vw, 42rem);
     border: 1px solid rgba(198, 179, 153, 0.22);
     border-radius: 8px;
     background: rgba(24, 21, 20, 0.38);
@@ -371,8 +373,8 @@
     }
 
     .pieceDetailMedia {
-        min-height: auto;
         aspect-ratio: 4 / 5;
+        max-height: none;
     }
 
 }

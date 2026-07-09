@@ -29,10 +29,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: [
-      { url: "/soHamDesign.png", type: "image/png" },
-      { url: "/soHamDesign.png", type: "image/png" },
-    ],
+    icon: [{ url: "/soHamDesign.png", type: "image/png" }],
     shortcut: "/soHamDesign.png",
     apple: "/soHamDesign.png",
   },

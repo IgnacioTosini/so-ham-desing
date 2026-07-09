@@ -8,6 +8,7 @@ import { NecklaceCircle } from '@/components/ui/simulator/necklaceCircle/Necklac
 import { PieceSelector } from '@/components/ui/createYourPiece/pieceSelector/PieceSelector';
 import { PieceType, Stone } from '@/types';
 import { StonePanel } from '@/components/ui/simulator/stonePanel/StonePanel';
+import { BraceletSizeGuide } from '@/components/ui/braceletSizeGuide/BraceletSizeGuide';
 import { buildWhatsappMessagePreview } from '@/utils';
 import { getSiteUrl } from '@/utils/siteUrl';
 import { IoLogoWhatsapp } from 'react-icons/io';
@@ -130,6 +131,7 @@ export const Simulator = ({ stones = [] }: Props) => {
                         activeStoneId={selectedBeadIndex === null ? null : beadStones[selectedBeadIndex] ?? null}
                     />
                 </div>
+                {selectedPiece === 'BRACELET' && <BraceletSizeGuide variant="compact" />}
                 <div className="simulatorFooter">
                     <div className="designNameContainer">
                         <label htmlFor="designName">Nombra el diseño o pon tu nombre!</label>

@@ -1,0 +1,250 @@
+@use '@/styles/variables' as *;
+
+.braceletSizeGuide {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    padding: clamp(1rem, 3vw, 1.4rem);
+    border: 1px solid rgba(198, 179, 153, 0.2);
+    border-radius: 8px;
+    background:
+        linear-gradient(135deg, rgba(198, 179, 153, 0.12), rgba(255, 255, 255, 0.025)),
+        rgba(24, 21, 20, 0.28);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.braceletSizeGuideHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    p {
+        margin: 0;
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+    }
+
+    h3 {
+        margin: 0;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        font-size: clamp(1.8rem, 4vw, 2.7rem);
+        font-weight: $font-weight-semibold;
+        line-height: 0.95;
+    }
+}
+
+.braceletGuideSteps {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+
+.braceletGuideStep {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.8rem;
+    min-width: 0;
+
+    > span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: $color-text-tertiary;
+        color: $color-text-quaternary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        font-weight: $font-weight-bold;
+    }
+
+    h4 {
+        margin: 0 0 0.45rem;
+        color: $color-text-primary;
+        font-family: $font-family-primary;
+        font-size: $font-size-normal;
+        font-weight: $font-weight-semibold;
+    }
+
+    p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.78);
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        line-height: 1.55;
+
+        + p {
+            margin-top: 0.35rem;
+        }
+    }
+}
+
+.braceletCordTypes {
+    display: grid;
+    gap: 0.55rem;
+
+    strong {
+        display: block;
+        margin-bottom: 0.2rem;
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        font-weight: $font-weight-semibold;
+    }
+}
+
+.braceletSizeTableArea {
+    position: relative;
+}
+
+.braceletSizeScrollHint {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin: 0 0 0.55rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid rgba(198, 179, 153, 0.18);
+    border-radius: 8px;
+    background: rgba(198, 179, 153, 0.1);
+    color: $color-text-tertiary;
+    font-family: $font-family-primary;
+    font-size: $font-size-xsmall;
+    font-weight: $font-weight-semibold;
+    line-height: 1.35;
+
+    span {
+        flex: 0 0 auto;
+        font-size: $font-size-normal;
+    }
+}
+
+.braceletSizeTableWrap {
+    position: relative;
+    overflow-x: auto;
+    width: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.08);
+
+    &::after {
+        content: "";
+        position: sticky;
+        right: 0;
+        display: none;
+        float: right;
+        width: 2.5rem;
+        height: 12rem;
+        margin-left: -2.5rem;
+        pointer-events: none;
+        background: linear-gradient(90deg, rgba(63, 54, 45, 0), rgba(63, 54, 45, 0.95));
+    }
+}
+
+.braceletSizeTable {
+    width: 100%;
+    min-width: 34rem;
+    border-collapse: collapse;
+    font-family: $font-family-primary;
+    font-size: $font-size-small;
+
+    caption {
+        margin-bottom: 0.55rem;
+        color: $color-text-secondary;
+        text-align: left;
+        font-size: $font-size-xsmall;
+        font-weight: $font-weight-medium;
+    }
+
+    th,
+    td {
+        padding: 0.7rem 0.75rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: left;
+    }
+
+    thead th {
+        color: $color-text-tertiary;
+        font-size: $font-size-xsmall;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+    }
+
+    tbody th {
+        color: $color-text-primary;
+        font-weight: $font-weight-semibold;
+    }
+
+    td {
+        color: rgba(255, 255, 255, 0.78);
+    }
+}
+
+.braceletSizeNote {
+    margin: 0;
+    padding: 0.85rem 1rem;
+    border-left: 3px solid $color-text-tertiary;
+    color: $color-text-secondary;
+    font-family: $font-family-primary;
+    font-size: $font-size-small;
+    line-height: 1.55;
+}
+
+.braceletSizeGuideCompact {
+    padding: 1rem;
+    background: rgba(198, 179, 153, 0.08);
+    box-shadow: none;
+
+    .braceletSizeGuideHeader h3 {
+        font-size: clamp(1.45rem, 3vw, 2rem);
+    }
+
+    .braceletGuideSteps {
+        grid-template-columns: 1fr;
+    }
+
+    .braceletGuideStep {
+        > span {
+            width: 1.75rem;
+            height: 1.75rem;
+            font-size: $font-size-xsmall;
+        }
+    }
+
+    .braceletSizeTable {
+        min-width: 28rem;
+    }
+}
+
+@media (max-width: 760px) {
+    .braceletGuideSteps {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .braceletSizeGuide {
+        padding: 1rem;
+    }
+
+    .braceletSizeScrollHint {
+        display: flex;
+    }
+
+    .braceletSizeTableWrap::after {
+        display: block;
+    }
+
+    .braceletGuideStep {
+        grid-template-columns: 1fr;
+    }
+
+    .braceletSizeTable {
+        min-width: 31rem;
+    }
+}

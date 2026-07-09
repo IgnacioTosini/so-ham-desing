@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { getProductById, getProducts } from "@/actions/product.action";
+import { BraceletSizeGuide } from "@/components/ui/braceletSizeGuide/BraceletSizeGuide";
 import { buildWhatsappMessageCompletePiece } from "@/utils";
 import { getSiteUrl } from "@/utils/siteUrl";
 import "./_pieceDetail.scss";
@@ -113,6 +114,8 @@ export default async function PieceDetailPage({ params }: PieceDetailPageProps) 
                             <p>{energyTags.slice(0, 4).join(" · ")}</p>
                         </div>
                     )}
+
+                    {product.type === "BRACELET" && <BraceletSizeGuide variant="compact" />}
 
                     <div className="pieceDetailPurchase">
                         <p>{formatPrice(product.price)}</p>
