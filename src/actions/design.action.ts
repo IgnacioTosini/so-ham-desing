@@ -8,6 +8,7 @@ import { BEAD_COUNT } from "@/utils/bead_count";
 import { randomBytes } from "crypto";
 
 const SHARED_DESIGNS_TAG = "shared-designs";
+const MAX_SHARED_DESIGN_NAME_LENGTH = 80;
 
 const getAllSharedDesignsCached = unstable_cache(
     async () => {
@@ -29,15 +30,38 @@ export async function createSharedDesign(params: {
     beadStones: Record<number, string>;
     name: string;
 }) {
+    if (!(params.type in BEAD_COUNT)) {
+        throw new Error("Tipo de pieza inválido.");
+    }
+
+    const name = params.name.trim();
+    if (!name) throw new Error("El nombre del diseño es obligatorio.");
+    if (name.length > MAX_SHARED_DESIGN_NAME_LENGTH) {
+        throw new Error(`El nombre del diseño no puede superar ${MAX_SHARED_DESIGN_NAME_LENGTH} caracteres.`);
+    }
+
     const total = BEAD_COUNT[params.type];
     const beads = Array.from({ length: total }, (_, i) => params.beadStones[i] ?? null);
+    const stoneIds = Array.from(new Set(beads.filter((stoneId): stoneId is string => Boolean(stoneId))));
+
+    if (beads.some((stoneId) => !stoneId)) {
+        throw new Error("El diseño debe tener una piedra en cada posición.");
+    }
+
+    const existingStoneCount = await prisma.stone.count({
+        where: { id: { in: stoneIds } },
+    });
+
+    if (existingStoneCount !== stoneIds.length) {
+        throw new Error("El diseño contiene piedras inválidas.");
+    }
 
     for (let attempt = 0; attempt < 3; attempt++) {
         const shareCode = randomBytes(5).toString("hex"); // ej: "a3f92c1b"
 
         try {
             const design = await prisma.sharedDesign.create({
-                data: { shareCode, type: params.type, beads, name: params.name },
+                data: { shareCode, type: params.type, beads, name },
             });
 
             await revalidateSharedDesignsData();

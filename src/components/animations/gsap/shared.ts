@@ -18,6 +18,25 @@ export const getResponsiveStart = (desktop: string, mobile: string) => {
   return window.innerWidth <= 768 ? mobile : desktop;
 };
 
+export const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+export const revealElements = (
+  ...items: Array<Element | NodeListOf<Element> | null>
+) => {
+  const elements = items.flatMap((item) => {
+    if (!item) return [];
+    return item instanceof Element ? [item] : Array.from(item);
+  });
+
+  if (elements.length > 0) {
+    gsap.set(elements, { autoAlpha: 1, clearProps: 'transform' });
+  }
+
+  return gsap.timeline();
+};
+
 export const buildSectionTimeline = (trigger: Element, desktopStart: string, mobileStart: string) => {
   ensureGsapPlugins();
 

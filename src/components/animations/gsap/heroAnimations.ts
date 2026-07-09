@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { prefersReducedMotion, revealElements } from './shared';
 
 export const animateHeroSection = (section: HTMLElement) => {
   const overlay = section.querySelector('.overlay');
@@ -7,6 +8,10 @@ export const animateHeroSection = (section: HTMLElement) => {
   const subtitle = section.querySelector('.heroSubtitle');
   const description = section.querySelector('.heroDescription');
   const actions = section.querySelector('.buttonsContainer');
+
+  if (prefersReducedMotion()) {
+    return revealElements(overlay, eyebrow, title, subtitle, description, actions);
+  }
 
   return gsap.timeline()
     .fromTo(overlay, { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.1, ease: 'power2.out' })

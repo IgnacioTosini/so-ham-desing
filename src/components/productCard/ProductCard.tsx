@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -22,11 +23,23 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
     const router = useRouter();
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = async () => {
-        await deleteProduct(product.id);
-        toast.success("Producto eliminado exitosamente.");
-        router.refresh();
+        if (isDeleting) return;
+        if (!confirm(`¿Eliminar el producto "${product.name}"?`)) return;
+
+        setIsDeleting(true);
+        try {
+            await deleteProduct(product.id);
+            toast.success("Producto eliminado exitosamente.");
+            router.refresh();
+        } catch (error) {
+            const message = error instanceof Error ? error.message : "No se pudo eliminar el producto.";
+            toast.error(message);
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
     const typeLabel = product.type === "BRACELET" ? "Pulsera" : "Collar";
@@ -51,7 +64,13 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <Link href={`/admin/products/${product.id}/edit`} className="productEditIcon">
                     <IoPencilOutline />
                 </Link>
-                <button className="productDeleteIcon" onClick={handleDelete}>
+                <button
+                    type="button"
+                    className="productDeleteIcon"
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                    aria-label={isDeleting ? `Eliminando ${product.name}` : `Eliminar ${product.name}`}
+                >
                     <FaRegTrashAlt />
                 </button>
             </div>

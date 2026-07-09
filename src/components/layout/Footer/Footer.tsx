@@ -10,6 +10,7 @@ import './_footer.scss';
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
+  const whatsappHref = `https://wa.me/${(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '').replace(/\D/g, '')}`;
 
   useEffect(() => {
     if (!footerRef.current) return;
@@ -25,20 +26,38 @@ export default function Footer() {
     <footer ref={footerRef} className="footer">
       <div className='footerContent'>
         <div className='footerContentInfoBrand'>
-          <Image src="/soHamDesignLogo.png" alt="Crear Pieza" width={50} height={50} />
-          <h1 className="footerTitle">So Ham Design</h1>
+          <div className="footerBrandHeader">
+            <Image src="/soHamDesignLogo.png" alt="Logo de So Ham Design" width={56} height={56} className="footerLogo" />
+            <div>
+              <span className="footerEyebrow">Piedras naturales</span>
+              <h2 className="footerTitle">So Ham Design</h2>
+            </div>
+          </div>
+          <p className="footerBrandText">Joyas artesanales creadas con intención, energía y una historia propia.</p>
         </div>
+
         <div className='footerContentInfo'>
           <p>Lo que llega a vos no es casualidad. Escribinos y creemos juntas tu pieza.</p>
 
+          <nav className="footerNav" aria-label="Navegación del sitio">
+            <a href="#viewPieces">Piezas</a>
+            <a href="#createPiece">Crear</a>
+            <a href="#simulator">Simulador</a>
+          </nav>
+
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="footerWhatsappCta">
+            <IoLogoWhatsapp />
+            Encargar una pieza
+          </a>
+
           <div className='footerContentInfoLinks'>
-            <a href="https://www.instagram.com/soham_desing/" target="_blank" rel="noopener noreferrer" className='instagramLink instagram'>
+            <a href="https://www.instagram.com/soham_design_bypato/" target="_blank" rel="noopener noreferrer" className='instagramLink instagram' aria-label="Instagram de So Ham Design">
               <IoLogoInstagram />
             </a>
-            <a href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer" className='whatsappLink whatsapp'>
+            <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className='whatsappLink whatsapp' aria-label="WhatsApp de So Ham Design">
               <IoLogoWhatsapp />
             </a>
-            <a href="https://www.tiktok.com/@soham_desingbypato?lang=es-419" target="_blank" rel="noopener noreferrer" className='tiktokLink tiktok'>
+            <a href="https://www.tiktok.com/@soham_desingbypato?lang=es-419" target="_blank" rel="noopener noreferrer" className='tiktokLink tiktok' aria-label="TikTok de So Ham Design">
               <IoLogoTiktok />
             </a>
           </div>
@@ -46,7 +65,7 @@ export default function Footer() {
       </div>
       <div className='footerContentFooter'>
         <p className='city'>Mar del Plata, Argentina</p>
-        <h1>© {new Date().getFullYear()} So Ham Design — Hecho con intención.</h1>
+        <p className="copyright">© <span suppressHydrationWarning>{new Date().getFullYear()}</span> So Ham Design. Hecho con intención.</p>
         <p className='creator'>Diseñado por Ignacio Tosini</p>
       </div>
     </footer>

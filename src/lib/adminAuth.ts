@@ -21,3 +21,8 @@ export async function requireAdminSession() {
     const hasSession = await hasAdminSession();
     if (!hasSession) redirect("/admin/login");
 }
+
+export async function assertAdminSession() {
+    const hasSession = await hasAdminSession();
+    if (!hasSession) throw new Error("No autorizado");
+}

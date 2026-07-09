@@ -15,7 +15,7 @@
         color: $color-text-secondary;
         line-height: 20px;
         text-transform: uppercase;
-        letter-spacing: .25em;
+        letter-spacing: 0;
     }
 
     .subTitle {
@@ -23,7 +23,7 @@
         text-wrap: balance;
         font-family: $font-family-secondary;
         font-weight: $font-weight-regular;
-        letter-spacing: -.01em;
+        letter-spacing: 0;
         max-width: 880px;
     }
 }

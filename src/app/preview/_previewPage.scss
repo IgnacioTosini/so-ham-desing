@@ -1,21 +1,19 @@
 @use '@/styles/variables' as *;
 
 .previewPage {
-    background: $color-secondary;
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 2rem;
+    padding: 2rem 1rem 4rem;
 
     .previewContainer {
         max-width: 72rem;
         width: 100%;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        gap: 2rem;
+        align-items: stretch;
+        gap: 1.5rem;
 
         .previewList {
             width: 100%;
@@ -26,13 +24,11 @@
 
         @media (max-width: 768px) {
             gap: 1.4rem;
-            padding-top: 7rem;
             align-items: stretch;
         }
     }
 
     @media (max-width: 768px) {
         padding: 1rem;
-        justify-content: flex-start;
     }
 }

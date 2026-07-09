@@ -1,6 +1,6 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { FaArrowRightLong } from 'react-icons/fa6';
-import { buildWhatsappMessageCompletePiece } from '@/utils';
 import { Product } from '@/types';
 import './_completedItem.scss';
 
@@ -9,10 +9,6 @@ interface Props {
 }
 
 export const CompletedItem = ({ item }: Props) => {
-  const whatsappUrl = buildWhatsappMessageCompletePiece({
-    type: item.type,
-    completedPiece: item,
-  });
   return (
     <div className='viewPiecesItem' key={item.id}>
       <picture className='viewPiecesItemPicture'>
@@ -26,8 +22,7 @@ export const CompletedItem = ({ item }: Props) => {
           </div>
           <p className='viewPiecesItemPrice'>${item.price}</p>
         </div>
-        <a href={whatsappUrl} target='_blank'
-          rel='noopener noreferrer' className='viewPiecesItemButton'>Consultar por Whatsapp <FaArrowRightLong className='viewPiecesItemButtonIcon' /></a>
+        <Link href={`/piezas/${item.id}`} className='viewPiecesItemButton'>Ver detalle <FaArrowRightLong className='viewPiecesItemButtonIcon' /></Link>
       </div>
     </div>
   )

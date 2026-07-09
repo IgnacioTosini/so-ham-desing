@@ -1,15 +1,16 @@
 @use '@/styles/variables' as *;
-@use 'sass:color';
 
 .hero {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     background-image: url('/heroImage.jpg');
-    min-height: 100dvh;
+    min-height: 92dvh;
     background-size: cover;
     background-position: center;
+    overflow: hidden;
 
     .overlay {
         position: absolute;
@@ -17,98 +18,155 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background:
+            linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.58) 62%, rgba(52, 46, 37, 0.96) 100%),
+            linear-gradient(90deg, rgba(24, 21, 20, 0.72) 0%, rgba(24, 21, 20, 0.18) 55%, rgba(24, 21, 20, 0.42) 100%);
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        right: clamp(1rem, 5vw, 5rem);
+        bottom: 1.25rem;
+        width: min(28rem, 42vw);
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(198, 179, 153, 0.72), transparent);
     }
 
     .heroContent {
         position: relative;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
+        align-items: flex-start;
+        justify-content: flex-end;
         width: 100%;
-        max-width: 950px;
+        max-width: 72rem;
         z-index: 1;
-        padding: 2rem;
+        padding: clamp(7rem, 18vh, 12rem) 1.25rem clamp(4rem, 10vh, 7rem);
 
         .heroSpan {
-            margin-bottom: 0.5rem;
-            color: $color-text-secondary;
+            margin-bottom: 0.85rem;
+            color: $color-text-tertiary;
             font-size: $font-size-xsmall;
             font-family: $font-family-primary;
             font-weight: $font-weight-medium;
-            letter-spacing: 0.1em;
+            letter-spacing: 0;
             text-transform: uppercase;
+            border-bottom: 1px solid rgba($color-text-tertiary, 0.45);
+            padding-bottom: 0.45rem;
         }
 
         .heroTitle {
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             color: $color-text-primary;
-            font-size: clamp($font-size-xlarge, 5vw, $font-size-xxxlarge);
+            font-size: clamp(3.5rem, 10vw, 7.5rem);
             font-family: $font-family-secondary;
             font-weight: $font-weight-regular;
-            text-align: center;
+            line-height: 0.88;
+            text-align: left;
+            max-width: 12ch;
         }
 
         .heroSubtitle {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             color: $color-text-primary;
-            font-size: clamp($font-size-medium, 3vw, $font-size-xlarge);
+            font-size: clamp($font-size-large, 3vw, $font-size-xlarge);
             font-family: $font-family-primary;
             font-weight: $font-weight-regular;
-            text-align: center;
+            line-height: 1.2;
+            text-align: left;
+            max-width: 34rem;
         }
 
         .heroDescription {
-            margin-bottom: 2rem;
+            margin-bottom: 2.25rem;
             color: $color-text-secondary;
-            font-size: clamp($font-size-normal, 2.5vw, $font-size-medium);
+            font-size: clamp($font-size-normal, 2vw, $font-size-medium);
             font-family: $font-family-primary;
             font-weight: $font-weight-regular;
-            text-align: center;
+            line-height: 1.7;
+            text-align: left;
+            max-width: 34rem;
         }
 
         .buttonsContainer {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
+            gap: 0.85rem;
+            justify-content: flex-start;
 
             .primaryButton,
             .secondaryButton {
-                letter-spacing: 0.1em;
+                letter-spacing: 0;
                 text-transform: uppercase;
-                border-radius: $radius-2xl;
-                transition: background-color 0.3s ease;
-                padding: 1rem 1.75rem;
+                border-radius: 999px;
+                transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+                padding: 1rem 1.6rem;
+                min-height: 3.25rem;
             }
 
             .primaryButton {
-                background-color: $color-primary;
-                color: #fff;
+                background-color: $color-text-primary;
+                color: $color-text-quaternary;
+                box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
                 font-size: $font-size-small;
                 font-family: $font-family-primary;
                 font-weight: $font-weight-medium;
-                border: none;
+                border: 1px solid rgba($color-text-primary, 0.9);
                 cursor: pointer;
 
                 &:hover {
-                    background-color: color.scale($color-primary, $lightness: -20%);
+                    background-color: $color-text-tertiary;
+                    border-color: $color-text-tertiary;
+                    transform: translateY(-2px);
                 }
             }
 
             .secondaryButton {
-                background-color: transparent;
-                color: $color-text-primary;
+                background-color: rgba(255, 255, 255, 0.08);
+                color: #fff;
                 font-size: $font-size-small;
                 font-family: $font-family-primary;
                 font-weight: $font-weight-medium;
-                border: 2px solid $color-text-primary;
+                border: 1px solid rgba($color-text-primary, 0.55);
+                backdrop-filter: blur(10px);
                 cursor: pointer;
 
                 &:hover {
-                    background-color: $color-hover-secondary;
+                    background-color: rgba($color-text-primary, 0.14);
+                    border-color: $color-text-primary;
                     color: #fff;
+                    transform: translateY(-2px);
+                }
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        min-height: 88dvh;
+        background-position: 58% center;
+
+        .heroContent {
+            align-items: center;
+            padding: 7rem 1.25rem 4rem;
+
+            .heroSpan,
+            .heroTitle,
+            .heroSubtitle,
+            .heroDescription {
+                text-align: center;
+            }
+
+            .heroTitle {
+                font-size: clamp(3.1rem, 18vw, 5.25rem);
+            }
+
+            .buttonsContainer {
+                justify-content: center;
+
+                .primaryButton,
+                .secondaryButton {
+                    width: min(100%, 18rem);
                 }
             }
         }

@@ -1,8 +1,12 @@
-import { buildSectionTimeline } from './shared';
+import { buildSectionTimeline, prefersReducedMotion, revealElements } from './shared';
 
 export const animateViewPiecesSection = (section: HTMLElement) => {
   const title = section.querySelector('.titleContainer');
   const cards = section.querySelectorAll('.viewPiecesItem');
+
+  if (prefersReducedMotion()) {
+    return revealElements(title, cards);
+  }
 
   return buildSectionTimeline(section, 'top 72%', 'top 50%')
     .fromTo(title, { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.74, ease: 'power3.out' })

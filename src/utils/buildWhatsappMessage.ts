@@ -1,4 +1,4 @@
-import { PieceType, Product } from "@/types";
+import type { PieceType, Product } from "@/types";
 
 interface BuildWhatsappMessageParams {
     type: PieceType;

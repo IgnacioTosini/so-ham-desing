@@ -49,7 +49,13 @@ export const CreateYourPiece = ({ stones }: CreateYourPieceProps) => {
       <div className='createYourPieceContainer'>
         <Title title={'Creá tu pieza'} subTitle={'Diseñá tu pulsera o collar a medida.'} />
         <p className="description">Elegí las piedras que resuenen con vos. Cada combinación es una intención.</p>
-        <PieceSelector selectedPiece={selectedPiece} onPieceChange={setSelectedPiece} />
+        <div className="createYourPieceToolbar">
+          <PieceSelector selectedPiece={selectedPiece} onPieceChange={setSelectedPiece} />
+          <div className="selectionMeter" aria-live="polite">
+            <span>{selectedStoneNames.length}</span>
+            <p>{selectedStoneNames.length === 1 ? 'piedra elegida' : 'piedras elegidas'}</p>
+          </div>
+        </div>
         <div className='stoneList'>
           {stones.map((stone) => (
             <StoneItem

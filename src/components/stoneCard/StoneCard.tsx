@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,11 +17,23 @@ interface StoneCardProps {
 
 export default function StoneCard({ stone }: StoneCardProps) {
     const router = useRouter();
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = async () => {
-        await deleteStone(stone.id);
-        toast.success("Piedra eliminada exitosamente.");
-        router.refresh();
+        if (isDeleting) return;
+        if (!confirm(`¿Eliminar la piedra "${stone.name}"?`)) return;
+
+        setIsDeleting(true);
+        try {
+            await deleteStone(stone.id);
+            toast.success("Piedra eliminada exitosamente.");
+            router.refresh();
+        } catch (error) {
+            const message = error instanceof Error ? error.message : "No se pudo eliminar la piedra.";
+            toast.error(message);
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
     return (
@@ -38,7 +51,13 @@ export default function StoneCard({ stone }: StoneCardProps) {
                 <Link href={`/admin/stones/${stone.id}/edit`} className="stoneEditIcon">
                     <IoPencilOutline />
                 </Link>
-                <button className="stoneDeleteIcon" onClick={handleDelete}>
+                <button
+                    type="button"
+                    className="stoneDeleteIcon"
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                    aria-label={isDeleting ? `Eliminando ${stone.name}` : `Eliminar ${stone.name}`}
+                >
                     <FaRegTrashAlt />
                 </button>
             </div>

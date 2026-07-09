@@ -1,7 +1,16 @@
 import { getCloudinaryCloudName } from "@/lib/services/cloudinary.service";
+import { hasAdminSession } from "@/lib/adminAuth";
 import { NextRequest, NextResponse } from "next/server";
 
+const MAX_UPLOAD_SIZE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+
 export async function POST(request: NextRequest) {
+    const isAdmin = await hasAdminSession();
+    if (!isAdmin) {
+        return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+
     const cloudName = getCloudinaryCloudName();
     const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET?.trim();
     const folder = process.env.CLOUDINARY_FOLDER?.trim();
@@ -15,6 +24,14 @@ export async function POST(request: NextRequest) {
 
     if (!file || !(file instanceof Blob)) {
         return NextResponse.json({ error: "No se recibió ningún archivo" }, { status: 400 });
+    }
+
+    if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+        return NextResponse.json({ error: "Formato de imagen no permitido" }, { status: 400 });
+    }
+
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+        return NextResponse.json({ error: "La imagen no puede superar los 5 MB" }, { status: 400 });
     }
 
     const uploadForm = new FormData();

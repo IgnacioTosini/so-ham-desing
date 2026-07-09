@@ -4,6 +4,7 @@ import { unstable_cache, revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { uploadBase64ImageToCloudinary } from "@/lib/services/cloudinary.service";
 import { deleteProjectImagesFromCloudinary, uploadImages } from "@/lib/services";
+import { assertAdminSession } from "@/lib/adminAuth";
 
 interface CreateStoneImageInput {
     url: string;
@@ -18,6 +19,12 @@ interface CreateStoneInput {
     energyTags: string[];
     images?: CreateStoneImageInput[];
 }
+
+const MAX_STONE_NAME_LENGTH = 80;
+const MAX_STONE_DESCRIPTION_LENGTH = 500;
+const MAX_STONE_IMAGES = 6;
+const MAX_ENERGY_TAGS = 8;
+const MAX_ENERGY_TAG_LENGTH = 30;
 
 const normalizeStoneImages = (images: CreateStoneImageInput[] = []) =>
     images
@@ -56,6 +63,27 @@ const resolveMainImageUrl = async (imageUrl: string | undefined, fallbackUrl: st
 };
 
 const STONES_TAG = "stones";
+
+const isMainImageUrlReferenced = async (url: string, excludeStoneId?: string): Promise<boolean> => {
+    if (!url) return false;
+
+    const [stonesUsingUrl, productsUsingUrl, imageRowsUsingUrl] = await Promise.all([
+        prisma.stone.count({
+            where: {
+                imageUrl: url,
+                ...(excludeStoneId ? { id: { not: excludeStoneId } } : {}),
+            },
+        }),
+        prisma.product.count({
+            where: { imageUrl: url },
+        }),
+        prisma.image.count({
+            where: { url },
+        }),
+    ]);
+
+    return stonesUsingUrl > 0 || productsUsingUrl > 0 || imageRowsUsingUrl > 0;
+};
 
 const isDatabaseConnectionError = (error: unknown): boolean => {
     if (!(error instanceof Error)) return false;
@@ -148,6 +176,8 @@ export async function getStones() {
 }
 
 export async function createStone(input: CreateStoneInput) {
+    await assertAdminSession();
+
     const name = input.name.trim();
     const description = input.description.trim();
     const normalizedImages = normalizeStoneImages(input.images);
@@ -158,6 +188,13 @@ export async function createStone(input: CreateStoneInput) {
     if (!name) throw new Error("El nombre es obligatorio");
     if (!description) throw new Error("La descripción es obligatoria");
     if (energyTags.length === 0) throw new Error("Al menos una etiqueta de energía es obligatoria");
+    if (name.length > MAX_STONE_NAME_LENGTH) throw new Error(`El nombre no puede superar ${MAX_STONE_NAME_LENGTH} caracteres`);
+    if (description.length > MAX_STONE_DESCRIPTION_LENGTH) throw new Error(`La descripción no puede superar ${MAX_STONE_DESCRIPTION_LENGTH} caracteres`);
+    if (normalizedImages.length > MAX_STONE_IMAGES) throw new Error(`No se pueden cargar más de ${MAX_STONE_IMAGES} imágenes`);
+    if (energyTags.length > MAX_ENERGY_TAGS) throw new Error(`No se pueden cargar más de ${MAX_ENERGY_TAGS} etiquetas`);
+    if (energyTags.some((tag) => tag.length > MAX_ENERGY_TAG_LENGTH)) {
+        throw new Error(`Cada etiqueta debe tener ${MAX_ENERGY_TAG_LENGTH} caracteres o menos`);
+    }
 
     try {
         const uploadedImages = await uploadStoneImagesIfNeeded(normalizedImages);
@@ -219,6 +256,8 @@ export async function getStoneById(id: string) {
 }
 
 export async function deleteStone(id: string) {
+    await assertAdminSession();
+
     try {
         const stone = await prisma.stone.findUnique({
             where: { id },
@@ -228,11 +267,33 @@ export async function deleteStone(id: string) {
                         image: true,
                     },
                 },
+                products: {
+                    include: {
+                        product: {
+                            select: {
+                                name: true,
+                            },
+                        },
+                    },
+                },
             },
         });
 
         if (!stone) {
             throw new Error("Piedra no encontrada");
+        }
+
+        if (stone.products.length > 0) {
+            const productNames = stone.products
+                .map((relation) => relation.product.name)
+                .filter(Boolean)
+                .join(", ");
+
+            throw new Error(
+                productNames
+                    ? `No se puede eliminar la piedra porque está usada en: ${productNames}.`
+                    : "No se puede eliminar la piedra porque está usada en productos."
+            );
         }
 
         const previousImageIds = stone.images.map((relation) => relation.image.id);
@@ -268,7 +329,8 @@ export async function deleteStone(id: string) {
         });
 
         const cloudinaryUrlsToDelete = new Set(orphanImages.map((image) => image.url));
-        if (stone.imageUrl) {
+        const stillReferencedMainImage = await isMainImageUrlReferenced(stone.imageUrl, id);
+        if (stone.imageUrl && !stillReferencedMainImage) {
             cloudinaryUrlsToDelete.add(stone.imageUrl);
         }
 
@@ -279,11 +341,19 @@ export async function deleteStone(id: string) {
         await revalidateStoneData();
     } catch (error) {
         console.error(error);
+        if (
+            error instanceof Error &&
+            (error.message === "Piedra no encontrada" || error.message.startsWith("No se puede eliminar la piedra"))
+        ) {
+            throw error;
+        }
         throw new Error("Error al eliminar la piedra");
     }
 }
 
 export async function updateStone(id: string, input: CreateStoneInput) {
+    await assertAdminSession();
+
     const name = input.name.trim();
     const description = input.description.trim();
     const hasImagesPayload = Array.isArray(input.images);
@@ -295,6 +365,13 @@ export async function updateStone(id: string, input: CreateStoneInput) {
     if (!name) throw new Error("El nombre es obligatorio");
     if (!description) throw new Error("La descripción es obligatoria");
     if (energyTags.length === 0) throw new Error("Al menos una etiqueta de energía es obligatoria");
+    if (name.length > MAX_STONE_NAME_LENGTH) throw new Error(`El nombre no puede superar ${MAX_STONE_NAME_LENGTH} caracteres`);
+    if (description.length > MAX_STONE_DESCRIPTION_LENGTH) throw new Error(`La descripción no puede superar ${MAX_STONE_DESCRIPTION_LENGTH} caracteres`);
+    if (normalizedImages.length > MAX_STONE_IMAGES) throw new Error(`No se pueden cargar más de ${MAX_STONE_IMAGES} imágenes`);
+    if (energyTags.length > MAX_ENERGY_TAGS) throw new Error(`No se pueden cargar más de ${MAX_ENERGY_TAGS} etiquetas`);
+    if (energyTags.some((tag) => tag.length > MAX_ENERGY_TAG_LENGTH)) {
+        throw new Error(`Cada etiqueta debe tener ${MAX_ENERGY_TAG_LENGTH} caracteres o menos`);
+    }
 
     try {
         const previousStone = await prisma.stone.findUnique({
@@ -392,7 +469,10 @@ export async function updateStone(id: string, input: CreateStoneInput) {
         }
 
         if (previousStone.imageUrl !== stone.imageUrl) {
-            await deleteProjectImagesFromCloudinary([previousStone.imageUrl]);
+            const stillReferencedMainImage = await isMainImageUrlReferenced(previousStone.imageUrl, id);
+            if (!stillReferencedMainImage) {
+                await deleteProjectImagesFromCloudinary([previousStone.imageUrl]);
+            }
         }
 
         await revalidateStoneData();

@@ -1,4 +1,4 @@
-import { buildSectionTimeline } from './shared';
+import { buildSectionTimeline, prefersReducedMotion, revealElements } from './shared';
 
 export const animateCreateYourPieceSection = (section: HTMLElement) => {
   const title = section.querySelector('.titleContainer');
@@ -7,6 +7,10 @@ export const animateCreateYourPieceSection = (section: HTMLElement) => {
   const stoneList = section.querySelector('.stoneList');
   const stones = section.querySelectorAll('.stoneItem');
   const order = section.querySelector('.yourOrder');
+
+  if (prefersReducedMotion()) {
+    return revealElements(title, description, selector, stoneList, stones, order);
+  }
 
   return buildSectionTimeline(section, 'top 74%', 'top 50%')
     .fromTo(title, { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.74, ease: 'power3.out' })

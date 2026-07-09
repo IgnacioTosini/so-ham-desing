@@ -114,7 +114,6 @@ export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick =
                 className="necklaceCircleCounter"
                 fill="#9CA3AF"
                 fontSize={13}
-                letterSpacing={2}
                 fontFamily="system-ui, sans-serif"
             >
                 {assignedCount} / {totalBeads} PIEDRAS

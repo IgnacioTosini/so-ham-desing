@@ -1,56 +1,157 @@
 @use '@/styles/variables' as *;
 
 .viewPieces {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 2rem;
-    background-color: $color-primary;
-    padding: 4rem 1rem;
+    background:
+        linear-gradient(180deg, $color-primary 0%, #27221c 100%);
+    padding: clamp(4rem, 9vw, 7rem) 1rem;
     margin: 0 auto;
-    min-height: 100dvh;
+    min-height: 92dvh;
+    overflow: hidden;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        background-size: 56px 56px;
+        mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 78%, transparent 100%);
+    }
 
     .viewPiecesContainer {
+        position: relative;
+        z-index: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 2rem;
+        gap: 2.5rem;
         width: 100%;
         max-width: 72rem;
 
-        .viewPiecesItems {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            gap: 2rem;
-            width: 100%;
-            overflow-y: auto;
-            max-height: 35rem;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.08);
-            scrollbar-gutter: stable;
+        .titleContainer {
+            align-items: center;
+            text-align: center;
+        }
 
-            &::-webkit-scrollbar {
-                width: 10px;
-            }
+        .viewPiecesFilters {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.3rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            background: rgba(24, 21, 20, 0.34);
+        }
 
-            &::-webkit-scrollbar-track {
+        .viewPiecesFilter {
+            appearance: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            min-height: 2.65rem;
+            min-width: 7.5rem;
+            padding: 0 0.9rem;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            background: transparent;
+            color: $color-text-secondary;
+            font-family: $font-family-primary;
+            font-size: $font-size-small;
+            font-weight: $font-weight-semibold;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+
+            strong {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 1.6rem;
+                height: 1.6rem;
+                padding: 0 0.35rem;
+                border-radius: 999px;
                 background: rgba(255, 255, 255, 0.08);
-                border-radius: 6px;
+                color: $color-text-primary;
+                font-size: $font-size-xsmall;
             }
 
-            &::-webkit-scrollbar-thumb {
-                background: rgba(255, 255, 255, 0.35);
-                border-radius: 6px;
+            &:hover,
+            &:focus-visible {
+                color: $color-text-primary;
+                border-color: rgba(255, 255, 255, 0.16);
+                outline: none;
             }
 
-            &::-webkit-scrollbar-thumb:hover {
-                background: rgba(255, 255, 255, 0.5);
+            &.isActive {
+                color: $color-text-quaternary;
+                background: $color-text-primary;
+                border-color: $color-text-primary;
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+
+                strong {
+                    background: rgba(20, 20, 20, 0.1);
+                    color: $color-text-quaternary;
+                }
             }
+        }
+
+        .viewPiecesItems {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-items: center;
+            gap: clamp(1.25rem, 3vw, 2rem);
+            width: 100%;
 
             @media (max-width: 768px) {
-                justify-content: center;
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .viewPiecesEmpty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            width: min(100%, 34rem);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            background: rgba(24, 21, 20, 0.28);
+            color: $color-text-secondary;
+            font-family: $font-family-primary;
+
+            p {
+                margin: 0;
+                color: $color-text-primary;
+                font-family: $font-family-secondary;
+                font-size: $font-size-large;
+            }
+
+            span {
+                font-size: $font-size-small;
+            }
+        }
+    }
+
+    @media (max-width: 620px) {
+        .viewPiecesContainer {
+            .viewPiecesFilters {
+                display: grid;
+                grid-template-columns: 1fr;
+                width: 100%;
+                border-radius: 8px;
+            }
+
+            .viewPiecesFilter {
+                width: 100%;
             }
         }
     }

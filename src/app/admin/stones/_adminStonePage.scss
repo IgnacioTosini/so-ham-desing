@@ -5,91 +5,31 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding-top: 6rem;
     min-height: 100dvh;
-
-    .backLink {
-        position: absolute;
-        top: 10rem;
-        left: 2rem;
-        font-size: $font-size-normal;
-        color: $color-text-secondary;
-        font-family: $font-family-primary;
-        text-decoration: none;
-        z-index: 2;
-
-        &:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            top: 8.5rem;
-            left: 1rem;
-            font-size: $font-size-small;
-        }
-    }
 
     .adminStonesPageContainer {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 2rem;
+        align-items: stretch;
+        gap: 1.5rem;
+        width: 100%;
         max-width: 1200px;
-        padding: 2rem;
+        padding: 2rem 1rem 4rem;
 
         @media (max-width: 768px) {
-            text-align: center;
-            padding-top: 4.5rem;
-        }
-
-        h1 {
-            font-size: $font-size-xxlarge;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            font-family: $font-family-secondary;
-            color: $color-text-primary;
-            font-weight: $font-weight-regular;
-
-            @media (max-width: 768px) {
-                font-size: $font-size-xlarge;
-                line-height: 1.2;
-            }
+            padding-top: 1rem;
         }
 
         .stoneListContainer {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            justify-items: center;
             align-items: stretch;
             gap: 1.5rem;
-            overflow-y: scroll;
-            max-height: 28rem;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.08);
-            scrollbar-gutter: stable;
-
-            &::-webkit-scrollbar {
-                width: 10px;
-            }
-
-            &::-webkit-scrollbar-track {
-                background: rgba(255, 255, 255, 0.08);
-                border-radius: 6px;
-            }
-
-            &::-webkit-scrollbar-thumb {
-                background: rgba(255, 255, 255, 0.35);
-                border-radius: 6px;
-            }
-
-            &::-webkit-scrollbar-thumb:hover {
-                background: rgba(255, 255, 255, 0.5);
-            }
+            width: 100%;
 
             @media (max-width: 768px) {
-                max-height: 20rem;
+                grid-template-columns: 1fr;
             }
         }
     }

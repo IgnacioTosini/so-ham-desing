@@ -26,6 +26,47 @@
             line-height: 1.7;
         }
 
+        .createYourPieceToolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .selectionMeter {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            min-height: 3rem;
+            padding: 0.45rem 0.9rem 0.45rem 0.55rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            background: rgba(24, 21, 20, 0.38);
+            color: $color-text-secondary;
+            font-family: $font-family-primary;
+
+            span {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 2.1rem;
+                height: 2.1rem;
+                border-radius: 50%;
+                background: $color-text-primary;
+                color: $color-text-quaternary;
+                font-size: $font-size-small;
+                font-weight: $font-weight-bold;
+            }
+
+            p {
+                margin: 0;
+                font-size: $font-size-small;
+                font-weight: $font-weight-medium;
+                white-space: nowrap;
+            }
+        }
+
         .stoneList {
             display: flex;
             flex-wrap: wrap;
@@ -67,8 +108,17 @@
         .selectorButton {
             flex: 1;
             min-width: 0;
-            letter-spacing: 0.18em;
             padding-inline: 1rem;
+        }
+
+        .createYourPieceToolbar {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .selectionMeter {
+            justify-content: center;
+            width: 100%;
         }
 
         .stoneList {

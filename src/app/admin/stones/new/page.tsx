@@ -18,9 +18,15 @@ export default async function NewStonePage() {
 
     return (
         <div className="adminStonesPage">
-            <Link href="/admin/stones" className="backLink">← Volver</Link>
             <div className="adminStonesPageContainer">
-                <h1>Admin - Nueva piedra</h1>
+                <div className="adminPageHeader">
+                    <div>
+                        <span className="adminEyebrow">Nueva piedra</span>
+                        <h1>Crear piedra</h1>
+                        <p>Agrega una piedra al catálogo y al simulador.</p>
+                    </div>
+                    <Link href="/admin/stones" className="adminSecondaryAction">Cancelar</Link>
+                </div>
                 <StoneForm mode="create" />
             </div>
         </div>

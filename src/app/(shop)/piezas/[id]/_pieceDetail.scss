@@ -1,0 +1,417 @@
+@use '@/styles/variables' as *;
+
+.pieceDetail {
+    min-height: 100dvh;
+    padding: clamp(6.5rem, 11vw, 8rem) 1rem clamp(4rem, 8vw, 7rem);
+    background:
+        radial-gradient(circle at 18% 8%, rgba(198, 179, 153, 0.16), transparent 30rem),
+        linear-gradient(180deg, $color-primary 0%, #27221c 42%, $color-secondary 100%);
+    color: $color-text-primary;
+}
+
+.pieceDetailHero,
+.pieceDetailSection {
+    width: min(100%, 72rem);
+    margin: 0 auto;
+}
+
+.pieceDetailHero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(20rem, 0.96fr);
+    align-items: stretch;
+    gap: clamp(1.25rem, 4vw, 3rem);
+}
+
+.pieceDetailMedia {
+    overflow: hidden;
+    min-height: clamp(28rem, 58vw, 42rem);
+    border: 1px solid rgba(198, 179, 153, 0.22);
+    border-radius: 8px;
+    background: rgba(24, 21, 20, 0.38);
+    box-shadow: 0 26px 64px rgba(0, 0, 0, 0.24);
+}
+
+.pieceDetailImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pieceDetailIntro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.25rem;
+    min-width: 0;
+    padding: clamp(1.25rem, 4vw, 2.25rem);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+        rgba(24, 21, 20, 0.32);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+    h1 {
+        margin: 0;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        font-size: clamp(3rem, 7vw, 6rem);
+        font-weight: $font-weight-semibold;
+        line-height: 0.9;
+    }
+}
+
+.pieceDetailBack {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    min-height: 2.35rem;
+    padding: 0 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    color: $color-text-secondary;
+    font-family: $font-family-primary;
+    font-size: $font-size-small;
+    font-weight: $font-weight-medium;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+
+    svg {
+        width: 0.85rem;
+    }
+
+    &:hover,
+    &:focus-visible {
+        color: $color-text-primary;
+        background: rgba(255, 255, 255, 0.08);
+        outline: none;
+        transform: translateX(-2px);
+    }
+}
+
+.pieceDetailType {
+    margin: 0;
+    color: $color-text-tertiary;
+    font-family: $font-family-primary;
+    font-size: $font-size-xsmall;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+}
+
+.pieceDetailDescription {
+    width: min(100%, 34rem);
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: $font-family-primary;
+    font-size: clamp($font-size-normal, 2vw, $font-size-medium);
+    line-height: 1.75;
+}
+
+.pieceDetailIntent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: min(100%, 32rem);
+    padding: 1rem;
+    border: 1px solid rgba(198, 179, 153, 0.2);
+    border-radius: 8px;
+    background: rgba(198, 179, 153, 0.08);
+
+    span {
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+    }
+
+    p {
+        margin: 0;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        font-size: clamp(1.35rem, 3vw, 2rem);
+        line-height: 1.08;
+    }
+}
+
+.pieceDetailPurchase {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem;
+    margin-top: 0.25rem;
+
+    p {
+        display: inline-flex;
+        align-items: center;
+        min-height: 3rem;
+        margin: 0;
+        padding: 0 1rem;
+        border-radius: 999px;
+        background: $color-text-tertiary;
+        color: $color-text-quaternary;
+        font-family: $font-family-primary;
+        font-size: $font-size-normal;
+        font-weight: $font-weight-bold;
+    }
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        min-height: 3rem;
+        padding: 0 1.15rem;
+        border: 1px solid $color-text-primary;
+        border-radius: 999px;
+        background: $color-text-primary;
+        color: $color-text-quaternary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        font-weight: $font-weight-semibold;
+        text-decoration: none;
+        transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+        svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        &:hover,
+        &:focus-visible {
+            background: $color-text-tertiary;
+            border-color: $color-text-tertiary;
+            outline: none;
+            transform: translateY(-1px);
+        }
+    }
+}
+
+.pieceDetailSection {
+    padding-top: clamp(3rem, 7vw, 5rem);
+}
+
+.pieceDetailSectionHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+
+    p {
+        margin: 0;
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+    }
+
+    h2 {
+        margin: 0;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        font-size: clamp(2.1rem, 5vw, 3.8rem);
+        font-weight: $font-weight-semibold;
+        line-height: 0.95;
+    }
+}
+
+.pieceStoneGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 1rem;
+}
+
+.pieceStoneCard {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1rem;
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(24, 21, 20, 0.32);
+
+    h3 {
+        margin: 0 0 0.35rem;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        font-size: $font-size-large;
+        font-weight: $font-weight-semibold;
+        line-height: 1;
+    }
+
+    p {
+        margin: 0;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        line-height: 1.65;
+    }
+}
+
+.pieceStoneImage {
+    width: 5.5rem;
+    height: 5.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.pieceStoneTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.85rem;
+
+    span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 1.75rem;
+        padding: 0 0.55rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+        font-weight: $font-weight-medium;
+    }
+}
+
+.pieceDetailEmpty {
+    margin: 0;
+    color: $color-text-secondary;
+    font-family: $font-family-primary;
+}
+
+.pieceGallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1rem;
+}
+
+.pieceGalleryImage {
+    width: 100%;
+    aspect-ratio: 1;
+    height: auto;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.relatedPieceCard {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    min-height: 0;
+    max-width: 15.5rem;
+    padding: 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(24, 21, 20, 0.32);
+    color: $color-text-primary;
+    text-decoration: none;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+
+    img {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        height: auto;
+        max-height: 11rem;
+        border-radius: 6px;
+        object-fit: cover;
+    }
+
+    span {
+        padding-right: 1.6rem;
+        font-family: $font-family-secondary;
+        font-size: $font-size-medium;
+        line-height: 1;
+    }
+
+    p {
+        margin: 0;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+    }
+
+    svg {
+        position: absolute;
+        right: 1rem;
+        bottom: 1rem;
+        color: $color-text-tertiary;
+    }
+
+    &:hover,
+    &:focus-visible {
+        border-color: rgba(198, 179, 153, 0.45);
+        outline: none;
+        transform: translateY(-2px);
+    }
+}
+
+.relatedPieces {
+    padding-bottom: 0.5rem;
+}
+
+.relatedPiecesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 15.5rem));
+    justify-content: start;
+    gap: 1rem;
+}
+
+@media (max-width: 820px) {
+    .pieceDetailHero {
+        grid-template-columns: 1fr;
+    }
+
+    .pieceDetailMedia {
+        min-height: auto;
+        aspect-ratio: 4 / 5;
+    }
+
+}
+
+@media (max-width: 560px) {
+    .pieceDetail {
+        padding-inline: 0.85rem;
+    }
+
+    .pieceDetailIntro {
+        padding: 1rem;
+    }
+
+    .pieceDetailPurchase,
+    .pieceDetailPurchase a,
+    .pieceDetailPurchase p {
+        width: 100%;
+    }
+
+    .pieceDetailPurchase a,
+    .pieceDetailPurchase p {
+        justify-content: center;
+    }
+
+    .pieceStoneCard {
+        grid-template-columns: 1fr;
+    }
+
+    .relatedPiecesGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .relatedPieceCard {
+        max-width: none;
+    }
+}
+
+@media (max-width: 420px) {
+    .relatedPiecesGrid {
+        grid-template-columns: 1fr;
+    }
+}

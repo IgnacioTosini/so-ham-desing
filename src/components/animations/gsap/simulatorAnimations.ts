@@ -1,4 +1,4 @@
-import { buildSectionTimeline } from './shared';
+import { buildSectionTimeline, prefersReducedMotion, revealElements } from './shared';
 
 export const animateSimulatorSection = (section: HTMLElement) => {
   const title = section.querySelector('.titleContainer');
@@ -6,6 +6,10 @@ export const animateSimulatorSection = (section: HTMLElement) => {
   const circle = section.querySelector('svg');
   const panel = section.querySelector('.stonePanel');
   const button = section.querySelector('.simulatorWhatsappButton');
+
+  if (prefersReducedMotion()) {
+    return revealElements(title, selectorRow, circle, panel, button);
+  }
 
   return buildSectionTimeline(section, 'top 72%', 'top 48%')
     .fromTo(title, { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.74, ease: 'power3.out' })

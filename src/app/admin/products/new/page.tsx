@@ -20,9 +20,15 @@ export default async function NewProductPage() {
 
     return (
         <div className="adminProductsPage">
-            <Link href="/admin/products" className="backLink">← Volver</Link>
             <div className="adminProductsPageContainer">
-                <h1>Admin - Nuevo producto</h1>
+                <div className="adminPageHeader">
+                    <div>
+                        <span className="adminEyebrow">Nuevo producto</span>
+                        <h1>Crear producto</h1>
+                        <p>Agrega una pieza lista para mostrar en la tienda.</p>
+                    </div>
+                    <Link href="/admin/products" className="adminSecondaryAction">Cancelar</Link>
+                </div>
                 <ProductForm
                     mode="create"
                     availableStones={stones.map((s) => ({ id: s.id, name: s.name }))}

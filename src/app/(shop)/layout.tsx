@@ -3,9 +3,10 @@ import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
 import { ToastContainer } from "react-toastify";
 import { Analytics } from "@vercel/analytics/next";
+import { getSiteUrl } from "@/utils/siteUrl";
 import 'react-toastify/dist/ReactToastify.css';
 
-const metadataBaseUrl = "https://so-ham-desing.vercel.app";
+const metadataBaseUrl = getSiteUrl();
 const ogImageUrl = "/soHamDesign.png?v=2";
 
 export const metadata: Metadata = {
@@ -63,20 +64,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default function ShopLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
-      <body>
-        <Navbar />
-        {children}
-        <ToastContainer position="top-right" autoClose={2500} />
-        <Analytics />
-        <Footer />
-      </body>
-    </html>
+    <>
+      <Navbar />
+      {children}
+      <ToastContainer position="top-right" autoClose={2500} />
+      <Analytics />
+      <Footer />
+    </>
   );
 }

@@ -11,6 +11,14 @@ interface Props {
     params: Promise<{ shareCode: string }>;
 }
 
+export const metadata = {
+    title: "Vista previa de diseño",
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
+
 export default async function PreviewByCodePage({ params }: Props) {
     const { shareCode } = await params;
 
@@ -33,7 +41,7 @@ export default async function PreviewByCodePage({ params }: Props) {
     return (
             <PreviewByCodeClient>
             <div className="previewByCodePage">
-                <Link href="/preview" className="backLink">← Volver a la lista de diseños</Link>
+                <Link href="/" className="backLink">← Volver al inicio</Link>
                 <PreviewCanvas
                     pieceType={design.type as PieceType}
                     beadStones={beadStones}

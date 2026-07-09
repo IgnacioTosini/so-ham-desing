@@ -19,15 +19,13 @@ export default async function AdminStonesPage() {
         <div className="adminStonesPage">
             <div className="adminStonesPageContainer">
                 <div className="adminHeader">
-                    <h1>Admin - General</h1>
-                    <p>Gestión de piedras y piezas.</p>
-                    <form action="/api/admin/logout" method="post">
-                        <button className="adminButton" type="submit">Cerrar sesión</button>
-                    </form>
+                    <span className="adminEyebrow">Panel de administración</span>
+                    <h1>Gestión de catálogo</h1>
+                    <p>Administra piedras, productos y diseños personalizados desde un solo lugar.</p>
                 </div>
 
                 <div className="adminSection">
-                    <h2>Gestión de piedras</h2>
+                    <h2>Piedras</h2>
                     <div className="adminSectionHeader">
                         <p>Aquí puedes agregar, editar o eliminar piedras.</p>
                     </div>
@@ -38,13 +36,23 @@ export default async function AdminStonesPage() {
                 </div>
 
                 <div className="adminSection">
-                    <h2>Gestión de productos</h2>
+                    <h2>Productos</h2>
                     <div className="adminSectionHeader">
                         <p>Aquí puedes agregar, editar o eliminar productos (pulseras, collares).</p>
                     </div>
                     <div className="adminButtonsContainer">
                         <Link href="/admin/products" className="adminButton">Ver productos</Link>
                         <Link href="/admin/products/new" className="adminButton">Agregar nuevo producto</Link>
+                    </div>
+                </div>
+
+                <div className="adminSection">
+                    <h2>Diseños personalizados</h2>
+                    <div className="adminSectionHeader">
+                        <p>Consulta los diseños que enviaron las clientas desde el simulador.</p>
+                    </div>
+                    <div className="adminButtonsContainer">
+                        <Link href="/preview" className="adminButton">Ver diseños</Link>
                     </div>
                 </div>
             </div>

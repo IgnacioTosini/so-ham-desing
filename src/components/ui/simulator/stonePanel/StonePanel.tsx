@@ -5,19 +5,28 @@ import './_stonePanel.scss';
 interface Props {
     stones: Stone[];
     onStoneClick: (stoneId: string) => void;
+    isBeadSelected: boolean;
+    activeStoneId: string | null;
 }
 
-export const StonePanel = ({ stones, onStoneClick }: Props) => {
+export const StonePanel = ({ stones, onStoneClick, isBeadSelected, activeStoneId }: Props) => {
     return (
         <div className="stonePanel">
-            <p className="stonePanelTitle">PIEDRAS</p>
+            <div className="stonePanelHeader">
+                <p className="stonePanelTitle">Piedras</p>
+                <span className={isBeadSelected ? 'stonePanelState isReady' : 'stonePanelState'}>
+                    {isBeadSelected ? 'Cuenta activa' : 'Elegí una cuenta'}
+                </span>
+            </div>
             <div className="stonePanelGrid">
                 {stones.map((stone) => (
                     <button
                         key={stone.id}
                         type="button"
-                        className="stonePanelItem"
+                        className={activeStoneId === stone.id ? 'stonePanelItem isActive' : 'stonePanelItem'}
                         onClick={() => onStoneClick(stone.id)}
+                        disabled={!isBeadSelected}
+                        aria-pressed={activeStoneId === stone.id}
                     >
                         <div className="stonePanelImageWrapper">
                             <Image

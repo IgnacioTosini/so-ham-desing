@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import type { AccessoryType } from "@prisma/client";
 import { uploadBase64ImageToCloudinary } from "@/lib/services/cloudinary.service";
 import { deleteProjectImagesFromCloudinary, uploadImages } from "@/lib/services";
+import { assertAdminSession } from "@/lib/adminAuth";
 
 interface CreateProductImageInput {
     url: string;
@@ -21,6 +22,12 @@ interface CreateProductInput {
     stoneIds?: string[];
     images?: CreateProductImageInput[];
 }
+
+const MAX_PRODUCT_NAME_LENGTH = 80;
+const MAX_PRODUCT_DESCRIPTION_LENGTH = 500;
+const MAX_PRODUCT_IMAGES = 6;
+const MAX_PRODUCT_STONES = 20;
+const MAX_PRODUCT_PRICE = 999_999_999;
 
 const productInclude = {
     images: {
@@ -175,6 +182,8 @@ export async function getProductById(id: string) {
 }
 
 export async function createProduct(input: CreateProductInput) {
+    await assertAdminSession();
+
     const name = input.name.trim();
     const description = input.description?.trim() || null;
     const price = Number(input.price);
@@ -184,6 +193,11 @@ export async function createProduct(input: CreateProductInput) {
 
     if (!name) throw new Error("El nombre es obligatorio");
     if (!Number.isFinite(price) || price <= 0) throw new Error("El precio debe ser mayor a cero");
+    if (name.length > MAX_PRODUCT_NAME_LENGTH) throw new Error(`El nombre no puede superar ${MAX_PRODUCT_NAME_LENGTH} caracteres`);
+    if (description && description.length > MAX_PRODUCT_DESCRIPTION_LENGTH) throw new Error(`La descripción no puede superar ${MAX_PRODUCT_DESCRIPTION_LENGTH} caracteres`);
+    if (price > MAX_PRODUCT_PRICE) throw new Error("El precio es demasiado alto");
+    if (normalizedImages.length > MAX_PRODUCT_IMAGES) throw new Error(`No se pueden cargar más de ${MAX_PRODUCT_IMAGES} imágenes`);
+    if (stoneIds.length > MAX_PRODUCT_STONES) throw new Error(`No se pueden asociar más de ${MAX_PRODUCT_STONES} piedras`);
 
     try {
         const uploadedImages = await uploadProductImagesIfNeeded(normalizedImages);
@@ -236,6 +250,8 @@ export async function createProduct(input: CreateProductInput) {
 }
 
 export async function deleteProduct(id: string) {
+    await assertAdminSession();
+
     try {
         const product = await prisma.product.findUnique({
             where: { id },
@@ -292,6 +308,8 @@ export async function deleteProduct(id: string) {
 }
 
 export async function updateProduct(id: string, input: CreateProductInput) {
+    await assertAdminSession();
+
     const name = input.name.trim();
     const description = input.description?.trim() || null;
     const price = Number(input.price);
@@ -303,6 +321,11 @@ export async function updateProduct(id: string, input: CreateProductInput) {
 
     if (!name) throw new Error("El nombre es obligatorio");
     if (!Number.isFinite(price) || price <= 0) throw new Error("El precio debe ser mayor a cero");
+    if (name.length > MAX_PRODUCT_NAME_LENGTH) throw new Error(`El nombre no puede superar ${MAX_PRODUCT_NAME_LENGTH} caracteres`);
+    if (description && description.length > MAX_PRODUCT_DESCRIPTION_LENGTH) throw new Error(`La descripción no puede superar ${MAX_PRODUCT_DESCRIPTION_LENGTH} caracteres`);
+    if (price > MAX_PRODUCT_PRICE) throw new Error("El precio es demasiado alto");
+    if (normalizedImages.length > MAX_PRODUCT_IMAGES) throw new Error(`No se pueden cargar más de ${MAX_PRODUCT_IMAGES} imágenes`);
+    if (stoneIds.length > MAX_PRODUCT_STONES) throw new Error(`No se pueden asociar más de ${MAX_PRODUCT_STONES} piedras`);
 
     try {
         const previousProduct = await prisma.product.findUnique({

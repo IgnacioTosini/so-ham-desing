@@ -1,19 +1,31 @@
 @use '@/styles/variables' as *;
 
 .viewPiecesItem {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+    align-items: stretch;
+    gap: 0;
     width: 100%;
-    max-width: 350px;
+    max-width: 360px;
     height: 100%;
-    max-height: 500px;
+    min-height: 31rem;
+    overflow: hidden;
+    border: 1px solid rgba(198, 179, 153, 0.2);
+    border-radius: 8px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+        rgba(63, 54, 45, 0.72);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.2);
+    transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
 
     &:hover {
+        transform: translateY(-6px);
+        border-color: rgba(198, 179, 153, 0.45);
+        box-shadow: 0 26px 58px rgba(0, 0, 0, 0.28);
+
         .viewPiecesItemImage {
             transform: scale(1.05);
-            transition: all 0.3s ease-in-out;
         }
     }
 
@@ -23,24 +35,26 @@
 
     .viewPiecesItemPicture {
         width: 100%;
-        max-width: 360px;
-        height: auto;
+        height: 20rem;
         overflow: hidden;
+        background-color: rgba(0, 0, 0, 0.18);
 
         .viewPiecesItemImage {
             width: 100%;
-            max-width: 360px;
-            height: 290px;
+            height: 100%;
             object-fit: cover;
-            transition: all 0.3s ease-in-out;
+            transition: transform 0.34s ease;
         }
     }
 
     .viewPiecesItemContent {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        justify-content: space-between;
+        gap: 1.25rem;
         width: 100%;
+        flex: 1;
+        padding: 1.2rem;
 
         .viewPiecesItemInfo {
             display: flex;
@@ -54,76 +68,67 @@
 
             h3 {
                 font-size: $font-size-xsmall;
-                letter-spacing: 0.05em;
+                letter-spacing: 0;
                 text-transform: uppercase;
-                color: $color-text-secondary;
-                font-weight: $font-weight-regular;
+                color: $color-text-tertiary;
+                font-weight: $font-weight-medium;
                 font-family: $font-family-primary;
                 margin-bottom: .5rem;
-                height: 20px;
+                min-height: 20px;
             }
 
             .viewPiecesItemDescription {
-                font-size: $font-size-medium;
+                font-size: clamp($font-size-large, 2.4vw, $font-size-xlarge);
                 color: $color-text-primary;
                 font-weight: $font-weight-regular;
                 font-family: $font-family-secondary;
-                margin-bottom: 1rem;
-                overflow: auto;
-                height: 80px;
-
-                /* Custom scrollbar styles */
-                &::-webkit-scrollbar {
-                    width: 2px;
-                }
-
-                &::-webkit-scrollbar-track {
-                    background: transparent;
-                }
-
-                &::-webkit-scrollbar-thumb {
-                    background-color: $color-text-primary;
-                    border-radius: 10px;
-                }
-
-                    /* Firefox scrollbar styles */
-                scrollbar-width: thin;
-                scrollbar-color: $color-text-primary transparent;
+                line-height: 1.12;
+                margin-bottom: 0.5rem;
+                min-height: 4.5rem;
+                overflow-wrap: anywhere;
             }
 
             .viewPiecesItemPrice {
-                font-size: $font-size-medium;
-                color: $color-text-primary;
-                font-weight: $font-weight-regular;
-                font-family: $font-family-secondary;
+                font-size: $font-size-normal;
+                color: $color-text-quaternary;
+                font-weight: $font-weight-semibold;
+                font-family: $font-family-primary;
+                background-color: $color-text-tertiary;
+                border-radius: 999px;
+                padding: 0.45rem 0.75rem;
                 width: fit-content;
             }
         }
 
         .viewPiecesItemButton {
             cursor: pointer;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
             color: $color-text-primary;
             font-size: $font-size-xsmall;
             font-weight: $font-weight-medium;
-            background-color: transparent;
-            border: none;
-            line-height: 16px;
-            border-bottom: 1px solid $color-text-primary;
+            background-color: rgba(24, 21, 20, 0.72);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            line-height: 1.2;
             text-decoration: none;
             font-family: $font-family-primary;
             text-transform: uppercase;
-            transition: all 0.3s ease-in-out;
-            letter-spacing: 0.1em;
-            padding-bottom: .5rem;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            letter-spacing: 0;
+            padding: 0.85rem 1rem;
+            border-radius: 999px;
 
             .viewPiecesItemButtonIcon {
-                margin-left: 0.5rem;
-                transition: all 0.3s ease-in-out;
+                flex: 0 0 auto;
+                transition: transform 0.3s ease;
             }
 
             &:hover {
-                border-color: $color-hover-primary;
+                background-color: $color-text-primary;
+                border-color: $color-text-primary;
+                color: $color-text-quaternary;
 
                 .viewPiecesItemButtonIcon {
                     transform: translateX(5px);

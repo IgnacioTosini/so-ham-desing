@@ -1,12 +1,13 @@
 @use '@/styles/variables' as *;
 
 .simulator {
-    background: $color-secondary;
-    padding: 4rem 1rem;
-    min-height: 100dvh;
+    background:
+        linear-gradient(180deg, $color-secondary 0%, #2c261f 100%);
+    padding: clamp(4rem, 8vw, 7rem) 1rem;
+    min-height: 92dvh;
 
     @media (max-width: 768px) {
-        padding: 2rem 0rem;
+        padding: 3rem 0rem;
 
         .titleContainer {
             align-items: center;
@@ -23,33 +24,70 @@
         margin: 0 auto;
         display: flex;
         flex-direction: column;
-        gap: 2rem;
+        gap: 2.25rem;
 
         .simulatorPieceSelector {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 1rem;
 
             @media (max-width: 768px) {
                 flex-direction: column;
+                align-items: stretch;
                 gap: 1rem;
             }
+        }
 
-            .simulatorPreviewLink {
-                font-family: $font-family-primary;
-                font-size: $font-size-small;
-                font-weight: $font-weight-regular;
+        .simulatorProgress {
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            width: min(100%, 19rem);
+            padding: 0.75rem 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            background: rgba(24, 21, 20, 0.32);
+
+            @media (max-width: 768px) {
+                width: 100%;
+            }
+        }
+
+        .simulatorProgressText {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            font-family: $font-family-primary;
+
+            span {
                 color: $color-text-primary;
-                text-decoration: none;
-                transition: all 0.3s ease;
+                font-size: $font-size-small;
+                font-weight: $font-weight-bold;
+            }
 
-                &:hover {
-                    color: $color-hover-primary;
-                }
+            p {
+                margin: 0;
+                color: $color-text-secondary;
+                font-size: $font-size-xsmall;
+                font-weight: $font-weight-medium;
+            }
+        }
 
-                @media (max-width: 768px) {
-                    font-size: $font-size-xsmall;
-                }
+        .simulatorProgressTrack {
+            position: relative;
+            overflow: hidden;
+            height: 0.45rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+
+            span {
+                display: block;
+                height: 100%;
+                border-radius: inherit;
+                background: $color-text-tertiary;
+                transition: width 0.25s ease;
             }
         }
 
@@ -57,17 +95,37 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 3rem;
+            gap: clamp(1.5rem, 4vw, 3rem);
+            padding: clamp(1rem, 3vw, 2rem);
+            border: 1px solid rgba(198, 179, 153, 0.18);
+            border-radius: 8px;
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+                rgba(24, 21, 20, 0.28);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 24px 60px rgba(0, 0, 0, 0.18);
+
+            > .necklaceCircleSvg {
+                flex: 1 1 34rem;
+                max-width: min(52vw, 38rem);
+                padding: 1rem;
+                border-radius: 8px;
+                background:
+                    radial-gradient(circle at center, rgba(198, 179, 153, 0.12), transparent 58%),
+                    rgba(0, 0, 0, 0.1);
+            }
 
             @media (max-width: 768px) {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 1rem;
-                z-index: 1000;
+                border-left: none;
+                border-right: none;
+                border-radius: 0;
+                padding: 1rem;
 
                 > :first-child {
                     position: sticky;
-                    top: 0rem;
+                    top: 0;
                     z-index: 2;
                     align-self: center;
                     background: linear-gradient(to bottom,
@@ -75,6 +133,8 @@
                             rgba(64, 51, 41, 0.92) 72%,
                             rgba(64, 51, 41, 0) 100%);
                     overflow: hidden;
+                    max-width: 100%;
+                    padding: 0.5rem;
 
                     svg {
                         display: block;
@@ -100,9 +160,12 @@
             font-family: $font-family-primary;
             font-size: $font-size-xsmall;
             color: $color-text-secondary;
+            max-width: 38rem;
+            margin: 0 auto;
 
             @media (max-width: 768px) {
                 text-align: center;
+                padding: 0 1rem;
             }
 
             .designNameContainer {
@@ -110,17 +173,20 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 0.5rem;
+                width: 100%;
 
                 .designNameInput {
-                    padding: 0.5rem;
-                    border: 1px solid $color-border;
-                    border-radius: $radius-xl;
+                    padding: 0.9rem 1rem;
+                    border: 1px solid rgba(198, 179, 153, 0.28);
+                    border-radius: 8px;
                     font-family: $font-family-primary;
-                    font-size: $font-size-xsmall;
+                    font-size: $font-size-normal;
                     color: $color-text-primary;
-                    background-color: transparent;
+                    background-color: rgba(24, 21, 20, 0.32);
                     width: 100%;
                     max-width: 20rem;
+                    text-align: center;
+                    transition: border-color 0.2s ease, background-color 0.2s ease;
 
                     &::placeholder {
                         color: $color-text-secondary;
@@ -128,7 +194,8 @@
 
                     &:focus {
                         outline: none;
-                        border-color: $color-accent;
+                        border-color: $color-text-tertiary;
+                        background-color: rgba(24, 21, 20, 0.52);
                     }
                 }
             }
@@ -141,26 +208,32 @@
                 text-decoration: none;
                 flex-wrap: wrap;
                 gap: 0.5rem;
-                padding: 1.25rem;
+                padding: 1rem 1.5rem;
+                min-height: 3.35rem;
                 line-height: 1;
-                background-color: $color-accent;
-                color: $color-text-primary;
-                border: none;
-                border-radius: $radius-2xl;
+                background-color: $color-text-primary;
+                color: $color-text-quaternary;
+                border: 1px solid $color-text-primary;
+                border-radius: 999px;
                 cursor: pointer;
-                letter-spacing: .2em;
+                letter-spacing: 0;
                 text-transform: uppercase;
                 font-family: $font-family-primary;
                 font-size: $font-size-small;
-                font-weight: $font-weight-regular;
-                transition: all 0.3s ease;
+                font-weight: $font-weight-semibold;
+                transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
 
-                &:hover {
-                    background-color: $color-hover-primary;
+                &:hover,
+                &:focus-visible {
+                    background-color: $color-text-tertiary;
+                    border-color: $color-text-tertiary;
+                    outline: none;
+                    transform: translateY(-2px);
                 }
 
                 @media (max-width: 768px) {
                     font-size: $font-size-xsmall;
+                    width: min(100%, 22rem);
                 }
             }
 
@@ -169,7 +242,9 @@
                 cursor: not-allowed;
 
                 &:hover {
-                    background-color: rgba($color-accent, 0.5);
+                    background-color: $color-text-primary;
+                    border-color: $color-text-primary;
+                    transform: none;
                 }
             }
         }

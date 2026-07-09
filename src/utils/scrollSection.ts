@@ -17,7 +17,7 @@ export const scrollSection = (sectionId: string, options: ScrollSectionOptions =
         mobileBreakpoint = 768,
         desktopBlock = 'start',
         mobileBlock = 'start',
-        blockOverrides = { projects: 'start' },
+        blockOverrides = {},
         urlBasePath = '/',
         updateUrl = true,
     } = options;

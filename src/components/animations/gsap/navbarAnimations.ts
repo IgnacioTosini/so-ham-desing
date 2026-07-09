@@ -1,8 +1,13 @@
 import gsap from 'gsap';
+import { prefersReducedMotion, revealElements } from './shared';
 
 export const animateNavbarEntrance = (navbar: HTMLElement) => {
   const links = navbar.querySelectorAll('.navbarLink');
   const title = navbar.querySelector('.navbarTitle');
+
+  if (prefersReducedMotion()) {
+    return revealElements(navbar, links, title);
+  }
 
   return gsap.timeline()
     .fromTo(

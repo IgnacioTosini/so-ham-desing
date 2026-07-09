@@ -38,9 +38,15 @@ export default async function EditStonePage({ params }: EditStonePageProps) {
 
     return (
         <div className="adminStonesPage">
-            <Link href="/admin/stones" className="backLink">← Volver</Link>
             <div className="adminStonesPageContainer">
-                <h1>Admin - Editar piedra</h1>
+                <div className="adminPageHeader">
+                    <div>
+                        <span className="adminEyebrow">Editar piedra</span>
+                        <h1>{stone.name}</h1>
+                        <p>Actualiza descripción, etiquetas e imagen principal.</p>
+                    </div>
+                    <Link href="/admin/stones" className="adminSecondaryAction">Cancelar</Link>
+                </div>
                 <StoneForm
                     mode="edit"
                     initialData={{

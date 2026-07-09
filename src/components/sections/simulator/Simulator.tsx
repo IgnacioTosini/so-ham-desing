@@ -9,10 +9,10 @@ import { PieceSelector } from '@/components/ui/createYourPiece/pieceSelector/Pie
 import { PieceType, Stone } from '@/types';
 import { StonePanel } from '@/components/ui/simulator/stonePanel/StonePanel';
 import { buildWhatsappMessagePreview } from '@/utils';
+import { getSiteUrl } from '@/utils/siteUrl';
 import { IoLogoWhatsapp } from 'react-icons/io';
 import { BEAD_COUNT } from '@/utils/bead_count';
 import { createSharedDesign } from '@/actions/design.action';
-import Link from 'next/link';
 import './_simulator.scss';
 import { toast } from 'react-toastify';
 
@@ -27,6 +27,20 @@ export const Simulator = ({ stones = [] }: Props) => {
     const [beadStones, setBeadStones] = useState<Record<number, string>>({});
     const [isSending, setIsSending] = useState(false);
     const [designName, setDesignName] = useState('');
+    const totalBeads = BEAD_COUNT[selectedPiece];
+    const assignedCount = Object.keys(beadStones).length;
+    const remainingBeads = Math.max(totalBeads - assignedCount, 0);
+    const completionPercent = Math.round((assignedCount / totalBeads) * 100);
+    const hasDesignName = designName.trim().length > 0;
+    const isDesignComplete = assignedCount >= totalBeads;
+    const canSend = !isSending && isDesignComplete && hasDesignName;
+    const sendButtonLabel = isSending
+        ? 'Generando...'
+        : !isDesignComplete
+            ? `Faltan ${remainingBeads} ${remainingBeads === 1 ? 'piedra' : 'piedras'}`
+            : !hasDesignName
+                ? 'Agregá un nombre'
+                : 'Enviar diseño por WhatsApp';
 
     useEffect(() => {
         if (!sectionRef.current) return;
@@ -52,8 +66,7 @@ export const Simulator = ({ stones = [] }: Props) => {
     const handleStoneClick = (stoneName: string) => {
         if (selectedBeadIndex === null) return; // Si no hay ninguna bolita seleccionada, no hacemos nada
         setBeadStones(prev => ({ ...prev, [selectedBeadIndex]: stoneName }));
-        const total = BEAD_COUNT[selectedPiece];
-        const nextIndex = (selectedBeadIndex + 1) % total; // +1 porque aún no se actualiza el estado
+        const nextIndex = (selectedBeadIndex + 1) % totalBeads; // +1 porque aún no se actualiza el estado
         setSelectedBeadIndex(nextIndex); // Deseleccionamos la bolita después de asignarle una piedra
     }
 
@@ -64,8 +77,8 @@ export const Simulator = ({ stones = [] }: Props) => {
 
         setIsSending(true);
         try {
-            const design = await createSharedDesign({ type: selectedPiece, beadStones, name: designName  || 'Diseño sin nombre' });
-            const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://so-ham-desing.vercel.app';
+            const design = await createSharedDesign({ type: selectedPiece, beadStones, name: designName.trim() || 'Diseño sin nombre' });
+            const siteUrl = getSiteUrl();
             const previewUrl = `${siteUrl}/preview/${design.shareCode}`;
             const whatsappUrl = buildWhatsappMessagePreview({ piece: selectedPiece, previewUrl });
 
@@ -92,7 +105,15 @@ export const Simulator = ({ stones = [] }: Props) => {
                 <Title title={'Simulador'} subTitle={'Armá tu pieza piedra por piedra.'} />
                 <div className="simulatorPieceSelector">
                     <PieceSelector selectedPiece={selectedPiece} onPieceChange={handlePieceChange} />
-                    <Link href="/preview" className='simulatorPreviewLink'>Ver diseños personalizados</Link>
+                    <div className="simulatorProgress" aria-live="polite">
+                        <div className="simulatorProgressText">
+                            <span>{assignedCount} / {totalBeads}</span>
+                            <p>{isDesignComplete ? 'Diseño completo' : 'piedras colocadas'}</p>
+                        </div>
+                        <div className="simulatorProgressTrack" aria-hidden="true">
+                            <span style={{ width: `${completionPercent}%` }} />
+                        </div>
+                    </div>
                 </div>
                 <div className="simulatorLayout">
                     <NecklaceCircle
@@ -105,6 +126,8 @@ export const Simulator = ({ stones = [] }: Props) => {
                     <StonePanel
                         stones={stones}
                         onStoneClick={handleStoneClick}
+                        isBeadSelected={selectedBeadIndex !== null}
+                        activeStoneId={selectedBeadIndex === null ? null : beadStones[selectedBeadIndex] ?? null}
                     />
                 </div>
                 <div className="simulatorFooter">
@@ -116,16 +139,17 @@ export const Simulator = ({ stones = [] }: Props) => {
                             id="designName"
                             className="designNameInput"
                             value={designName}
+                            placeholder="Ej: pulsera calma"
                             onChange={(e) => setDesignName(e.target.value)}
                         />
                     </div>
                     <button
                         type="button"
-                        className={`simulatorWhatsappButton ${isSending || Object.keys(beadStones).length < BEAD_COUNT[selectedPiece] || !designName.trim() ? 'disabled' : ''}`}
+                        className={`simulatorWhatsappButton ${!canSend ? 'disabled' : ''}`}
                         onClick={handleSendWhatsapp}
-                        disabled={isSending || Object.keys(beadStones).length < BEAD_COUNT[selectedPiece] || !designName.trim()}
+                        disabled={!canSend}
                     >
-                        <span>{isSending ? 'Generando...' : 'Enviar diseño por WhatsApp'}</span>
+                        <span>{sendButtonLabel}</span>
                         <IoLogoWhatsapp />
                     </button>
                 </div>

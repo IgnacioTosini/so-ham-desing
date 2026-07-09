@@ -20,9 +20,15 @@ export default async function AdminProductsPage() {
 
     return (
         <div className="adminProductsPage">
-            <Link href="/admin" className="backLink">← Volver</Link>
             <div className="adminProductsPageContainer">
-                <h1>Admin - Gestión de productos</h1>
+                <div className="adminPageHeader">
+                    <div>
+                        <span className="adminEyebrow">{products.length} productos cargados</span>
+                        <h1>Productos</h1>
+                        <p>Gestiona pulseras y collares listos para consultar por WhatsApp.</p>
+                    </div>
+                    <Link href="/admin/products/new" className="adminPrimaryAction">Nuevo producto</Link>
+                </div>
 
                 <div className="productListContainer">
                     {products.length === 0 ? (

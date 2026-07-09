@@ -1,0 +1,300 @@
+@use '@/styles/variables' as *;
+
+.adminShell {
+    min-height: 100dvh;
+    background:
+        linear-gradient(180deg, #2d271f 0%, #1d1a17 100%);
+}
+
+.adminShellMain {
+    min-height: 100dvh;
+    padding-top: 5.5rem;
+}
+
+.adminNavbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(198, 179, 153, 0.18);
+    background: rgba(24, 21, 20, 0.9);
+    backdrop-filter: blur(14px);
+}
+
+.adminNavbarInner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    width: min(100%, 78rem);
+    margin: 0 auto;
+    padding: 0.8rem 1rem;
+}
+
+.adminNavbarBrand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: $color-text-primary;
+    text-decoration: none;
+    min-width: 10rem;
+}
+
+.adminNavbarMark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 8px;
+    background: $color-text-primary;
+    color: $color-text-quaternary;
+    font-family: $font-family-secondary;
+    font-size: $font-size-medium;
+}
+
+.adminNavbarTitle,
+.adminNavbarSubtitle {
+    display: block;
+    line-height: 1.05;
+}
+
+.adminNavbarTitle {
+    font-family: $font-family-secondary;
+    font-size: $font-size-large;
+}
+
+.adminNavbarSubtitle {
+    color: $color-text-secondary;
+    font-family: $font-family-primary;
+    font-size: $font-size-xsmall;
+    text-transform: uppercase;
+}
+
+.adminNavbarNav {
+    display: flex;
+    justify-content: center;
+    gap: 0.35rem;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.adminNavbarLink,
+.adminNavbarButton,
+.adminNavbarIconButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 2.45rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    color: $color-text-secondary;
+    font-family: $font-family-primary;
+    font-size: $font-size-small;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+    svg {
+        width: 1.05rem;
+        height: 1.05rem;
+        flex: 0 0 auto;
+    }
+
+    &:hover,
+    &:focus-visible {
+        color: $color-text-primary;
+        border-color: rgba(198, 179, 153, 0.22);
+        background: rgba(255, 255, 255, 0.06);
+        outline: none;
+    }
+}
+
+.adminNavbarLink {
+    padding: 0 0.85rem;
+
+    &.isActive {
+        color: $color-text-primary;
+        background: rgba(198, 179, 153, 0.14);
+        border-color: rgba(198, 179, 153, 0.3);
+    }
+}
+
+.adminNavbarActions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+
+    form {
+        display: flex;
+    }
+}
+
+.adminNavbarButton,
+.adminNavbarIconButton {
+    background: rgba(255, 255, 255, 0.055);
+    cursor: pointer;
+    padding: 0 0.85rem;
+}
+
+.adminNavbarIconButton {
+    width: 2.45rem;
+    padding: 0;
+    color: $color-text-primary;
+}
+
+.adminNavbarButton {
+    &.secondary {
+        color: $color-text-primary;
+    }
+
+    &.danger {
+        color: $color-error;
+        border: none;
+    }
+}
+
+.adminPageHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.25rem;
+    width: 100%;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(198, 179, 153, 0.16);
+
+    h1 {
+        margin: 0.35rem 0 0.35rem;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        font-size: clamp($font-size-xlarge, 4vw, $font-size-xxlarge);
+        font-weight: $font-weight-regular;
+        line-height: 1;
+    }
+
+    p {
+        max-width: 38rem;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-normal;
+        line-height: 1.55;
+    }
+}
+
+.adminEyebrow {
+    color: $color-text-tertiary;
+    font-family: $font-family-primary;
+    font-size: $font-size-xsmall;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+}
+
+.adminPrimaryAction,
+.adminSecondaryAction {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    border-radius: 8px;
+    padding: 0 1rem;
+    font-family: $font-family-primary;
+    font-size: $font-size-small;
+    font-weight: $font-weight-semibold;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.adminPrimaryAction {
+    background: $color-text-primary;
+    border: 1px solid $color-text-primary;
+    color: $color-text-quaternary;
+
+    &:hover,
+    &:focus-visible {
+        background: $color-text-tertiary;
+        border-color: $color-text-tertiary;
+        outline: none;
+    }
+}
+
+.adminSecondaryAction {
+    background: rgba(255, 255, 255, 0.055);
+    border: 1px solid rgba(198, 179, 153, 0.22);
+    color: $color-text-primary;
+
+    &:hover,
+    &:focus-visible {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(198, 179, 153, 0.42);
+        outline: none;
+    }
+}
+
+@media (max-width: 980px) {
+    .adminNavbarInner {
+        grid-template-columns: auto 1fr;
+        grid-template-areas:
+            "brand actions"
+            "nav nav";
+        gap: 0.65rem;
+    }
+
+    .adminNavbarBrand {
+        grid-area: brand;
+    }
+
+    .adminNavbarNav {
+        grid-area: nav;
+        justify-content: flex-start;
+        padding-bottom: 0.1rem;
+    }
+
+    .adminNavbarActions {
+        grid-area: actions;
+    }
+
+    .adminShellMain {
+        padding-top: 8.3rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .adminNavbarInner {
+        padding: 0.7rem;
+    }
+
+    .adminNavbarBrand {
+        min-width: 0;
+    }
+
+    .adminNavbarTitle {
+        font-size: $font-size-medium;
+    }
+
+    .adminNavbarButton span {
+        display: none;
+    }
+
+    .adminShellMain {
+        padding-top: 8rem;
+    }
+
+    .adminPageHeader {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .adminPrimaryAction,
+    .adminSecondaryAction {
+        width: 100%;
+    }
+}

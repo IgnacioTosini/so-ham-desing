@@ -1,4 +1,5 @@
 import { getStoneById, deleteStone, updateStone } from "@/actions/stone.action";
+import { hasAdminSession } from "@/lib/adminAuth";
 import { NextResponse } from "next/server";
 
 interface StoneImagePayload {
@@ -46,6 +47,11 @@ export async function DELETE(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const isAdmin = await hasAdminSession();
+        if (!isAdmin) {
+            return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+        }
+
         const { id } = await params;
         if (!id) {
             return NextResponse.json({ error: "ID de la piedra no proporcionado" }, { status: 400 });
@@ -55,7 +61,8 @@ export async function DELETE(
         return NextResponse.json({ message: "Piedra eliminada correctamente" }, { status: 200 });
     } catch (error) {
         const message = error instanceof Error ? error.message : "Error al eliminar la piedra";
-        return NextResponse.json({ error: message }, { status: 500 });
+        const status = message === "No autorizado" ? 401 : 500;
+        return NextResponse.json({ error: message }, { status });
     }
 }
 
@@ -64,6 +71,11 @@ export async function PUT(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const isAdmin = await hasAdminSession();
+        if (!isAdmin) {
+            return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+        }
+
         const { id } = await params;
         if (!id) {
             return NextResponse.json({ error: "ID de la piedra no proporcionado" }, { status: 400 });
@@ -102,7 +114,9 @@ export async function PUT(
     } catch (error) {
         const message = error instanceof Error ? error.message : "Error al actualizar la piedra";
         const status =
-            message.includes("obligatorio") || message.includes("obligatoria") ? 400 : 500;
+            message === "No autorizado"
+                ? 401
+                : message.includes("obligatorio") || message.includes("obligatoria") ? 400 : 500;
 
         return NextResponse.json({ error: message }, { status });
     }

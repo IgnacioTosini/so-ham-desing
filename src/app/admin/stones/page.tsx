@@ -20,9 +20,15 @@ export default async function AdminStonesPage() {
 
     return (
         <div className="adminStonesPage">
-            <Link href="/admin" className="backLink">← Volver</Link>
             <div className="adminStonesPageContainer">
-                <h1>Admin - Gestión de piedras</h1>
+                <div className="adminPageHeader">
+                    <div>
+                        <span className="adminEyebrow">{stones.length} piedras cargadas</span>
+                        <h1>Piedras</h1>
+                        <p>Gestiona el catálogo de piedras disponible en la tienda y el simulador.</p>
+                    </div>
+                    <Link href="/admin/stones/new" className="adminPrimaryAction">Nueva piedra</Link>
+                </div>
 
                 <div className="stoneListContainer">
                     {stones.length === 0 ? (

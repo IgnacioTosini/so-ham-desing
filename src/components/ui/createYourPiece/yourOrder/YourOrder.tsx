@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react';
 import { IoLogoWhatsapp } from 'react-icons/io';
 import { buildWhatsappMessageCreatePiece } from '@/utils/buildWhatsappMessage';
 import { PieceType } from '@/types';
@@ -14,15 +15,24 @@ export const YourOrder = ({ selectedPiece, selectedStoneNames }: Props) => {
         stones: selectedStoneNames,
     });
     const selectedPieceLabel = selectedPiece === 'NECKLACE' ? 'Collar' : 'Pulsera';
+    const hasSelectedStones = selectedStoneNames.length > 0;
+
+    const handleSubmit = (event: MouseEvent<HTMLAnchorElement>) => {
+        if (hasSelectedStones) return;
+        event.preventDefault();
+    };
 
     return (
-        <div className='yourOrder'>
+        <div className={`yourOrder ${hasSelectedStones ? 'isReady' : 'isEmpty'}`}>
             <div className='yourOrderContainerHeader'>
-                <h3 className='yourOrderTitle'>Tu pedido</h3>
+                <div className='yourOrderTitleGroup'>
+                    <p className='yourOrderEyebrow'>{hasSelectedStones ? 'Pedido listo' : 'Pedido pendiente'}</p>
+                    <h3 className='yourOrderTitle'>Tu pieza personalizada</h3>
+                </div>
                 <div className='selectedPiece'>
-                    <p className='piece'>{selectedPieceLabel} ·</p>
+                    <p className='piece'>{selectedPieceLabel}</p>
                     <div className='selectedStones'>
-                        {selectedStoneNames.length > 0 ? (
+                        {hasSelectedStones ? (
                             selectedStoneNames.map((stoneName, index) => (
                                 <p key={index} className='stone'>{stoneName}</p>
                             ))
@@ -37,8 +47,10 @@ export const YourOrder = ({ selectedPiece, selectedStoneNames }: Props) => {
                 href={whatsappUrl}
                 target='_blank'
                 rel='noopener noreferrer'
+                aria-disabled={!hasSelectedStones}
+                onClick={handleSubmit}
             >
-                <span>Enviar pedido por WhatsApp</span> <IoLogoWhatsapp />
+                <span>{hasSelectedStones ? 'Enviar pedido por WhatsApp' : 'Elegí al menos una piedra'}</span> <IoLogoWhatsapp />
             </a>
         </div>
     )

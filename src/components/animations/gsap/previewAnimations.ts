@@ -1,8 +1,13 @@
 import gsap from 'gsap';
+import { prefersReducedMotion, revealElements } from './shared';
 
 export const animatePreviewListPage = (container: HTMLElement) => {
   const title = container.querySelector('.titleContainer');
   const items = container.querySelectorAll('.previewListItem');
+
+  if (prefersReducedMotion()) {
+    return revealElements(title, items);
+  }
 
   return gsap.timeline()
     .fromTo(title, { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' })
@@ -23,6 +28,10 @@ export const animatePreviewListPage = (container: HTMLElement) => {
 export const animatePreviewDetailPage = (container: HTMLElement) => {
   const backLink = container.querySelector('.backLink');
   const canvas = container.querySelector('svg');
+
+  if (prefersReducedMotion()) {
+    return revealElements(backLink, canvas);
+  }
 
   return gsap.timeline()
     .fromTo(backLink, { autoAlpha: 0, x: -20 }, { autoAlpha: 1, x: 0, duration: 0.55, ease: 'power2.out' })

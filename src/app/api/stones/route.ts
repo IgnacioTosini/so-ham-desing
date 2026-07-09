@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createStone, getStones } from "@/actions/stone.action";
+import { hasAdminSession } from "@/lib/adminAuth";
 
 export async function GET() {
     try {
@@ -13,6 +14,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
+        const isAdmin = await hasAdminSession();
+        if (!isAdmin) {
+            return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+        }
+
         const body = (await request.json()) as {
             name?: string;
             description?: string;
@@ -33,7 +39,9 @@ export async function POST(request: Request) {
     } catch (error) {
         const message = error instanceof Error ? error.message : "Error al crear la piedra";
         const status =
-            message.includes("obligatorio") || message.includes("obligatoria") ? 400 : 500;
+            message === "No autorizado"
+                ? 401
+                : message.includes("obligatorio") || message.includes("obligatoria") ? 400 : 500;
 
         return NextResponse.json({ error: message }, { status });
     }

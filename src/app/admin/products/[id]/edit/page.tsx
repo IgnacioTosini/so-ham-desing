@@ -42,9 +42,15 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
 
     return (
         <div className="adminProductsPage">
-            <Link href="/admin/products" className="backLink">← Volver</Link>
             <div className="adminProductsPageContainer">
-                <h1>Admin - Editar producto</h1>
+                <div className="adminPageHeader">
+                    <div>
+                        <span className="adminEyebrow">Editar producto</span>
+                        <h1>{product.name}</h1>
+                        <p>Actualiza precio, tipo, piedras asociadas e imagen principal.</p>
+                    </div>
+                    <Link href="/admin/products" className="adminSecondaryAction">Cancelar</Link>
+                </div>
                 <ProductForm
                     mode="edit"
                     initialData={{

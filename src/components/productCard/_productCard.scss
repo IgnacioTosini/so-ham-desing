@@ -72,12 +72,17 @@
             &:hover {
                 background-color: $color-hover-secondary;
             }
+
+            &:disabled {
+                cursor: not-allowed;
+                opacity: 0.55;
+            }
         }
 
         .productDeleteIcon {
             color: $color-error;
 
-            &:hover {
+            &:hover:not(:disabled) {
                 background-color: rgba($color-error, 0.15);
             }
         }
