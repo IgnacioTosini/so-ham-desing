@@ -5,6 +5,7 @@
         linear-gradient(180deg, $color-secondary 0%, #2c261f 100%);
     padding: clamp(4rem, 8vw, 7rem) 1rem;
     min-height: 92dvh;
+    overflow-x: clip;
 
     @media (max-width: 768px) {
         padding: 3rem 0rem;
@@ -20,6 +21,8 @@
     }
 
     .simulatorContainer {
+        width: 100%;
+        min-width: 0;
         max-width: 72rem;
         margin: 0 auto;
         display: flex;
