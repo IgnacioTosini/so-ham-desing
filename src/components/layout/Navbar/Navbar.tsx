@@ -1,12 +1,12 @@
 'use client'
 
 import Image from "next/image";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 import gsap from 'gsap';
 import { animateNavbarEntrance } from '@/components/animations/gsap';
 import { navigationItems, scrollSection } from "@/utils";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import "./_navbar.scss";
 
 export default function Navbar() {
@@ -121,13 +121,13 @@ export default function Navbar() {
     return (
         <nav ref={navbarRef} className={`navbar ${isScrolled ? 'isScrolled' : ''} ${isMenuOpen ? 'isMenuOpen' : ''}`}>
             <div className="navbarInner">
-                <Link href="/" className="navbarBrand" onClick={handleHomeNavigation} aria-label="Ir al inicio">
+                <SmoothRouteLink href="/" className="navbarBrand" onClick={handleHomeNavigation} aria-label="Ir al inicio">
                     <Image src="/soHamDesignLogo.png" alt="" width={38} height={38} className="navbarLogo" priority />
                     <span className="navbarBrandText">
                         <span className="navbarTitle">So Ham Design</span>
                         <span className="navbarSubtitle">Piedras naturales</span>
                     </span>
-                </Link>
+                </SmoothRouteLink>
 
                 <button
                     type="button"
@@ -146,7 +146,7 @@ export default function Navbar() {
                 <div className="navbarPanel">
                     <div className="navbarLinks">
                         {navigationItems.map(({ id, label }) => (
-                            <Link
+                            <SmoothRouteLink
                                 key={id}
                                 href={getSectionHref(id)}
                                 className={`navbarLink ${currentSection === id ? 'active' : ''}`}
@@ -154,16 +154,16 @@ export default function Navbar() {
                                 onClick={(event) => handleSectionNavigation(event, id)}
                             >
                                 {label}
-                            </Link>
+                            </SmoothRouteLink>
                         ))}
                     </div>
-                    <Link
+                    <SmoothRouteLink
                         href={getSectionHref('createPiece')}
                         className="navbarCta"
                         onClick={(event) => handleSectionNavigation(event, 'createPiece')}
                     >
                         Diseñar ahora
-                    </Link>
+                    </SmoothRouteLink>
                 </div>
             </div>
         </nav>

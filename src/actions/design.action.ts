@@ -23,6 +23,8 @@ const getAllSharedDesignsCached = unstable_cache(
 const revalidateSharedDesignsData = async () => {
     revalidateTag(SHARED_DESIGNS_TAG, "max");
     revalidatePath("/preview");
+    revalidatePath("/disenos");
+    revalidatePath("/admin/designs");
 };
 
 export async function createSharedDesign(params: {

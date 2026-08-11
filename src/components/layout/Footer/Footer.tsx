@@ -1,16 +1,28 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { MouseEvent, useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { IoLogoInstagram, IoLogoWhatsapp } from 'react-icons/io';
 import { animateFooter } from '@/components/animations/gsap';
 import { IoLogoTiktok } from 'react-icons/io5';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { SmoothRouteLink } from '@/components/ui/SmoothRouteLink';
+import { scrollSection } from '@/utils';
 import './_footer.scss';
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
+  const pathname = usePathname();
   const whatsappHref = `https://wa.me/${(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '').replace(/\D/g, '')}`;
+
+  const handleSectionNavigation = (event: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    if (pathname !== '/') return;
+
+    event.preventDefault();
+    scrollSection(sectionId, { updateUrl: true });
+  };
 
   useEffect(() => {
     if (!footerRef.current) return;
@@ -19,8 +31,16 @@ export default function Footer() {
       animateFooter(footerRef.current!);
     }, footerRef.current);
 
-    return () => ctx.revert();
-  }, []);
+    const refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    const resizeObserver = new ResizeObserver(() => ScrollTrigger.refresh());
+    resizeObserver.observe(document.body);
+
+    return () => {
+      cancelAnimationFrame(refreshFrame);
+      resizeObserver.disconnect();
+      ctx.revert();
+    };
+  }, [pathname]);
 
   return (
     <footer ref={footerRef} className="footer">
@@ -40,9 +60,10 @@ export default function Footer() {
           <p>Lo que llega a vos no es casualidad. Escribinos y creemos juntas tu pieza.</p>
 
           <nav className="footerNav" aria-label="Navegación del sitio">
-            <a href="#viewPieces">Piezas</a>
-            <a href="#createPiece">Crear</a>
-            <a href="#simulator">Simulador</a>
+            <SmoothRouteLink href="/#viewPieces" onClick={(event) => handleSectionNavigation(event, 'viewPieces')}>Piezas</SmoothRouteLink>
+            <SmoothRouteLink href="/#createPiece" onClick={(event) => handleSectionNavigation(event, 'createPiece')}>Crear</SmoothRouteLink>
+            <SmoothRouteLink href="/#simulator" onClick={(event) => handleSectionNavigation(event, 'simulator')}>Simulador</SmoothRouteLink>
+            <SmoothRouteLink href="/disenos">Compartidos</SmoothRouteLink>
           </nav>
 
           <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="footerWhatsappCta">

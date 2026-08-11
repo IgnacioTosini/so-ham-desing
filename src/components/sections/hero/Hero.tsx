@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { animateHeroSection } from '@/components/animations/gsap'
 import { scrollSection } from '@/utils'
+import { SmoothRouteLink } from '@/components/ui/SmoothRouteLink'
+import { IoPeopleOutline } from 'react-icons/io5'
 import './_hero.scss'
 
 export const Hero = () => {
@@ -30,6 +32,10 @@ export const Hero = () => {
         <div className='buttonsContainer'>
           <button className='primaryButton' onClick={() => scrollSection('viewPieces')}>Ver piezas</button>
           <button className='secondaryButton' onClick={() => scrollSection('createPiece')}>Crear tu pieza</button>
+          <SmoothRouteLink href="/disenos" className="sharedDesignsButton">
+            <IoPeopleOutline aria-hidden="true" />
+            Diseños compartidos
+          </SmoothRouteLink>
         </div>
       </div>
     </div>

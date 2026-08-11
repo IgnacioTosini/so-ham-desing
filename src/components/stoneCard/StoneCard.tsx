@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { useRouter } from "next/navigation";
 import { IoPencilOutline } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -48,9 +48,9 @@ export default function StoneCard({ stone }: StoneCardProps) {
             <h3 className="stoneName">{stone.name}</h3>
             <p className="stoneDescription">{stone.description}</p>
             <div className="stoneActions">
-                <Link href={`/admin/stones/${stone.id}/edit`} className="stoneEditIcon">
+                <SmoothRouteLink href={`/admin/stones/${stone.id}/edit`} className="stoneEditIcon">
                     <IoPencilOutline />
-                </Link>
+                </SmoothRouteLink>
                 <button
                     type="button"
                     className="stoneDeleteIcon"

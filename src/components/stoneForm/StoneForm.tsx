@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, DragEvent, FormEvent, useMemo, useState } from "react";
-import Link from "next/link";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { useRouter } from "next/navigation";
 import { createStone, updateStone } from "@/actions/stone.action";
 import { uploadImageToCloudinary } from "@/lib/services/image-upload.service";
@@ -226,9 +226,9 @@ export default function StoneForm({ mode, initialData }: StoneFormProps) {
             {error ? <p className="stoneFormError">{error}</p> : null}
 
             <div className="stoneFormActions">
-                <Link href="/admin/stones" className="stoneFormButton secondary">
+                <SmoothRouteLink href="/admin/stones" className="stoneFormButton secondary">
                     Cancelar
-                </Link>
+                </SmoothRouteLink>
                 <button type="submit" className="stoneFormButton primary" disabled={isSaving || isUploading}>
                     {isUploading ? "Subiendo imagen..." : isSaving ? "Guardando..." : submitLabel}
                 </button>

@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { getProductById, getProducts } from "@/actions/product.action";
 import { BraceletSizeGuide } from "@/components/ui/braceletSizeGuide/BraceletSizeGuide";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { buildWhatsappMessageCompletePiece } from "@/utils";
 import { getSiteUrl } from "@/utils/siteUrl";
+import { SmoothScrollToTop } from "./SmoothScrollToTop";
 import "./_pieceDetail.scss";
 
 interface PieceDetailPageProps {
@@ -85,6 +86,7 @@ export default async function PieceDetailPage({ params }: PieceDetailPageProps) 
 
     return (
         <main className="pieceDetail">
+            <SmoothScrollToTop routeKey={product.id} />
             <section className="pieceDetailHero">
                 <div className="pieceDetailMedia">
                     <Image
@@ -98,10 +100,10 @@ export default async function PieceDetailPage({ params }: PieceDetailPageProps) 
                 </div>
 
                 <div className="pieceDetailIntro">
-                    <Link href="/#viewPieces" className="pieceDetailBack">
+                    <SmoothRouteLink href="/#viewPieces" className="pieceDetailBack">
                         <FaArrowLeftLong />
                         Volver a piezas
-                    </Link>
+                    </SmoothRouteLink>
                     <p className="pieceDetailType">{typeLabel} artesanal</p>
                     <h1>{product.name}</h1>
                     <p className="pieceDetailDescription">
@@ -186,12 +188,12 @@ export default async function PieceDetailPage({ params }: PieceDetailPageProps) 
                     </div>
                     <div className="relatedPiecesGrid">
                         {relatedProducts.map((relatedProduct) => (
-                            <Link href={`/piezas/${relatedProduct.id}`} key={relatedProduct.id} className="relatedPieceCard">
+                            <SmoothRouteLink href={`/piezas/${relatedProduct.id}`} key={relatedProduct.id} className="relatedPieceCard">
                                 <Image src={relatedProduct.imageUrl} alt={relatedProduct.name} width={260} height={260} />
                                 <span>{relatedProduct.name}</span>
                                 <p>{formatPrice(relatedProduct.price)}</p>
                                 <FaArrowRightLong />
-                            </Link>
+                            </SmoothRouteLink>
                         ))}
                     </div>
                 </section>

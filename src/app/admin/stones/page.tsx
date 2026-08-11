@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getStones } from "@/actions/stone.action";
 import { requireAdminSession } from "@/lib/adminAuth";
 import StoneCard from "../../../components/stoneCard/StoneCard";
-import Link from "next/link";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import "./_adminStonePage.scss";
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default async function AdminStonesPage() {
                         <h1>Piedras</h1>
                         <p>Gestiona el catálogo de piedras disponible en la tienda y el simulador.</p>
                     </div>
-                    <Link href="/admin/stones/new" className="adminPrimaryAction">Nueva piedra</Link>
+                    <SmoothRouteLink href="/admin/stones/new" className="adminPrimaryAction">Nueva piedra</SmoothRouteLink>
                 </div>
 
                 <div className="stoneListContainer">

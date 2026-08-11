@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { requireAdminSession } from "@/lib/adminAuth";
 import StoneForm from "@/components/stoneForm/StoneForm";
 import "../_adminStonePage.scss";
@@ -25,7 +25,7 @@ export default async function NewStonePage() {
                         <h1>Crear piedra</h1>
                         <p>Agrega una piedra al catálogo y al simulador.</p>
                     </div>
-                    <Link href="/admin/stones" className="adminSecondaryAction">Cancelar</Link>
+                    <SmoothRouteLink href="/admin/stones" className="adminSecondaryAction">Cancelar</SmoothRouteLink>
                 </div>
                 <StoneForm mode="create" />
             </div>

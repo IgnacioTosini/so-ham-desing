@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { getStones } from "@/actions/stone.action";
 import { requireAdminSession } from "@/lib/adminAuth";
 import ProductForm from "@/components/productForm/ProductForm";
@@ -27,7 +27,7 @@ export default async function NewProductPage() {
                         <h1>Crear producto</h1>
                         <p>Agrega una pieza lista para mostrar en la tienda.</p>
                     </div>
-                    <Link href="/admin/products" className="adminSecondaryAction">Cancelar</Link>
+                    <SmoothRouteLink href="/admin/products" className="adminSecondaryAction">Cancelar</SmoothRouteLink>
                 </div>
                 <ProductForm
                     mode="create"

@@ -96,13 +96,19 @@
             justify-content: flex-start;
 
             .primaryButton,
-            .secondaryButton {
+            .secondaryButton,
+            .sharedDesignsButton {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.45rem;
                 letter-spacing: 0;
                 text-transform: uppercase;
                 border-radius: 999px;
                 transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
                 padding: 1rem 1.6rem;
                 min-height: 3.25rem;
+                text-decoration: none;
             }
 
             .primaryButton {
@@ -139,6 +145,29 @@
                     transform: translateY(-2px);
                 }
             }
+
+            .sharedDesignsButton {
+                background: transparent;
+                border: 1px solid rgba($color-text-tertiary, 0.48);
+                color: $color-text-tertiary;
+                font-family: $font-family-primary;
+                font-size: $font-size-small;
+                font-weight: $font-weight-medium;
+
+                svg {
+                    width: 1rem;
+                    height: 1rem;
+                }
+
+                &:hover,
+                &:focus-visible {
+                    border-color: $color-text-tertiary;
+                    background: rgba($color-text-tertiary, 0.12);
+                    color: $color-text-primary;
+                    transform: translateY(-2px);
+                    outline: none;
+                }
+            }
         }
     }
 
@@ -165,7 +194,8 @@
                 justify-content: center;
 
                 .primaryButton,
-                .secondaryButton {
+                .secondaryButton,
+                .sharedDesignsButton {
                     width: min(100%, 18rem);
                 }
             }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { notFound } from "next/navigation";
 import { getStoneById } from "@/actions/stone.action";
 import { requireAdminSession } from "@/lib/adminAuth";
@@ -45,7 +45,7 @@ export default async function EditStonePage({ params }: EditStonePageProps) {
                         <h1>{stone.name}</h1>
                         <p>Actualiza descripción, etiquetas e imagen principal.</p>
                     </div>
-                    <Link href="/admin/stones" className="adminSecondaryAction">Cancelar</Link>
+                    <SmoothRouteLink href="/admin/stones" className="adminSecondaryAction">Cancelar</SmoothRouteLink>
                 </div>
                 <StoneForm
                     mode="edit"

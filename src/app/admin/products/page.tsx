@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getProducts } from "@/actions/product.action";
 import { requireAdminSession } from "@/lib/adminAuth";
 import ProductCard from "../../../components/productCard/ProductCard";
-import Link from "next/link";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import "./_adminProductPage.scss";
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default async function AdminProductsPage() {
                         <h1>Productos</h1>
                         <p>Gestiona pulseras y collares listos para consultar por WhatsApp.</p>
                     </div>
-                    <Link href="/admin/products/new" className="adminPrimaryAction">Nuevo producto</Link>
+                    <SmoothRouteLink href="/admin/products/new" className="adminPrimaryAction">Nuevo producto</SmoothRouteLink>
                 </div>
 
                 <div className="productListContainer">

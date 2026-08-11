@@ -12,6 +12,8 @@ import { BraceletSizeGuide } from '@/components/ui/braceletSizeGuide/BraceletSiz
 import { buildWhatsappMessagePreview } from '@/utils';
 import { getSiteUrl } from '@/utils/siteUrl';
 import { IoLogoWhatsapp } from 'react-icons/io';
+import { IoPeopleOutline } from 'react-icons/io5';
+import { SmoothRouteLink } from '@/components/ui/SmoothRouteLink';
 import { BEAD_COUNT } from '@/utils/bead_count';
 import { createSharedDesign } from '@/actions/design.action';
 import './_simulator.scss';
@@ -103,7 +105,13 @@ export const Simulator = ({ stones = [] }: Props) => {
     return (
         <div className='simulator' ref={sectionRef} id='simulator'>
             <div className='simulatorContainer'>
-                <Title title={'Simulador'} subTitle={'Armá tu pieza piedra por piedra.'} />
+                <div className="simulatorHeader">
+                    <Title title={'Simulador'} subTitle={'Armá tu pieza piedra por piedra.'} />
+                    <SmoothRouteLink href="/disenos" className="simulatorSharedDesignsButton">
+                        <IoPeopleOutline aria-hidden="true" />
+                        Ver diseños compartidos
+                    </SmoothRouteLink>
+                </div>
                 <div className="simulatorPieceSelector">
                     <PieceSelector selectedPiece={selectedPiece} onPieceChange={handlePieceChange} />
                     <div className="simulatorProgress" aria-live="polite">

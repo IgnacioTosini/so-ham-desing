@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { requireAdminSession } from "@/lib/adminAuth";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import "./_admin.scss";
 
 export const metadata: Metadata = {
@@ -30,8 +30,8 @@ export default async function AdminStonesPage() {
                         <p>Aquí puedes agregar, editar o eliminar piedras.</p>
                     </div>
                     <div className="adminButtonsContainer">
-                        <Link href="/admin/stones" className="adminButton">Ver piedras</Link>
-                        <Link href="/admin/stones/new" className="adminButton">Agregar nueva piedra</Link>
+                        <SmoothRouteLink href="/admin/stones" className="adminButton">Ver piedras</SmoothRouteLink>
+                        <SmoothRouteLink href="/admin/stones/new" className="adminButton">Agregar nueva piedra</SmoothRouteLink>
                     </div>
                 </div>
 
@@ -41,8 +41,8 @@ export default async function AdminStonesPage() {
                         <p>Aquí puedes agregar, editar o eliminar productos (pulseras, collares).</p>
                     </div>
                     <div className="adminButtonsContainer">
-                        <Link href="/admin/products" className="adminButton">Ver productos</Link>
-                        <Link href="/admin/products/new" className="adminButton">Agregar nuevo producto</Link>
+                        <SmoothRouteLink href="/admin/products" className="adminButton">Ver productos</SmoothRouteLink>
+                        <SmoothRouteLink href="/admin/products/new" className="adminButton">Agregar nuevo producto</SmoothRouteLink>
                     </div>
                 </div>
 
@@ -52,7 +52,7 @@ export default async function AdminStonesPage() {
                         <p>Consulta los diseños que enviaron las clientas desde el simulador.</p>
                     </div>
                     <div className="adminButtonsContainer">
-                        <Link href="/preview" className="adminButton">Ver diseños</Link>
+                        <SmoothRouteLink href="/admin/designs" className="adminButton">Ver diseños</SmoothRouteLink>
                     </div>
                 </div>
             </div>

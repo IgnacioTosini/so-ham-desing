@@ -2,13 +2,18 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getStones } from "@/actions/stone.action";
 import { PieceType } from "@/types";
+import { getBeadStoneRecord } from "@/utils";
 import { PreviewCanvas } from "../previewCanvas/PreviewCanvas";
-import Link from "next/link";
+import Image from "next/image";
+import { IoArrowBack, IoArrowForward } from "react-icons/io5";
+import { PreviewShareButton } from "@/components/ui/shareDesignPage/PreviewShareButton";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { PreviewByCodeClient } from "./PreviewByCodeClient";
 import "./_previewByCodePage.scss";
 
 interface Props {
     params: Promise<{ shareCode: string }>;
+    searchParams: Promise<{ from?: string }>;
 }
 
 export const metadata = {
@@ -19,8 +24,8 @@ export const metadata = {
     },
 };
 
-export default async function PreviewByCodePage({ params }: Props) {
-    const { shareCode } = await params;
+export default async function PreviewByCodePage({ params, searchParams }: Props) {
+    const [{ shareCode }, query] = await Promise.all([params, searchParams]);
 
     const design = await prisma.sharedDesign.findUnique({
         where: { shareCode },
@@ -29,25 +34,80 @@ export default async function PreviewByCodePage({ params }: Props) {
     if (!design) notFound();
 
     const stones = await getStones();
-    const beadArray = Array.isArray(design.beads) ? design.beads : [];
-
-    const beadStones: Record<number, string> = {};
-    beadArray.forEach((value, index) => {
-        if (typeof value === "string" && value) {
-            beadStones[index] = value;
-        }
-    });
+    const beadArray = Array.isArray(design.beads)
+        ? design.beads.filter((value): value is string | null => typeof value === 'string' || value === null)
+        : [];
+    const beadStones = getBeadStoneRecord(beadArray);
+    const assignedCount = Object.keys(beadStones).length;
+    const pieceLabel = design.type === 'BRACELET' ? 'Pulsera' : 'Collar';
+    const isAdminOrigin = query.from === 'admin';
+    const backHref = isAdminOrigin ? '/admin/designs' : '/disenos';
+    const backLabel = isAdminOrigin ? 'Volver a diseños del admin' : 'Volver a diseños compartidos';
+    const formattedDate = new Intl.DateTimeFormat('es-AR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'America/Argentina/Buenos_Aires',
+    }).format(design.createdAt);
 
     return (
-            <PreviewByCodeClient>
-            <div className="previewByCodePage">
-                <Link href="/" className="backLink">← Volver al inicio</Link>
-                <PreviewCanvas
-                    pieceType={design.type as PieceType}
-                    beadStones={beadStones}
-                    stones={stones}
-                />
-            </div>
-            </PreviewByCodeClient>
+        <PreviewByCodeClient>
+            <main className="previewByCodePage">
+                <div className="previewByCodeShell">
+                    <header className="previewDetailHeader">
+                        <SmoothRouteLink href={backHref} className="backLink">
+                            <IoArrowBack aria-hidden="true" />
+                            {backLabel}
+                        </SmoothRouteLink>
+                        <SmoothRouteLink href="/" className="previewBrand" aria-label="Ir al inicio de So Ham Design">
+                            <Image src="/soHamDesignLogo.png" alt="" width={40} height={40} />
+                            <span>So Ham Design</span>
+                        </SmoothRouteLink>
+                    </header>
+
+                    <div className="previewDetailLayout">
+                        <div className="previewCanvasFrame">
+                            <span className="previewCanvasLabel">Vista del diseño</span>
+                            <PreviewCanvas
+                                pieceType={design.type as PieceType}
+                                beadStones={beadStones}
+                                stones={stones}
+                            />
+                        </div>
+
+                        <section className="previewDetailInfo">
+                            <span className="previewPieceType">{pieceLabel} compartido</span>
+                            <h1>{design.name || 'Diseño sin nombre'}</h1>
+                            <p className="previewLead">
+                                Una combinación creada piedra por piedra en el simulador de So Ham Design.
+                            </p>
+
+                            <dl className="previewStats">
+                                <div>
+                                    <dt>Tipo</dt>
+                                    <dd>{pieceLabel}</dd>
+                                </div>
+                                <div>
+                                    <dt>Piedras</dt>
+                                    <dd>{assignedCount}</dd>
+                                </div>
+                                <div>
+                                    <dt>Compartido</dt>
+                                    <dd>{formattedDate}</dd>
+                                </div>
+                            </dl>
+
+                            <div className="previewActions">
+                                <SmoothRouteLink href="/#simulator" className="previewCreateButton">
+                                    Crear mi diseño
+                                    <IoArrowForward aria-hidden="true" />
+                                </SmoothRouteLink>
+                                <PreviewShareButton designName={design.name || 'Diseño sin nombre'} />
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </main>
+        </PreviewByCodeClient>
     );
 }

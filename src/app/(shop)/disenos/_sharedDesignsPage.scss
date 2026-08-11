@@ -1,0 +1,194 @@
+@use '@/styles/variables' as *;
+
+.sharedDesignsPage {
+    min-height: 100dvh;
+    overflow-x: clip;
+    background: $color-secondary;
+}
+
+.sharedDesignsIntro {
+    display: flex;
+    align-items: flex-end;
+    min-height: min(72dvh, 44rem);
+    padding: 9rem 1rem 4rem;
+    border-bottom: 1px solid rgba(198, 179, 153, 0.18);
+    background:
+        linear-gradient(90deg, rgba(24, 21, 20, 0.88), rgba(24, 21, 20, 0.34)),
+        url('/heroImage.jpg') center 44% / cover;
+}
+
+.sharedDesignsIntroContent {
+    width: min(100%, 72rem);
+    margin: 0 auto;
+
+    h1 {
+        max-width: 13ch;
+        margin: 0.7rem 0 1rem;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        font-size: clamp(3rem, 7vw, 5.5rem);
+        font-weight: $font-weight-regular;
+        line-height: 0.95;
+    }
+
+    p {
+        max-width: 38rem;
+        margin: 0 0 1.75rem;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: clamp($font-size-normal, 2vw, $font-size-medium);
+        line-height: 1.65;
+    }
+}
+
+.sharedDesignsEyebrow,
+.sharedDesignsCount {
+    color: $color-text-tertiary;
+    font-family: $font-family-primary;
+    font-size: $font-size-xsmall;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+}
+
+.sharedDesignsPrimaryAction {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 3.2rem;
+    padding: 0 1.35rem;
+    border: 1px solid $color-text-primary;
+    border-radius: 999px;
+    background: $color-text-primary;
+    color: $color-text-quaternary;
+    font-family: $font-family-primary;
+    font-size: $font-size-small;
+    font-weight: $font-weight-semibold;
+    text-decoration: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+    svg {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    &:hover,
+    &:focus-visible {
+        border-color: $color-text-tertiary;
+        background: $color-text-tertiary;
+        transform: translateY(-2px);
+        outline: none;
+    }
+}
+
+.sharedDesignsGallery {
+    padding: clamp(3.5rem, 7vw, 6rem) 1rem;
+    background: linear-gradient(180deg, $color-secondary 0%, #2c261f 100%);
+}
+
+.sharedDesignsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: min(100%, 72rem);
+    margin: 0 auto;
+}
+
+.sharedDesignsHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-bottom: 1.4rem;
+    border-bottom: 1px solid rgba(198, 179, 153, 0.18);
+
+    h2 {
+        max-width: 18ch;
+        margin: 0.45rem 0 0;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        font-size: clamp(2rem, 5vw, 3.3rem);
+        font-weight: $font-weight-regular;
+        line-height: 1;
+    }
+
+    p {
+        max-width: 28rem;
+        margin: 0;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        line-height: 1.6;
+    }
+}
+
+.sharedDesignsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.sharedDesignsEmpty {
+    padding: 3rem 1rem;
+    border-top: 1px solid rgba(198, 179, 153, 0.18);
+    border-bottom: 1px solid rgba(198, 179, 153, 0.18);
+    text-align: center;
+
+    h2 {
+        margin: 0 0 0.5rem;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        font-size: $font-size-xlarge;
+        font-weight: $font-weight-regular;
+    }
+
+    p {
+        margin: 0 0 1rem;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+    }
+
+    a {
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-weight: $font-weight-semibold;
+    }
+}
+
+@media (max-width: 900px) {
+    .sharedDesignsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .sharedDesignsIntro {
+        min-height: 78dvh;
+        padding: 7rem 1rem 3rem;
+        background-position: 58% center;
+    }
+
+    .sharedDesignsIntroContent {
+        h1 {
+            font-size: clamp(2.7rem, 14vw, 4rem);
+        }
+
+        .sharedDesignsPrimaryAction {
+            width: 100%;
+        }
+    }
+
+    .sharedDesignsGallery {
+        padding: 3rem 1rem;
+    }
+
+    .sharedDesignsHeader {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .sharedDesignsGrid {
+        grid-template-columns: 1fr;
+    }
+}

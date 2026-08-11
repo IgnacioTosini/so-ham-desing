@@ -29,6 +29,58 @@
         flex-direction: column;
         gap: 2.25rem;
 
+        .simulatorHeader {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1.5rem;
+
+            @media (max-width: 768px) {
+                align-items: center;
+                flex-direction: column;
+                gap: 1.25rem;
+                padding: 0 1rem;
+            }
+        }
+
+        .simulatorSharedDesignsButton {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-height: 3rem;
+            padding: 0 1.1rem;
+            border: 1px solid rgba(198, 179, 153, 0.34);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.045);
+            color: $color-text-primary;
+            font-family: $font-family-primary;
+            font-size: $font-size-small;
+            font-weight: $font-weight-semibold;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+            svg {
+                width: 1rem;
+                height: 1rem;
+                flex: 0 0 auto;
+                color: $color-text-tertiary;
+            }
+
+            &:hover,
+            &:focus-visible {
+                border-color: rgba(198, 179, 153, 0.62);
+                background: rgba(198, 179, 153, 0.11);
+                transform: translateY(-2px);
+                outline: none;
+            }
+
+            @media (max-width: 768px) {
+                width: min(100%, 22rem);
+            }
+        }
+
         .simulatorPieceSelector {
             display: flex;
             align-items: center;

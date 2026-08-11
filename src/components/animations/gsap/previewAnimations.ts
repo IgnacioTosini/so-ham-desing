@@ -2,15 +2,15 @@ import gsap from 'gsap';
 import { prefersReducedMotion, revealElements } from './shared';
 
 export const animatePreviewListPage = (container: HTMLElement) => {
-  const title = container.querySelector('.titleContainer');
-  const items = container.querySelectorAll('.previewListItem');
+  const headers = container.querySelectorAll('.sharedDesignsIntroContent, .sharedDesignsHeader');
+  const items = container.querySelectorAll('.sharedDesignCard');
 
   if (prefersReducedMotion()) {
-    return revealElements(title, items);
+    return revealElements(headers, items);
   }
 
   return gsap.timeline()
-    .fromTo(title, { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' })
+    .fromTo(headers, { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out' })
     .fromTo(
       items,
       { autoAlpha: 0, y: 24 },
@@ -26,19 +26,21 @@ export const animatePreviewListPage = (container: HTMLElement) => {
 };
 
 export const animatePreviewDetailPage = (container: HTMLElement) => {
-  const backLink = container.querySelector('.backLink');
-  const canvas = container.querySelector('svg');
+  const header = container.querySelector('.previewDetailHeader');
+  const canvas = container.querySelector('.previewCanvasFrame');
+  const info = container.querySelector('.previewDetailInfo');
 
   if (prefersReducedMotion()) {
-    return revealElements(backLink, canvas);
+    return revealElements(header, canvas, info);
   }
 
   return gsap.timeline()
-    .fromTo(backLink, { autoAlpha: 0, x: -20 }, { autoAlpha: 1, x: 0, duration: 0.55, ease: 'power2.out' })
+    .fromTo(header, { autoAlpha: 0, y: -16 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power2.out' })
     .fromTo(
       canvas,
-      { autoAlpha: 0, scale: 0.94, transformOrigin: 'center center' },
-      { autoAlpha: 1, scale: 1, duration: 0.95, ease: 'power3.out' },
-      '-=0.08'
-    );
+      { autoAlpha: 0, y: 24, scale: 0.96, transformOrigin: 'center center' },
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.85, ease: 'power3.out' },
+      '-=0.2'
+    )
+    .fromTo(info, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.72, ease: 'power3.out' }, '-=0.5');
 };

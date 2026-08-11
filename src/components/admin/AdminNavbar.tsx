@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import {
     IoAddCircleOutline,
     IoAlbumsOutline,
@@ -16,7 +16,7 @@ const navItems = [
     { href: "/admin", label: "General", icon: IoHomeOutline, match: (path: string) => path === "/admin" },
     { href: "/admin/stones", label: "Piedras", icon: IoColorFilterOutline, match: (path: string) => path.startsWith("/admin/stones") },
     { href: "/admin/products", label: "Productos", icon: IoAlbumsOutline, match: (path: string) => path.startsWith("/admin/products") },
-    { href: "/preview", label: "Diseños", icon: IoSparklesOutline, match: (path: string) => path.startsWith("/preview") },
+    { href: "/admin/designs", label: "Diseños", icon: IoSparklesOutline, match: (path: string) => path.startsWith("/admin/designs") },
 ];
 
 export default function AdminNavbar() {
@@ -25,13 +25,13 @@ export default function AdminNavbar() {
     return (
         <header className="adminNavbar">
             <div className="adminNavbarInner">
-                <Link href="/admin" className="adminNavbarBrand" aria-label="Ir al inicio del panel">
+                <SmoothRouteLink href="/admin" className="adminNavbarBrand" aria-label="Ir al inicio del panel">
                     <span className="adminNavbarMark">SH</span>
                     <span>
                         <span className="adminNavbarTitle">So Ham</span>
                         <span className="adminNavbarSubtitle">Admin</span>
                     </span>
-                </Link>
+                </SmoothRouteLink>
 
                 <nav className="adminNavbarNav" aria-label="Navegación de administración">
                     {navItems.map((item) => {
@@ -39,7 +39,7 @@ export default function AdminNavbar() {
                         const isActive = item.match(pathname);
 
                         return (
-                            <Link
+                            <SmoothRouteLink
                                 key={item.href}
                                 href={item.href}
                                 className={`adminNavbarLink ${isActive ? "isActive" : ""}`}
@@ -47,19 +47,19 @@ export default function AdminNavbar() {
                             >
                                 <Icon aria-hidden="true" />
                                 <span>{item.label}</span>
-                            </Link>
+                            </SmoothRouteLink>
                         );
                     })}
                 </nav>
 
                 <div className="adminNavbarActions">
-                    <Link href="/admin/stones/new" className="adminNavbarIconButton" aria-label="Crear nueva piedra" title="Nueva piedra">
+                    <SmoothRouteLink href="/admin/stones/new" className="adminNavbarIconButton" aria-label="Crear nueva piedra" title="Nueva piedra">
                         <IoAddCircleOutline aria-hidden="true" />
-                    </Link>
-                    <Link href="/" className="adminNavbarButton secondary">
+                    </SmoothRouteLink>
+                    <SmoothRouteLink href="/" className="adminNavbarButton secondary">
                         <IoOpenOutline aria-hidden="true" />
                         <span>Ver sitio</span>
-                    </Link>
+                    </SmoothRouteLink>
                     <form action="/api/admin/logout" method="post">
                         <button className="adminNavbarButton danger" type="submit">
                             <IoLogOutOutline aria-hidden="true" />

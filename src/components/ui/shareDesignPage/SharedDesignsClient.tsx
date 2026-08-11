@@ -8,7 +8,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export function PreviewPageClient({ children }: Props) {
+export function SharedDesignsClient({ children }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

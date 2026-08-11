@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useId, useMemo } from "react";
 import { PieceType, Stone } from "@/types";
 import { BEAD_COUNT } from "@/utils/bead_count";
 import "./_necklaceCircle.scss";
@@ -23,6 +23,7 @@ const PIECE_RADIUS: Record<PieceType, { rx: number; ry: number }> = {
 };
 
 export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick = () => {}, beadStones, stones }: Props) => {
+    const clipPathPrefix = useId().replace(/:/g, "");
     const totalBeads = BEAD_COUNT[selectedPiece];
     const { rx, ry } = PIECE_RADIUS[selectedPiece];
 
@@ -51,7 +52,7 @@ export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick =
             {/* Definimos un clipPath circular por cada bolita */}
             <defs>
                 {beads.map((bead) => (
-                    <clipPath key={`clip-${bead.id}`} id={`clip-bead-${bead.id}`}>
+                    <clipPath key={`clip-${bead.id}`} id={`${clipPathPrefix}-clip-bead-${bead.id}`}>
                         <circle cx={bead.x} cy={bead.y} r={BEAD_RADIUS} />
                     </clipPath>
                 ))}
@@ -98,7 +99,7 @@ export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick =
                                 y={bead.y - BEAD_RADIUS}
                                 width={BEAD_RADIUS * 2}
                                 height={BEAD_RADIUS * 2}
-                                clipPath={`url(#clip-bead-${bead.id})`}
+                                clipPath={`url(#${clipPathPrefix}-clip-bead-${bead.id})`}
                                 preserveAspectRatio="xMidYMid slice"
                             />
                         )}

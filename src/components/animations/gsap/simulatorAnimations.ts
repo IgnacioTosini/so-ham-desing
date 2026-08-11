@@ -1,7 +1,7 @@
 import { buildSectionTimeline, prefersReducedMotion, revealElements } from './shared';
 
 export const animateSimulatorSection = (section: HTMLElement) => {
-  const title = section.querySelector('.titleContainer');
+  const title = section.querySelector('.simulatorHeader');
   const selectorRow = section.querySelector('.simulatorPieceSelector');
   const circle = section.querySelector('svg');
   const panel = section.querySelector('.stonePanel');

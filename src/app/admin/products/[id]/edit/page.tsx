@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { notFound } from "next/navigation";
 import { getProductById } from "@/actions/product.action";
 import { getStones } from "@/actions/stone.action";
@@ -49,7 +49,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
                         <h1>{product.name}</h1>
                         <p>Actualiza precio, tipo, piedras asociadas e imagen principal.</p>
                     </div>
-                    <Link href="/admin/products" className="adminSecondaryAction">Cancelar</Link>
+                    <SmoothRouteLink href="/admin/products" className="adminSecondaryAction">Cancelar</SmoothRouteLink>
                 </div>
                 <ProductForm
                     mode="edit"

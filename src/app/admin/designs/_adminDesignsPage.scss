@@ -1,0 +1,72 @@
+@use '@/styles/variables' as *;
+
+.adminDesignsPage {
+    min-height: 100dvh;
+    padding: 0 1rem 4rem;
+}
+
+.adminDesignsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: min(100%, 75rem);
+    margin: 0 auto;
+    padding-top: 2rem;
+}
+
+.adminDesignsPage .sharedDesignsHeader {
+    h1 {
+        max-width: none;
+    }
+
+    .adminSecondaryAction {
+        gap: 0.45rem;
+    }
+}
+
+.adminDesignsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.adminDesignsEmpty {
+    padding: 3rem 1rem;
+    border-top: 1px solid rgba(198, 179, 153, 0.18);
+    border-bottom: 1px solid rgba(198, 179, 153, 0.18);
+    text-align: center;
+
+    h2 {
+        margin: 0 0 0.5rem;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        font-size: $font-size-xlarge;
+        font-weight: $font-weight-regular;
+    }
+
+    p {
+        margin: 0;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+    }
+}
+
+@media (max-width: 900px) {
+    .adminDesignsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .adminDesignsPage {
+        padding: 0 0.75rem 3rem;
+    }
+
+    .adminDesignsContainer {
+        padding-top: 1rem;
+    }
+
+    .adminDesignsGrid {
+        grid-template-columns: 1fr;
+    }
+}

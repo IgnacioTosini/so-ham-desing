@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { useRouter } from "next/navigation";
 import { IoPencilOutline } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -61,9 +61,9 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <p className="productDescription">{product.description}</p>
             )}
             <div className="productActions">
-                <Link href={`/admin/products/${product.id}/edit`} className="productEditIcon">
+                <SmoothRouteLink href={`/admin/products/${product.id}/edit`} className="productEditIcon">
                     <IoPencilOutline />
-                </Link>
+                </SmoothRouteLink>
                 <button
                     type="button"
                     className="productDeleteIcon"
