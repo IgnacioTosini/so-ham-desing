@@ -1,9 +1,10 @@
 "use server";
 
-import { unstable_cache, revalidatePath, revalidateTag } from "next/cache";
+import { unstable_cache, revalidatePath, updateTag } from "next/cache";
 import { hasAdminSession } from "@/lib/adminAuth";
 import { prisma } from "@/lib/prisma";
-import { PieceType, SharedDesign } from "@/types";
+import { PieceType, SharedDesign, SharedDesignConfiguration } from "@/types";
+import type { Prisma } from "@prisma/client";
 import { BEAD_COUNT } from "@/utils/bead_count";
 import { randomBytes } from "crypto";
 
@@ -21,7 +22,7 @@ const getAllSharedDesignsCached = unstable_cache(
 );
 
 const revalidateSharedDesignsData = async () => {
-    revalidateTag(SHARED_DESIGNS_TAG, "max");
+    updateTag(SHARED_DESIGNS_TAG);
     revalidatePath("/preview");
     revalidatePath("/disenos");
     revalidatePath("/admin/designs");
@@ -31,6 +32,7 @@ export async function createSharedDesign(params: {
     type: PieceType;
     beadStones: Record<number, string>;
     name: string;
+    configuration?: SharedDesignConfiguration;
 }) {
     if (!(params.type in BEAD_COUNT)) {
         throw new Error("Tipo de pieza inválido.");
@@ -50,12 +52,37 @@ export async function createSharedDesign(params: {
         throw new Error("El diseño debe tener una piedra en cada posición.");
     }
 
-    const existingStoneCount = await prisma.stone.count({
-        where: { id: { in: stoneIds } },
+    const existingItemCount = await prisma.catalogItem.count({
+        where: {
+            id: { in: stoneIds },
+            isActive: true,
+            category: { role: { in: ["BEAD", "CHARM"] } },
+        },
     });
 
-    if (existingStoneCount !== stoneIds.length) {
-        throw new Error("El diseño contiene piedras inválidas.");
+    if (existingItemCount !== stoneIds.length) {
+        throw new Error("El diseño contiene componentes inválidos.");
+    }
+
+    const configuration: SharedDesignConfiguration = {
+        baseItemId: params.configuration?.baseItemId ?? null,
+        claspItemId: params.configuration?.claspItemId ?? null,
+    };
+    const structuralSelections = [
+        configuration.baseItemId ? { id: configuration.baseItemId, role: "BASE" as const } : null,
+        configuration.claspItemId ? { id: configuration.claspItemId, role: "CLASP" as const } : null,
+    ].filter((selection): selection is { id: string; role: "BASE" | "CLASP" } => Boolean(selection));
+
+    if (structuralSelections.length > 0) {
+        const structuralItems = await prisma.catalogItem.findMany({
+            where: { id: { in: structuralSelections.map((selection) => selection.id) }, isActive: true },
+            select: { id: true, category: { select: { role: true } } },
+        });
+        const structuralItemsById = new Map(structuralItems.map((item) => [item.id, item.category.role]));
+
+        if (structuralSelections.some((selection) => structuralItemsById.get(selection.id) !== selection.role)) {
+            throw new Error("La base o el cierre seleccionado no es válido.");
+        }
     }
 
     for (let attempt = 0; attempt < 3; attempt++) {
@@ -63,7 +90,13 @@ export async function createSharedDesign(params: {
 
         try {
             const design = await prisma.sharedDesign.create({
-                data: { shareCode, type: params.type, beads, name },
+                data: {
+                    shareCode,
+                    type: params.type,
+                    beads,
+                    name,
+                    configuration: configuration as Prisma.InputJsonValue,
+                },
             });
 
             await revalidateSharedDesignsData();
@@ -85,6 +118,9 @@ export async function getAllSharedDesigns(): Promise<SharedDesign[]> {
         ...d,
         beads: d.beads as (string | null)[],
         name: d.name || 'Diseño sin nombre',
+        configuration: d.configuration && typeof d.configuration === "object" && !Array.isArray(d.configuration)
+            ? d.configuration as SharedDesignConfiguration
+            : null,
     }));
 }
 

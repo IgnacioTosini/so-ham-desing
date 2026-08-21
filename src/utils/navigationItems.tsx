@@ -1,5 +1,5 @@
 export const navigationItems = [
     { id: 'viewPieces', label: 'Piezas' },
-    { id: 'createPiece', label: 'Crear' },
+    { id: 'materials', label: 'Materiales' },
     { id: 'simulator', label: 'Simulador' },
 ] as const;

@@ -19,23 +19,31 @@ interface ProductFormInitialData {
     imageUrl: string;
     price: number;
     type: string;
-    stones?: Array<{ id: string; name: string }>;
+    catalogItems?: Array<{ id: string; name: string }>;
+}
+
+interface ProductFormCatalogItem {
+    id: string;
+    name: string;
+    categoryId: string;
+    categoryName: string;
+    isActive: boolean;
 }
 
 interface ProductFormProps {
     mode: ProductFormMode;
     initialData?: ProductFormInitialData;
-    availableStones?: Array<{ id: string; name: string }>;
+    availableCatalogItems?: ProductFormCatalogItem[];
 }
 
-export default function ProductForm({ mode, initialData, availableStones = [] }: ProductFormProps) {
+export default function ProductForm({ mode, initialData, availableCatalogItems = [] }: ProductFormProps) {
     const router = useRouter();
     const [name, setName] = useState(initialData?.name ?? "");
     const [description, setDescription] = useState(initialData?.description ?? "");
     const [price, setPrice] = useState(initialData?.price ?? 0);
     const [type, setType] = useState(initialData?.type ?? "BRACELET");
-    const [selectedStoneIds, setSelectedStoneIds] = useState<Set<string>>(
-        new Set(initialData?.stones?.map((s) => s.id) ?? [])
+    const [selectedCatalogItemIds, setSelectedCatalogItemIds] = useState<Set<string>>(
+        new Set(initialData?.catalogItems?.map((item) => item.id) ?? [])
     );
     const [error, setError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
@@ -65,6 +73,22 @@ export default function ProductForm({ mode, initialData, availableStones = [] }:
         return mode === "create" ? "Crear producto" : "Guardar cambios";
     }, [mode]);
 
+    const catalogGroups = useMemo(() => {
+        const groups = new Map<string, { id: string; name: string; items: ProductFormCatalogItem[] }>();
+
+        availableCatalogItems.forEach((item) => {
+            const group = groups.get(item.categoryId) ?? {
+                id: item.categoryId,
+                name: item.categoryName,
+                items: [],
+            };
+            group.items.push(item);
+            groups.set(item.categoryId, group);
+        });
+
+        return Array.from(groups.values());
+    }, [availableCatalogItems]);
+
     const handleDragOverWrapper = (event: DragEvent<HTMLDivElement>) => {
         handleDragOver(event);
     };
@@ -81,14 +105,14 @@ export default function ProductForm({ mode, initialData, availableStones = [] }:
         handleInputFileChange(event);
     };
 
-    const toggleStone = (stoneId: string) => {
-        const newSelection = new Set(selectedStoneIds);
-        if (newSelection.has(stoneId)) {
-            newSelection.delete(stoneId);
+    const toggleCatalogItem = (itemId: string) => {
+        const newSelection = new Set(selectedCatalogItemIds);
+        if (newSelection.has(itemId)) {
+            newSelection.delete(itemId);
         } else {
-            newSelection.add(stoneId);
+            newSelection.add(itemId);
         }
-        setSelectedStoneIds(newSelection);
+        setSelectedCatalogItemIds(newSelection);
     };
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -122,7 +146,7 @@ export default function ProductForm({ mode, initialData, availableStones = [] }:
                 price: Number(price),
                 imageUrl: finalImageUrl,
                 type: type as "BRACELET" | "NECKLACE",
-                stoneIds: Array.from(selectedStoneIds),
+                catalogItemIds: Array.from(selectedCatalogItemIds),
             };
 
             if (mode === "edit") {
@@ -255,20 +279,39 @@ export default function ProductForm({ mode, initialData, availableStones = [] }:
                 ) : null}
             </div>
 
-            {availableStones.length > 0 && (
+            {catalogGroups.length > 0 && (
                 <div className="productFormField">
-                    <label>Piedras incluidas</label>
-                    <div className="stoneSelectionGrid">
-                        {availableStones.map((stone) => (
-                            <label key={stone.id} className="stoneCheckbox">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedStoneIds.has(stone.id)}
-                                    onChange={() => toggleStone(stone.id)}
-                                />
-                                <span>{stone.name}</span>
-                            </label>
-                        ))}
+                    <label>Insumos que componen la pieza</label>
+                    <small>Selecciona los materiales utilizados. Están ordenados por categoría.</small>
+                    <div className="catalogSelectionGroups">
+                        {catalogGroups.map((group) => {
+                            const selectedCount = group.items.filter((item) => selectedCatalogItemIds.has(item.id)).length;
+
+                            return (
+                                <section key={group.id} className="catalogSelectionGroup">
+                                    <div className="catalogSelectionGroupHeader">
+                                        <h3>{group.name}</h3>
+                                        <span>{selectedCount} de {group.items.length}</span>
+                                    </div>
+                                    <div className="catalogItemSelectionGrid">
+                                        {group.items.map((item) => (
+                                            <label
+                                                key={item.id}
+                                                className={`catalogItemCheckbox ${!item.isActive ? "inactive" : ""}`}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedCatalogItemIds.has(item.id)}
+                                                    onChange={() => toggleCatalogItem(item.id)}
+                                                />
+                                                <span>{item.name}</span>
+                                                {!item.isActive && <small>Inactivo</small>}
+                                            </label>
+                                        ))}
+                                    </div>
+                                </section>
+                            );
+                        })}
                     </div>
                 </div>
             )}

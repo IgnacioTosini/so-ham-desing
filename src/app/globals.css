@@ -1,11 +1,44 @@
+:root {
+  --soham-scrollbar-track: #181514;
+  --soham-scrollbar-thumb: #776452;
+  --soham-scrollbar-thumb-hover: #c6b399;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--soham-scrollbar-thumb) var(--soham-scrollbar-track);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--soham-scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  min-height: 2.5rem;
+  border: 2px solid var(--soham-scrollbar-track);
+  border-radius: 999px;
+  background: var(--soham-scrollbar-thumb);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--soham-scrollbar-thumb-hover);
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--soham-scrollbar-track);
 }
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 html, body {

@@ -17,6 +17,7 @@ export default function Navbar() {
     const [menuState, setMenuState] = useState({ isOpen: false, pathname })
     const currentSection = pathname === '/' ? activeSection : ''
     const isMenuOpen = menuState.pathname === pathname && menuState.isOpen
+    const isSimulatorActive = currentSection === 'simulator'
 
     const getSectionHref = (sectionId: string) => {
         if (pathname === '/') return `#${sectionId}`
@@ -119,7 +120,10 @@ export default function Navbar() {
     }, [])
 
     return (
-        <nav ref={navbarRef} className={`navbar ${isScrolled ? 'isScrolled' : ''} ${isMenuOpen ? 'isMenuOpen' : ''}`}>
+        <nav
+            ref={navbarRef}
+            className={`navbar ${isScrolled ? 'isScrolled' : ''} ${isMenuOpen ? 'isMenuOpen' : ''} ${isSimulatorActive ? 'isSimulatorActive' : ''}`}
+        >
             <div className="navbarInner">
                 <SmoothRouteLink href="/" className="navbarBrand" onClick={handleHomeNavigation} aria-label="Ir al inicio">
                     <Image src="/soHamDesignLogo.png" alt="" width={38} height={38} className="navbarLogo" priority />
@@ -158,9 +162,9 @@ export default function Navbar() {
                         ))}
                     </div>
                     <SmoothRouteLink
-                        href={getSectionHref('createPiece')}
+                        href={getSectionHref('simulator')}
                         className="navbarCta"
-                        onClick={(event) => handleSectionNavigation(event, 'createPiece')}
+                        onClick={(event) => handleSectionNavigation(event, 'simulator')}
                     >
                         Diseñar ahora
                     </SmoothRouteLink>

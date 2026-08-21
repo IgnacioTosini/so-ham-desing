@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getProducts } from "@/actions/product.action";
-import { getStones } from "@/actions/stone.action";
-import { AboutBrand, CreateYourPiece, Hero, ViewPieces } from "@/components/sections";
+import { getPublicCatalog } from "@/actions/catalog.action";
+import { AboutBrand, Hero, MaterialsCatalog, ViewPieces } from "@/components/sections";
 import { Simulator } from "@/components/sections/simulator/Simulator";
 
 export const revalidate = 3600;
@@ -15,14 +15,16 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const products = await getProducts();
-  const stones = await getStones();
+  const [products, categories] = await Promise.all([
+    getProducts(),
+    getPublicCatalog(),
+  ]);
   return (
     <main className='main' id='top'>
         <Hero />
         <ViewPieces products={products} />
-        <CreateYourPiece stones={stones} />
-        <Simulator stones={stones} />
+        <MaterialsCatalog categories={categories} />
+        <Simulator categories={categories} />
         <AboutBrand />
     </main>
   );

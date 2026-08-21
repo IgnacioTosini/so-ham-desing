@@ -19,15 +19,19 @@ interface CreateProductInput {
     price: number;
     imageUrl?: string;
     type: AccessoryType | "pulsera" | "collar" | "bracelet" | "necklace";
-    stoneIds?: string[];
+    catalogItemIds?: string[];
     images?: CreateProductImageInput[];
 }
 
 const MAX_PRODUCT_NAME_LENGTH = 80;
 const MAX_PRODUCT_DESCRIPTION_LENGTH = 500;
 const MAX_PRODUCT_IMAGES = 6;
-const MAX_PRODUCT_STONES = 20;
+const MAX_PRODUCT_CATALOG_ITEMS = 100;
 const MAX_PRODUCT_PRICE = 999_999_999;
+const PRODUCT_TRANSACTION_OPTIONS = {
+    maxWait: 10_000,
+    timeout: 20_000,
+} as const;
 
 const productInclude = {
     images: {
@@ -38,6 +42,19 @@ const productInclude = {
     stones: {
         include: {
             stone: true,
+        },
+    },
+    catalogItems: {
+        include: {
+            item: {
+                include: {
+                    category: true,
+                    attributeValues: {
+                        include: { attribute: true },
+                        orderBy: { attribute: { order: "asc" as const } },
+                    },
+                },
+            },
         },
     },
 } as const;
@@ -68,8 +85,20 @@ const uploadProductImagesIfNeeded = async (images: Array<{ url: string; alt: str
     }));
 };
 
-const normalizeStoneIds = (stoneIds: string[] = []) =>
-    Array.from(new Set(stoneIds.map((id) => id.trim()).filter(Boolean)));
+const normalizeCatalogItemIds = (catalogItemIds: string[] = []) =>
+    Array.from(new Set(catalogItemIds.map((id) => id.trim()).filter(Boolean)));
+
+const assertCatalogItemsExist = async (catalogItemIds: string[]) => {
+    if (catalogItemIds.length === 0) return;
+
+    const itemCount = await prisma.catalogItem.count({
+        where: { id: { in: catalogItemIds } },
+    });
+
+    if (itemCount !== catalogItemIds.length) {
+        throw new Error("Uno o más insumos seleccionados ya no existen.");
+    }
+};
 
 const resolveProductType = (type: CreateProductInput["type"]): AccessoryType => {
     if (type === "BRACELET" || type === "NECKLACE") return type;
@@ -145,6 +174,7 @@ const isMainImageUrlReferenced = async (url: string, excludeProductId?: string):
 const revalidateProductData = async () => {
     revalidateTag(PRODUCTS_TAG, "max");
     revalidatePath("/");
+    revalidatePath("/piezas/[id]", "page");
 };
 
 const getProductsCached = unstable_cache(
@@ -189,7 +219,7 @@ export async function createProduct(input: CreateProductInput) {
     const price = Number(input.price);
     const type = resolveProductType(input.type);
     const normalizedImages = normalizeProductImages(input.images);
-    const stoneIds = normalizeStoneIds(input.stoneIds);
+    const catalogItemIds = normalizeCatalogItemIds(input.catalogItemIds);
 
     if (!name) throw new Error("El nombre es obligatorio");
     if (!Number.isFinite(price) || price <= 0) throw new Error("El precio debe ser mayor a cero");
@@ -197,7 +227,11 @@ export async function createProduct(input: CreateProductInput) {
     if (description && description.length > MAX_PRODUCT_DESCRIPTION_LENGTH) throw new Error(`La descripción no puede superar ${MAX_PRODUCT_DESCRIPTION_LENGTH} caracteres`);
     if (price > MAX_PRODUCT_PRICE) throw new Error("El precio es demasiado alto");
     if (normalizedImages.length > MAX_PRODUCT_IMAGES) throw new Error(`No se pueden cargar más de ${MAX_PRODUCT_IMAGES} imágenes`);
-    if (stoneIds.length > MAX_PRODUCT_STONES) throw new Error(`No se pueden asociar más de ${MAX_PRODUCT_STONES} piedras`);
+    if (catalogItemIds.length > MAX_PRODUCT_CATALOG_ITEMS) {
+        throw new Error(`No se pueden asociar más de ${MAX_PRODUCT_CATALOG_ITEMS} insumos`);
+    }
+
+    await assertCatalogItemsExist(catalogItemIds);
 
     try {
         const uploadedImages = await uploadProductImagesIfNeeded(normalizedImages);
@@ -211,11 +245,11 @@ export async function createProduct(input: CreateProductInput) {
             price: Math.round(price),
             imageUrl,
             type,
-            ...(stoneIds.length > 0
+            ...(catalogItemIds.length > 0
                 ? {
-                    stones: {
-                        create: stoneIds.map((stoneId) => ({
-                            stone: { connect: { id: stoneId } },
+                    catalogItems: {
+                        create: catalogItemIds.map((itemId) => ({
+                            item: { connect: { id: itemId } },
                         })),
                     },
                 }
@@ -264,31 +298,35 @@ export async function deleteProduct(id: string) {
 
         const previousImageIds = product.images.map((relation) => relation.image.id);
 
-        const orphanImages = await prisma.$transaction(async (tx) => {
-            await tx.productStone.deleteMany({ where: { productId: id } });
-            await tx.productImage.deleteMany({ where: { productId: id } });
-            await tx.product.delete({ where: { id } });
+        const orphanImages = await prisma.$transaction(
+            async (tx) => {
+                await tx.productCatalogItem.deleteMany({ where: { productId: id } });
+                await tx.productStone.deleteMany({ where: { productId: id } });
+                await tx.productImage.deleteMany({ where: { productId: id } });
+                await tx.product.delete({ where: { id } });
 
-            if (previousImageIds.length === 0) return [];
+                if (previousImageIds.length === 0) return [];
 
-            const orphaned = await tx.image.findMany({
-                where: {
-                    id: { in: previousImageIds },
-                    stones: { none: {} },
-                    products: { none: {} },
-                },
-            });
-
-            if (orphaned.length > 0) {
-                await tx.image.deleteMany({
+                const orphaned = await tx.image.findMany({
                     where: {
-                        id: { in: orphaned.map((image) => image.id) },
+                        id: { in: previousImageIds },
+                        stones: { none: {} },
+                        products: { none: {} },
                     },
                 });
-            }
 
-            return orphaned;
-        });
+                if (orphaned.length > 0) {
+                    await tx.image.deleteMany({
+                        where: {
+                            id: { in: orphaned.map((image) => image.id) },
+                        },
+                    });
+                }
+
+                return orphaned;
+            },
+            PRODUCT_TRANSACTION_OPTIONS
+        );
 
         const cloudinaryUrlsToDelete = new Set(orphanImages.map((image) => image.url));
         const stillReferencedMainImage = await isMainImageUrlReferenced(product.imageUrl, id);
@@ -315,9 +353,9 @@ export async function updateProduct(id: string, input: CreateProductInput) {
     const price = Number(input.price);
     const type = resolveProductType(input.type);
     const hasImagesPayload = Array.isArray(input.images);
-    const hasStonesPayload = Array.isArray(input.stoneIds);
+    const hasCatalogItemsPayload = Array.isArray(input.catalogItemIds);
     const normalizedImages = normalizeProductImages(input.images);
-    const stoneIds = normalizeStoneIds(input.stoneIds);
+    const catalogItemIds = normalizeCatalogItemIds(input.catalogItemIds);
 
     if (!name) throw new Error("El nombre es obligatorio");
     if (!Number.isFinite(price) || price <= 0) throw new Error("El precio debe ser mayor a cero");
@@ -325,7 +363,11 @@ export async function updateProduct(id: string, input: CreateProductInput) {
     if (description && description.length > MAX_PRODUCT_DESCRIPTION_LENGTH) throw new Error(`La descripción no puede superar ${MAX_PRODUCT_DESCRIPTION_LENGTH} caracteres`);
     if (price > MAX_PRODUCT_PRICE) throw new Error("El precio es demasiado alto");
     if (normalizedImages.length > MAX_PRODUCT_IMAGES) throw new Error(`No se pueden cargar más de ${MAX_PRODUCT_IMAGES} imágenes`);
-    if (stoneIds.length > MAX_PRODUCT_STONES) throw new Error(`No se pueden asociar más de ${MAX_PRODUCT_STONES} piedras`);
+    if (catalogItemIds.length > MAX_PRODUCT_CATALOG_ITEMS) {
+        throw new Error(`No se pueden asociar más de ${MAX_PRODUCT_CATALOG_ITEMS} insumos`);
+    }
+
+    if (hasCatalogItemsPayload) await assertCatalogItemsExist(catalogItemIds);
 
     try {
         const previousProduct = await prisma.product.findUnique({
@@ -351,75 +393,78 @@ export async function updateProduct(id: string, input: CreateProductInput) {
 
         const previousImageIds = previousProduct.images.map((relation) => relation.image.id);
 
-        const { product, orphanImages } = await prisma.$transaction(async (tx) => {
-            const updatedProduct = await tx.product.update({
-                where: { id },
-                data: {
-                    name,
-                    description,
-                    price: Math.round(price),
-                    imageUrl,
-                    type,
-                    ...(hasStonesPayload
-                        ? {
-                            stones: {
-                                deleteMany: {},
-                                ...(stoneIds.length > 0
-                                    ? {
-                                        create: stoneIds.map((stoneId) => ({
-                                            stone: { connect: { id: stoneId } },
-                                        })),
-                                    }
-                                    : {}),
-                            },
-                        }
-                        : {}),
-                    ...(hasImagesPayload
-                        ? {
-                            images: {
-                                deleteMany: {},
-                                ...(uploadedImages.length > 0
-                                    ? {
-                                        create: uploadedImages.map((image) => ({
-                                            image: {
-                                                create: {
-                                                    url: image.url,
-                                                    alt: image.alt ?? null,
-                                                    order: image.order,
+        const { product, orphanImages } = await prisma.$transaction(
+            async (tx) => {
+                const updatedProduct = await tx.product.update({
+                    where: { id },
+                    data: {
+                        name,
+                        description,
+                        price: Math.round(price),
+                        imageUrl,
+                        type,
+                        ...(hasCatalogItemsPayload
+                            ? {
+                                catalogItems: {
+                                    deleteMany: {},
+                                    ...(catalogItemIds.length > 0
+                                        ? {
+                                            create: catalogItemIds.map((itemId) => ({
+                                                item: { connect: { id: itemId } },
+                                            })),
+                                        }
+                                        : {}),
+                                },
+                            }
+                            : {}),
+                        ...(hasImagesPayload
+                            ? {
+                                images: {
+                                    deleteMany: {},
+                                    ...(uploadedImages.length > 0
+                                        ? {
+                                            create: uploadedImages.map((image) => ({
+                                                image: {
+                                                    create: {
+                                                        url: image.url,
+                                                        alt: image.alt ?? null,
+                                                        order: image.order,
+                                                    },
                                                 },
-                                            },
-                                        })),
-                                    }
-                                    : {}),
-                            },
-                        }
-                        : {}),
-                },
-                include: productInclude,
-            });
+                                            })),
+                                        }
+                                        : {}),
+                                },
+                            }
+                            : {}),
+                    },
+                    include: productInclude,
+                });
 
-            if (!hasImagesPayload || previousImageIds.length === 0) {
-                return { product: updatedProduct, orphanImages: [] };
-            }
+                if (!hasImagesPayload || previousImageIds.length === 0) {
+                    return { product: updatedProduct, orphanImages: [] };
+                }
 
-            const orphaned = await tx.image.findMany({
-                where: {
-                    id: { in: previousImageIds },
-                    stones: { none: {} },
-                    products: { none: {} },
-                },
-            });
-
-            if (orphaned.length > 0) {
-                await tx.image.deleteMany({
+                const orphaned = await tx.image.findMany({
                     where: {
-                        id: { in: orphaned.map((image) => image.id) },
+                        id: { in: previousImageIds },
+                        stones: { none: {} },
+                        products: { none: {} },
                     },
                 });
-            }
 
-            return { product: updatedProduct, orphanImages: orphaned };
-        });
+                if (orphaned.length > 0) {
+                    await tx.image.deleteMany({
+                        where: {
+                            id: { in: orphaned.map((image) => image.id) },
+                        },
+                    });
+                }
+
+                return { product: updatedProduct, orphanImages: orphaned };
+            },
+            PRODUCT_TRANSACTION_OPTIONS
+        );
 
         if (orphanImages.length > 0) {
             await deleteProjectImagesFromCloudinary(orphanImages.map((image) => image.url));

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { IoOpenOutline } from 'react-icons/io5';
 import { getAllSharedDesigns } from '@/actions/design.action';
-import { getStones } from '@/actions/stone.action';
+import { getPublicCatalog } from '@/actions/catalog.action';
 import { requireAdminSession } from '@/lib/adminAuth';
 import { SharedDesignsClient } from '@/components/ui/shareDesignPage/SharedDesignsClient';
 import { ShareDesignItem } from '@/components/ui/shareDesignPage/shareDesignItem/ShareDesignItem';
@@ -20,10 +20,11 @@ export const metadata: Metadata = {
 export default async function AdminDesignsPage() {
     await requireAdminSession();
 
-    const [designs, stones] = await Promise.all([
+    const [designs, categories] = await Promise.all([
         getAllSharedDesigns(),
-        getStones(),
+        getPublicCatalog(),
     ]);
+    const items = categories.flatMap((category) => category.items);
 
     return (
         <div className="adminDesignsPage">
@@ -31,7 +32,9 @@ export default async function AdminDesignsPage() {
                 <div className="adminDesignsContainer">
                     <header className="adminPageHeader sharedDesignsHeader">
                         <div>
-                            <span className="adminEyebrow">{designs.length} diseños guardados</span>
+                            <span className="adminEyebrow">
+                                {designs.length} {designs.length === 1 ? 'diseño guardado' : 'diseños guardados'}
+                            </span>
                             <h1>Diseños compartidos</h1>
                             <p>Revisa las combinaciones enviadas desde el simulador y abre cada pieza en detalle.</p>
                         </div>
@@ -47,7 +50,7 @@ export default async function AdminDesignsPage() {
                                 <ShareDesignItem
                                     key={design.id}
                                     design={design}
-                                    stones={stones}
+                                    items={items}
                                     canDelete
                                 />
                             ))}

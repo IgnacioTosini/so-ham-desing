@@ -130,7 +130,7 @@
     overflow-x: auto;
     width: 100%;
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.08);
+    scrollbar-color: $color-tertiary $color-accent;
 
     &::after {
         content: "";

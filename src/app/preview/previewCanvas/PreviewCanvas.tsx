@@ -1,22 +1,22 @@
 "use client";
 
 import { NecklaceCircle } from "@/components/ui/simulator/necklaceCircle/NecklaceCircle";
-import { PieceType, Stone } from "@/types";
+import { CatalogItemView, PieceType } from "@/types";
 
 interface Props {
     pieceType: PieceType;
     beadStones: Record<number, string>;
-    stones: Stone[];
+    items: CatalogItemView[];
 }
 
-export function PreviewCanvas({ pieceType, beadStones, stones }: Props) {
+export function PreviewCanvas({ pieceType, beadStones, items }: Props) {
     return (
         <>
             <NecklaceCircle
                 selectedPiece={pieceType}
                 selectedBeadIndex={null}
                 beadStones={beadStones}
-                stones={stones}
+                items={items}
             />
         </>
     );

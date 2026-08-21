@@ -27,6 +27,16 @@ const formatPrice = (price: number) =>
 
 const uniqueValues = (values: string[]) => Array.from(new Set(values.filter(Boolean)));
 
+const getEnergyTags = (item: { attributeValues: Array<{ value: string; attribute: { key: string } }> }) =>
+    item.attributeValues
+        .filter(({ attribute }) => attribute.key === "etiquetas-de-energia")
+        .flatMap(({ value }) => value.split(/[,;]+/).map((tag) => tag.trim()).filter(Boolean));
+
+const formatAttributeValue = (attribute: { type: string; unit: string | null; value: string }) => {
+    if (attribute.type === "BOOLEAN") return attribute.value === "true" ? "Sí" : "No";
+    return `${attribute.value}${attribute.unit ? ` ${attribute.unit}` : ""}`;
+};
+
 export async function generateMetadata({ params }: PieceDetailPageProps): Promise<Metadata> {
     const { id } = await params;
     const product = await getProductById(id);
@@ -71,8 +81,39 @@ export default async function PieceDetailPage({ params }: PieceDetailPageProps) 
         type: product.type,
         completedPiece: product,
     });
-    const stones = product.stones.map(({ stone }) => stone);
-    const energyTags = uniqueValues(stones.flatMap((stone) => stone.energyTags));
+    const catalogItems = product.catalogItems.map(({ item }) => item);
+    const legacyStones = product.stones.map(({ stone }) => stone);
+    const energyTags = uniqueValues(
+        catalogItems.length > 0
+            ? catalogItems.flatMap(getEnergyTags)
+            : legacyStones.flatMap((stone) => stone.energyTags)
+    );
+    const groupedComposition = new Map<
+        string,
+        {
+            id: string;
+            name: string;
+            description: string | null;
+            order: number;
+            items: typeof catalogItems;
+        }
+    >();
+
+    catalogItems.forEach((item) => {
+        const group = groupedComposition.get(item.categoryId) ?? {
+            id: item.category.id,
+            name: item.category.name,
+            description: item.category.description,
+            order: item.category.order,
+            items: [],
+        };
+        group.items.push(item);
+        groupedComposition.set(item.categoryId, group);
+    });
+
+    const compositionGroups = Array.from(groupedComposition.values()).sort(
+        (a, b) => a.order - b.order || a.name.localeCompare(b.name, "es")
+    );
     const gallery = uniqueValues([
         product.imageUrl,
         ...product.images
@@ -132,30 +173,71 @@ export default async function PieceDetailPage({ params }: PieceDetailPageProps) 
             <section className="pieceDetailSection">
                 <div className="pieceDetailSectionHeader">
                     <p>Composición</p>
-                    <h2>Piedras de esta pieza</h2>
+                    <h2>Materiales de esta pieza</h2>
                 </div>
 
-                {stones.length > 0 ? (
-                    <div className="pieceStoneGrid">
-                        {stones.map((stone) => (
-                            <article key={stone.id} className="pieceStoneCard">
-                                <Image src={stone.imageUrl} alt={stone.name} width={180} height={180} className="pieceStoneImage" />
-                                <div>
-                                    <h3>{stone.name}</h3>
-                                    <p>{stone.description}</p>
-                                    {stone.energyTags.length > 0 && (
-                                        <div className="pieceStoneTags">
-                                            {stone.energyTags.map((tag) => (
-                                                <span key={tag}>{tag}</span>
-                                            ))}
-                                        </div>
-                                    )}
+                {compositionGroups.length > 0 ? (
+                    <div className="pieceCompositionGroups">
+                        {compositionGroups.map((group) => (
+                            <section key={group.id} className="pieceCompositionGroup">
+                                <div className="pieceCompositionGroupHeader">
+                                    <div>
+                                        <h3>{group.name}</h3>
+                                        {group.description && <p>{group.description}</p>}
+                                    </div>
+                                    <span>{group.items.length} {group.items.length === 1 ? "insumo" : "insumos"}</span>
                                 </div>
-                            </article>
+
+                                <div className="pieceMaterialGrid">
+                                    {group.items.map((item) => {
+                                        const itemEnergyTags = getEnergyTags(item);
+                                        const visibleAttributes = item.attributeValues.filter(
+                                            ({ attribute }) => attribute.key !== "etiquetas-de-energia"
+                                        );
+
+                                        return (
+                                            <article key={item.id} className="pieceMaterialCard">
+                                                {item.imageUrl ? (
+                                                    <Image
+                                                        src={item.imageUrl}
+                                                        alt={item.name}
+                                                        width={180}
+                                                        height={180}
+                                                        className="pieceMaterialImage"
+                                                    />
+                                                ) : (
+                                                    <div className="pieceMaterialImagePlaceholder" aria-hidden="true">
+                                                        {item.name.slice(0, 1)}
+                                                    </div>
+                                                )}
+                                                <div className="pieceMaterialContent">
+                                                    <h4>{item.name}</h4>
+                                                    {item.description && <p>{item.description}</p>}
+                                                    {visibleAttributes.length > 0 && (
+                                                        <dl className="pieceMaterialAttributes">
+                                                            {visibleAttributes.map(({ attribute, value }) => (
+                                                                <div key={attribute.id}>
+                                                                    <dt>{attribute.name}</dt>
+                                                                    <dd>{formatAttributeValue({ ...attribute, value })}</dd>
+                                                                </div>
+                                                            ))}
+                                                        </dl>
+                                                    )}
+                                                    {itemEnergyTags.length > 0 && (
+                                                        <div className="pieceMaterialTags">
+                                                            {itemEnergyTags.map((tag) => <span key={tag}>{tag}</span>)}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </article>
+                                        );
+                                    })}
+                                </div>
+                            </section>
                         ))}
                     </div>
                 ) : (
-                    <p className="pieceDetailEmpty">Esta pieza todavía no tiene piedras asociadas.</p>
+                    <p className="pieceDetailEmpty">Esta pieza todavía no tiene insumos asociados.</p>
                 )}
             </section>
 

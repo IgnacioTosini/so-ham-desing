@@ -1,0 +1,257 @@
+@use '@/styles/variables' as *;
+
+.catalogPanel {
+    display: flex;
+    flex: 0 1 30rem;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 24rem;
+    max-width: 30rem;
+    padding: 1.25rem;
+    border-left: 1px solid rgba(198, 179, 153, 0.16);
+}
+
+.catalogPanelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    > div > span {
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+        text-transform: uppercase;
+    }
+
+    p {
+        margin: 0.15rem 0 0;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        font-size: $font-size-medium;
+    }
+}
+
+.catalogPanelActiveMaterial {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.65rem;
+    border: 1px solid rgba(198, 179, 153, 0.34);
+    border-radius: 8px;
+    background: rgba(198, 179, 153, 0.1);
+
+    > div:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    small {
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+    }
+
+    strong {
+        overflow: hidden;
+        color: $color-text-primary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    > button {
+        border: 0;
+        background: transparent;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+        cursor: pointer;
+    }
+}
+
+.catalogPanelActiveMaterialImage {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    overflow: hidden;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: $color-text-tertiary;
+    font-family: $font-family-secondary;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.catalogPanelGroups {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.35rem;
+    padding: 0.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.12);
+
+    button {
+        min-width: 0;
+        border: 0;
+        border-radius: 999px;
+        padding: 0.55rem 0.35rem;
+        background: transparent;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+        cursor: pointer;
+
+        &.isActive {
+            background: $color-text-primary;
+            color: $color-text-quaternary;
+            font-weight: $font-weight-semibold;
+        }
+    }
+}
+
+.catalogPanelState {
+    flex: 0 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    padding: 0.3rem 0.55rem;
+    color: $color-text-secondary;
+    font-family: $font-family-primary;
+    font-size: $font-size-xsmall;
+
+    &.isReady {
+        border-color: rgba(198, 179, 153, 0.38);
+        background: rgba(198, 179, 153, 0.1);
+        color: $color-text-primary;
+    }
+}
+
+.catalogPanelTabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+
+    button {
+        flex: 0 0 auto;
+        border: 1px solid rgba(198, 179, 153, 0.16);
+        border-radius: 999px;
+        padding: 0.4rem 0.65rem;
+        background: rgba(255, 255, 255, 0.035);
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+        cursor: pointer;
+
+        &.isActive,
+        &:hover {
+            border-color: rgba(198, 179, 153, 0.55);
+            background: rgba(198, 179, 153, 0.12);
+            color: $color-text-primary;
+        }
+    }
+}
+
+.catalogPanelGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(7.4rem, 1fr));
+    gap: 0.7rem;
+    overflow-y: auto;
+    max-height: 32rem;
+    padding-right: 0.25rem;
+    scrollbar-width: thin;
+}
+
+.catalogPanelItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 7.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 0.7rem 0.5rem;
+    background: rgba(255, 255, 255, 0.045);
+    color: $color-text-primary;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+    &:hover:not(:disabled),
+    &.isActive {
+        border-color: rgba(198, 179, 153, 0.6);
+        background: rgba(198, 179, 153, 0.13);
+        transform: translateY(-2px);
+    }
+
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+.catalogPanelImageWrapper {
+    display: grid;
+    place-items: center;
+    width: 4.2rem;
+    height: 4.2rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.055);
+    color: $color-text-secondary;
+    font-family: $font-family-secondary;
+
+    img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.catalogPanelName {
+    font-family: $font-family-primary;
+    font-size: $font-size-xsmall;
+    line-height: 1.25;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.catalogPanelTip,
+.catalogPanelNoItems,
+.catalogPanelEmpty {
+    color: $color-text-secondary;
+    font-family: $font-family-primary;
+    font-size: $font-size-xsmall;
+    line-height: 1.5;
+}
+
+.catalogPanelNoItems {
+    display: grid;
+    place-items: center;
+    min-height: 10rem;
+    border: 1px dashed rgba(198, 179, 153, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.catalogPanelTip { margin: 0; color: $color-text-tertiary; }
+
+@media (max-width: 768px) {
+    .catalogPanel {
+        flex-basis: auto;
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        border-left: none;
+        padding: 0.85rem 0 0;
+    }
+
+    .catalogPanelGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+    }
+}

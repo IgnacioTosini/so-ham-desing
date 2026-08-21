@@ -75,7 +75,7 @@
             overflow-y: auto;
             max-height: 30rem;
             scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.08);
+            scrollbar-color: $color-tertiary $color-accent;
             scrollbar-gutter: stable;
 
             &::-webkit-scrollbar {
@@ -83,17 +83,18 @@
             }
 
             &::-webkit-scrollbar-track {
-                background: rgba(255, 255, 255, 0.08);
+                background: $color-accent;
                 border-radius: 6px;
             }
 
             &::-webkit-scrollbar-thumb {
-                background: rgba(255, 255, 255, 0.35);
+                border: 2px solid $color-accent;
+                background: $color-tertiary;
                 border-radius: 6px;
             }
 
             &::-webkit-scrollbar-thumb:hover {
-                background: rgba(255, 255, 255, 0.5);
+                background: $color-text-tertiary;
             }
         }
     }

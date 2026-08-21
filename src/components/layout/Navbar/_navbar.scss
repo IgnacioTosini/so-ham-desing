@@ -8,7 +8,7 @@
     z-index: 1000;
     padding: 1rem;
     pointer-events: none;
-    transition: padding 0.25s ease;
+    transition: padding 0.25s ease, translate 0.28s ease;
 
     &.isScrolled {
         padding-top: 0.65rem;
@@ -173,6 +173,11 @@
 @media (max-width: 820px) {
     .navbar {
         padding: 0.75rem;
+    }
+
+    .navbar.isSimulatorActive:not(.isMenuOpen) {
+        z-index: 4;
+        translate: 0 calc(-100% - 1rem);
     }
 
     .navbarInner {

@@ -89,6 +89,10 @@
         width: min(90%, 38rem);
         height: auto;
     }
+
+    .necklaceCircleCounter {
+        display: none;
+    }
 }
 
 .previewCanvasLabel {
@@ -165,7 +169,6 @@
     dd {
         color: $color-text-primary;
         font-size: $font-size-normal;
-        text-transform: capitalize;
     }
 }
 

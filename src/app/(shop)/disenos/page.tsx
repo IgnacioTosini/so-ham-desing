@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { IoArrowForward } from 'react-icons/io5';
 import { getAllSharedDesigns } from '@/actions/design.action';
-import { getStones } from '@/actions/stone.action';
+import { getPublicCatalog } from '@/actions/catalog.action';
 import { SharedDesignsClient } from '@/components/ui/shareDesignPage/SharedDesignsClient';
 import { ShareDesignItem } from '@/components/ui/shareDesignPage/shareDesignItem/ShareDesignItem';
 import { SmoothRouteLink } from '@/components/ui/SmoothRouteLink';
@@ -16,10 +16,11 @@ export const metadata: Metadata = {
 };
 
 export default async function SharedDesignsPage() {
-    const [designs, stones] = await Promise.all([
+    const [designs, categories] = await Promise.all([
         getAllSharedDesigns(),
-        getStones(),
+        getPublicCatalog(),
     ]);
+    const items = categories.flatMap((category) => category.items);
 
     return (
         <main className="sharedDesignsPage">
@@ -29,7 +30,7 @@ export default async function SharedDesignsPage() {
                         <span className="sharedDesignsEyebrow">Creaciones de la comunidad</span>
                         <h1>Diseños que empezaron con una intención.</h1>
                         <p>
-                            Pulseras y collares armados piedra por piedra en el simulador.
+                            Pulseras y collares armados componente por componente en el simulador.
                             Cada combinación guarda una idea distinta.
                         </p>
                         <SmoothRouteLink href="/#simulator" className="sharedDesignsPrimaryAction">
@@ -43,7 +44,9 @@ export default async function SharedDesignsPage() {
                     <div className="sharedDesignsContainer">
                         <header className="sharedDesignsHeader">
                             <div>
-                                <span className="sharedDesignsCount">{designs.length} diseños compartidos</span>
+                                <span className="sharedDesignsCount">
+                                    {designs.length} {designs.length === 1 ? 'diseño compartido' : 'diseños compartidos'}
+                                </span>
                                 <h2 id="shared-designs-title">Piezas creadas por otras personas</h2>
                             </div>
                             <p>Entrá a cualquiera para verla en detalle o usala como punto de partida.</p>
@@ -52,7 +55,7 @@ export default async function SharedDesignsPage() {
                         {designs.length > 0 ? (
                             <div className="sharedDesignsGrid">
                                 {designs.map((design) => (
-                                    <ShareDesignItem key={design.id} design={design} stones={stones} />
+                                    <ShareDesignItem key={design.id} design={design} items={items} />
                                 ))}
                             </div>
                         ) : (

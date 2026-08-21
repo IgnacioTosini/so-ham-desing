@@ -20,6 +20,90 @@ enum AccessoryType {
   NECKLACE
 }
 
+enum CatalogAttributeType {
+  TEXT
+  NUMBER
+  BOOLEAN
+  SELECT
+}
+
+enum CatalogCategoryRole {
+  BEAD
+  CHARM
+  BASE
+  CLASP
+}
+
+model Category {
+  id          String              @id @default(uuid())
+  name        String              @unique
+  slug        String              @unique
+  description String?
+  order       Int                 @default(0)
+  isActive    Boolean             @default(true)
+  role        CatalogCategoryRole @default(BEAD)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  attributes CategoryAttribute[]
+  items      CatalogItem[]
+
+  @@index([isActive, order])
+}
+
+model CategoryAttribute {
+  id         String               @id @default(uuid())
+  category   Category             @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+  name       String
+  key        String
+  type       CatalogAttributeType @default(TEXT)
+  unit       String?
+  isRequired Boolean              @default(false)
+  options    String[]
+  order      Int                  @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  values CatalogItemAttributeValue[]
+
+  @@unique([categoryId, key])
+  @@index([categoryId, order])
+}
+
+model CatalogItem {
+  id          String   @id @default(uuid())
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  categoryId  String
+  name        String
+  description String?
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  attributeValues CatalogItemAttributeValue[]
+  products        ProductCatalogItem[]
+
+  @@unique([categoryId, name])
+  @@index([categoryId, isActive])
+}
+
+model CatalogItemAttributeValue {
+  id          String            @id @default(uuid())
+  item        CatalogItem       @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId      String
+  attribute   CategoryAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+  attributeId String
+  value       String
+
+  @@unique([itemId, attributeId])
+  @@index([attributeId])
+}
+
 model Stone {
   id          String @id @default(uuid())
   name        String // "Amatista"
@@ -49,9 +133,24 @@ model Product {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // relación con piedras
-  stones ProductStone[]
-  images ProductImage[]
+  // ProductStone se conserva temporalmente para no perder las asociaciones históricas.
+  stones       ProductStone[]
+  catalogItems ProductCatalogItem[]
+  images       ProductImage[]
+}
+
+model ProductCatalogItem {
+  id String @id @default(uuid())
+
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+
+  item   CatalogItem @relation(fields: [itemId], references: [id], onDelete: Restrict)
+  itemId String
+
+  @@unique([productId, itemId])
+  @@index([productId])
+  @@index([itemId])
 }
 
 model ProductStone {
@@ -105,10 +204,11 @@ model ProductImage {
 }
 
 model SharedDesign {
-  id        String        @id @default(uuid())
-  name      String
-  shareCode String        @unique
-  type      AccessoryType
-  beads     Json
-  createdAt DateTime      @default(now())
+  id            String        @id @default(uuid())
+  name          String
+  shareCode     String        @unique
+  type          AccessoryType
+  beads         Json
+  configuration Json?
+  createdAt     DateTime      @default(now())
 }

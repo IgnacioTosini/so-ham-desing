@@ -1,7 +1,7 @@
 'use client';
 
 import { deleteSharedDesign } from "@/actions/design.action";
-import { SharedDesign, Stone } from "@/types";
+import { CatalogItemView, SharedDesign } from "@/types";
 import { getBeadStoneRecord } from "@/utils";
 import { NecklaceCircle } from "@/components/ui/simulator/necklaceCircle/NecklaceCircle";
 import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
@@ -13,11 +13,11 @@ import "./_shareDesignItem.scss";
 
 interface Props {
     design: SharedDesign;
-    stones: Stone[];
+    items: CatalogItemView[];
     canDelete?: boolean;
 }
 
-export const ShareDesignItem = ({ design, stones, canDelete = false }: Props) => {
+export const ShareDesignItem = ({ design, items, canDelete = false }: Props) => {
     const router = useRouter();
     const [isDeleting, setIsDeleting] = useState(false);
     const beadStones = getBeadStoneRecord(design.beads);
@@ -56,7 +56,7 @@ export const ShareDesignItem = ({ design, stones, canDelete = false }: Props) =>
                         selectedPiece={design.type}
                         selectedBeadIndex={null}
                         beadStones={beadStones}
-                        stones={stones}
+                        items={items}
                     />
                 </div>
 
@@ -67,7 +67,7 @@ export const ShareDesignItem = ({ design, stones, canDelete = false }: Props) =>
                     </div>
                     <h2>{design.name}</h2>
                     <div className="sharedDesignCardFooter">
-                        <span>{assignedCount} piedras</span>
+                        <span>{assignedCount} {assignedCount === 1 ? 'componente' : 'componentes'}</span>
                         <span className="sharedDesignView">Ver diseño <IoArrowForward aria-hidden="true" /></span>
                     </div>
                 </div>

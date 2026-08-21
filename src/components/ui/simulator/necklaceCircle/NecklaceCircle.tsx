@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useMemo } from "react";
-import { PieceType, Stone } from "@/types";
+import { CatalogItemView, PieceType } from "@/types";
 import { BEAD_COUNT } from "@/utils/bead_count";
 import "./_necklaceCircle.scss";
 
@@ -14,7 +14,7 @@ interface Props {
     selectedBeadIndex: number | null;
     onBeadClick?: (index: number) => void;
     beadStones: Record<number, string>;
-    stones: Stone[];
+    items: CatalogItemView[];
 }
 
 const PIECE_RADIUS: Record<PieceType, { rx: number; ry: number }> = {
@@ -22,7 +22,17 @@ const PIECE_RADIUS: Record<PieceType, { rx: number; ry: number }> = {
     NECKLACE:  { rx: 200, ry: 320 }, // elipse vertical: más ancho que pulsera, más alto que ancho
 };
 
-export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick = () => {}, beadStones, stones }: Props) => {
+const PIECE_VIEWBOX: Record<PieceType, string> = {
+    BRACELET: "120 105 560 590",
+    NECKLACE: "90 25 620 750",
+};
+
+const COUNTER_Y: Record<PieceType, number> = {
+    BRACELET: 675,
+    NECKLACE: 755,
+};
+
+export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick = () => {}, beadStones, items }: Props) => {
     const clipPathPrefix = useId().replace(/:/g, "");
     const totalBeads = BEAD_COUNT[selectedPiece];
     const { rx, ry } = PIECE_RADIUS[selectedPiece];
@@ -46,7 +56,7 @@ export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick =
         <svg
             width={SVG_SIZE}
             height={SVG_SIZE}
-            viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`}
+            viewBox={PIECE_VIEWBOX[selectedPiece]}
             className="necklaceCircleSvg"
         >
             {/* Definimos un clipPath circular por cada bolita */}
@@ -62,7 +72,7 @@ export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick =
                 // beadStones guarda { índice: stoneId }
                 const assignedStoneId = beadStones[bead.id];
                 const assignedStone = assignedStoneId
-                    ? stones.find(s => s.id === assignedStoneId)
+                    ? items.find((item) => item.id === assignedStoneId)
                     : null;
                 const isSelected = selectedBeadIndex === bead.id;
 
@@ -75,9 +85,9 @@ export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick =
                                 cy={bead.y}
                                 r={BEAD_RADIUS + 6}
                                 fill="none"
-                                stroke="#000000"
-                                strokeWidth={2}
-                                opacity={0.6}
+                                stroke="#E4C49E"
+                                strokeWidth={4}
+                                opacity={0.9}
                             />
                         )}
 
@@ -87,12 +97,12 @@ export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick =
                             cy={bead.y}
                             r={BEAD_RADIUS}
                             fill="#D4C5B0"
-                            stroke={isSelected ? "#000000" : "#C4B49F"}
-                            strokeWidth={isSelected ? 2 : 1}
+                            stroke={isSelected ? "#E4C49E" : "#C4B49F"}
+                            strokeWidth={isSelected ? 3 : 1}
                         />
 
                         {/* Imagen de la piedra encima, recortada al círculo */}
-                        {assignedStone && (
+                        {assignedStone?.imageUrl && (
                             <image
                                 href={assignedStone.imageUrl}
                                 x={bead.x - BEAD_RADIUS}
@@ -110,14 +120,14 @@ export const NecklaceCircle = ({ selectedPiece, selectedBeadIndex, onBeadClick =
             {/* Contador dinámico */}
             <text
                 x={CENTER}
-                y={SVG_SIZE - 30}
+                y={COUNTER_Y[selectedPiece]}
                 textAnchor="middle"
                 className="necklaceCircleCounter"
                 fill="#9CA3AF"
                 fontSize={13}
                 fontFamily="system-ui, sans-serif"
             >
-                {assignedCount} / {totalBeads} PIEDRAS
+                {assignedCount} / {totalBeads} COMPONENTES
             </text>
         </svg>
     );

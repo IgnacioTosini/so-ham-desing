@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { notFound } from "next/navigation";
 import { getProductById } from "@/actions/product.action";
-import { getStones } from "@/actions/stone.action";
+import { getCatalogItems } from "@/actions/catalog.action";
 import { requireAdminSession } from "@/lib/adminAuth";
 import ProductForm from "@/components/productForm/ProductForm";
 import "../../_adminProductPage.scss";
@@ -31,9 +31,9 @@ export async function generateMetadata({ params }: EditProductPageProps): Promis
 export default async function EditProductPage({ params }: EditProductPageProps) {
     await requireAdminSession();
     const { id } = await params;
-    const [product, stones] = await Promise.all([
+    const [product, catalogItems] = await Promise.all([
         getProductById(id),
-        getStones(),
+        getCatalogItems(),
     ]);
 
     if (!product) {
@@ -47,7 +47,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
                     <div>
                         <span className="adminEyebrow">Editar producto</span>
                         <h1>{product.name}</h1>
-                        <p>Actualiza precio, tipo, piedras asociadas e imagen principal.</p>
+                        <p>Actualiza precio, tipo, composición e imagen principal.</p>
                     </div>
                     <SmoothRouteLink href="/admin/products" className="adminSecondaryAction">Cancelar</SmoothRouteLink>
                 </div>
@@ -60,12 +60,18 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
                         imageUrl: product.imageUrl,
                         price: product.price,
                         type: product.type,
-                        stones: product.stones.map((ps) => ({
-                            id: ps.stone.id,
-                            name: ps.stone.name,
+                        catalogItems: product.catalogItems.map(({ item }) => ({
+                            id: item.id,
+                            name: item.name,
                         })),
                     }}
-                    availableStones={stones.map((s) => ({ id: s.id, name: s.name }))}
+                    availableCatalogItems={catalogItems.map((item) => ({
+                        id: item.id,
+                        name: item.name,
+                        categoryId: item.categoryId,
+                        categoryName: item.category.name,
+                        isActive: item.isActive,
+                    }))}
                 />
             </div>
         </div>

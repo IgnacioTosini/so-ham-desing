@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { getStones } from "@/actions/stone.action";
-import { PieceType } from "@/types";
+import { getPublicCatalog } from "@/actions/catalog.action";
+import { PieceType, SharedDesignConfiguration } from "@/types";
 import { getBeadStoneRecord } from "@/utils";
 import { PreviewCanvas } from "../previewCanvas/PreviewCanvas";
 import Image from "next/image";
@@ -33,13 +33,23 @@ export default async function PreviewByCodePage({ params, searchParams }: Props)
 
     if (!design) notFound();
 
-    const stones = await getStones();
+    const categories = await getPublicCatalog();
+    const items = categories.flatMap((category) => category.items);
     const beadArray = Array.isArray(design.beads)
         ? design.beads.filter((value): value is string | null => typeof value === 'string' || value === null)
         : [];
     const beadStones = getBeadStoneRecord(beadArray);
     const assignedCount = Object.keys(beadStones).length;
     const pieceLabel = design.type === 'BRACELET' ? 'Pulsera' : 'Collar';
+    const configuration = design.configuration && typeof design.configuration === 'object' && !Array.isArray(design.configuration)
+        ? design.configuration as SharedDesignConfiguration
+        : null;
+    const selectedBase = configuration?.baseItemId
+        ? items.find((item) => item.id === configuration.baseItemId)
+        : null;
+    const selectedClasp = configuration?.claspItemId
+        ? items.find((item) => item.id === configuration.claspItemId)
+        : null;
     const isAdminOrigin = query.from === 'admin';
     const backHref = isAdminOrigin ? '/admin/designs' : '/disenos';
     const backLabel = isAdminOrigin ? 'Volver a diseños del admin' : 'Volver a diseños compartidos';
@@ -71,7 +81,7 @@ export default async function PreviewByCodePage({ params, searchParams }: Props)
                             <PreviewCanvas
                                 pieceType={design.type as PieceType}
                                 beadStones={beadStones}
-                                stones={stones}
+                                items={items}
                             />
                         </div>
 
@@ -79,7 +89,7 @@ export default async function PreviewByCodePage({ params, searchParams }: Props)
                             <span className="previewPieceType">{pieceLabel} compartido</span>
                             <h1>{design.name || 'Diseño sin nombre'}</h1>
                             <p className="previewLead">
-                                Una combinación creada piedra por piedra en el simulador de So Ham Design.
+                                Una combinación creada componente por componente en el simulador de So Ham Design.
                             </p>
 
                             <dl className="previewStats">
@@ -88,13 +98,25 @@ export default async function PreviewByCodePage({ params, searchParams }: Props)
                                     <dd>{pieceLabel}</dd>
                                 </div>
                                 <div>
-                                    <dt>Piedras</dt>
+                                    <dt>Componentes</dt>
                                     <dd>{assignedCount}</dd>
                                 </div>
                                 <div>
                                     <dt>Compartido</dt>
                                     <dd>{formattedDate}</dd>
                                 </div>
+                                {selectedBase ? (
+                                    <div>
+                                        <dt>Base</dt>
+                                        <dd>{selectedBase.name}</dd>
+                                    </div>
+                                ) : null}
+                                {selectedClasp ? (
+                                    <div>
+                                        <dt>Cierre</dt>
+                                        <dd>{selectedClasp.name}</dd>
+                                    </div>
+                                ) : null}
                             </dl>
 
                             <div className="previewActions">

@@ -1,0 +1,211 @@
+@use '@/styles/variables' as *;
+
+.materialsCatalog {
+    padding: clamp(4rem, 8vw, 7rem) 1rem;
+    background: #211d19;
+    color: $color-text-primary;
+}
+
+.materialsCatalogContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: min(100%, 75rem);
+    margin: 0 auto;
+}
+
+.materialsCatalogHeader {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+    align-items: end;
+    gap: 2rem;
+
+    > p {
+        max-width: 34rem;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-normal;
+        line-height: 1.7;
+    }
+}
+
+.materialsCategoryTabs {
+    display: flex;
+    gap: 0.55rem;
+    overflow-x: auto;
+    padding: 0.15rem 0 0.5rem;
+    scrollbar-width: thin;
+
+    button {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: 0.55rem;
+        min-height: 2.8rem;
+        border: 1px solid rgba(198, 179, 153, 0.2);
+        border-radius: 999px;
+        padding: 0 0.85rem 0 1rem;
+        background: rgba(255, 255, 255, 0.035);
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+
+        small {
+            display: grid;
+            place-items: center;
+            min-width: 1.55rem;
+            height: 1.55rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.075);
+            font-size: $font-size-xsmall;
+        }
+
+        &.isActive,
+        &:hover {
+            border-color: rgba(198, 179, 153, 0.62);
+            background: rgba(198, 179, 153, 0.12);
+            color: $color-text-primary;
+        }
+    }
+}
+
+.materialsCategoryIntro {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    border-top: 1px solid rgba(198, 179, 153, 0.18);
+    padding-top: 1.5rem;
+
+    span {
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+    }
+
+    h3 {
+        margin-top: 0.25rem;
+        font-family: $font-family-secondary;
+        font-size: clamp($font-size-xlarge, 4vw, $font-size-xxlarge);
+        font-weight: $font-weight-regular;
+    }
+
+    p {
+        max-width: 34rem;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        line-height: 1.6;
+        text-align: right;
+    }
+}
+
+.materialsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    max-height: 46rem;
+    overflow-y: auto;
+    padding-right: 0.35rem;
+    scrollbar-width: thin;
+}
+
+.materialCard {
+    overflow: hidden;
+    border: 1px solid rgba(198, 179, 153, 0.16);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.materialCardImage {
+    width: 100%;
+    height: 15rem;
+    object-fit: cover;
+    background: linear-gradient(135deg, rgba(198, 179, 153, 0.12), rgba(24, 21, 20, 0.4));
+
+    &.placeholder {
+        display: grid;
+        place-items: center;
+        color: rgba(255, 255, 255, 0.32);
+        font-family: $font-family-secondary;
+        font-size: $font-size-xxlarge;
+    }
+}
+
+.materialCardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding: 1rem;
+
+    h4 {
+        font-family: $font-family-secondary;
+        font-size: $font-size-large;
+        font-weight: $font-weight-medium;
+    }
+
+    > p {
+        display: -webkit-box;
+        overflow: hidden;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        line-height: 1.5;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+    }
+
+    dl {
+        display: grid;
+        gap: 0.35rem;
+        margin: 0.25rem 0 0;
+        padding-top: 0.7rem;
+        border-top: 1px solid rgba(198, 179, 153, 0.12);
+
+        div {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            font-family: $font-family-primary;
+            font-size: $font-size-xsmall;
+        }
+
+        dt { color: $color-text-secondary; }
+        dd { margin: 0; color: $color-text-primary; text-align: right; }
+    }
+}
+
+.materialCardCategory {
+    color: $color-text-tertiary;
+    font-family: $font-family-primary;
+    font-size: $font-size-xsmall;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+}
+
+.materialsEmpty {
+    display: grid;
+    place-items: center;
+    min-height: 14rem;
+    border: 1px dashed rgba(198, 179, 153, 0.22);
+    border-radius: 10px;
+    color: $color-text-secondary;
+    font-family: $font-family-primary;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .materialsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 680px) {
+    .materialsCatalogHeader { grid-template-columns: 1fr; gap: 1rem; }
+    .materialsCategoryIntro { align-items: flex-start; flex-direction: column; }
+    .materialsCategoryIntro p { text-align: left; }
+    .materialsGrid { grid-template-columns: 1fr; max-height: 42rem; }
+    .materialCardImage { height: 13rem; }
+}

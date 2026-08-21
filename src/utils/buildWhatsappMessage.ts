@@ -33,12 +33,15 @@ export const buildWhatsappMessagePreview = ({
     piece: PieceType;
     previewUrl: string;
 }) => {
-    const braceletDetails = piece === "BRACELET"
-        ? "\nMi contorno de muñeca es: \nPrefiero tanza: elástica / rígida."
-        : "";
-    const message =
-        `Hola! Te mando mi diseño de ${piece === "NECKLACE" ? "collar" : "pulsera"}.\n` +
-        `Miralo acá: ${previewUrl}${braceletDetails}`;
+    const pieceName = piece === "NECKLACE" ? "un collar" : "una pulsera";
+    const message = [
+        `¡Hola! Diseñé ${pieceName} en So Ham Design ✨`,
+        "",
+        "Podés ver mi diseño acá:",
+        previewUrl,
+        "",
+        "Quisiera consultar por este diseño.",
+    ].join("\n");
 
     const phoneNumber = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? process.env.WHATSAPP_NUMBER ?? "").replace(/\D/g, "");
 

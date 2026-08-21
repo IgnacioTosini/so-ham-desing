@@ -61,7 +61,7 @@ describe("WhatsApp message builders", () => {
         expect(url.searchParams.get("text")).toContain("$13000");
     });
 
-    it("includes the preview URL", () => {
+    it("builds a clean preview message without unanswered bracelet fields", () => {
         process.env.NEXT_PUBLIC_WHATSAPP_NUMBER = "5492231234567";
 
         const url = new URL(buildWhatsappMessagePreview({
@@ -69,6 +69,21 @@ describe("WhatsApp message builders", () => {
             previewUrl: "https://example.com/preview/abc123",
         }));
 
-        expect(url.searchParams.get("text")).toContain("https://example.com/preview/abc123");
+        const message = url.searchParams.get("text");
+
+        expect(message).toContain("Diseñé una pulsera en So Ham Design");
+        expect(message).toContain("https://example.com/preview/abc123");
+        expect(message).toContain("Quisiera consultar por este diseño.");
+        expect(message).not.toContain("contorno de muñeca");
+        expect(message).not.toContain("Prefiero tanza");
+    });
+
+    it("uses the correct article for a necklace preview", () => {
+        const url = new URL(buildWhatsappMessagePreview({
+            piece: "NECKLACE",
+            previewUrl: "https://example.com/preview/collar123",
+        }));
+
+        expect(url.searchParams.get("text")).toContain("Diseñé un collar en So Ham Design");
     });
 });

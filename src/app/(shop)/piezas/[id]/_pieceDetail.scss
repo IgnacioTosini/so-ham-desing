@@ -219,13 +219,62 @@
     }
 }
 
-.pieceStoneGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-    gap: 1rem;
+.pieceCompositionGroups {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-.pieceStoneCard {
+.pieceCompositionGroup {
+    padding: clamp(1rem, 3vw, 1.4rem);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(24, 21, 20, 0.2);
+}
+
+.pieceCompositionGroupHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    h3 {
+        margin: 0;
+        color: $color-text-tertiary;
+        font-family: $font-family-secondary;
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: $font-weight-semibold;
+        line-height: 1;
+    }
+
+    p {
+        max-width: 42rem;
+        margin: 0.4rem 0 0;
+        color: $color-text-secondary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        line-height: 1.5;
+    }
+
+    > span {
+        flex: 0 0 auto;
+        padding: 0.35rem 0.6rem;
+        border: 1px solid rgba(198, 179, 153, 0.22);
+        border-radius: 999px;
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+    }
+}
+
+.pieceMaterialGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+    gap: 0.85rem;
+}
+
+.pieceMaterialCard {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     gap: 1rem;
@@ -235,7 +284,7 @@
     border-radius: 8px;
     background: rgba(24, 21, 20, 0.32);
 
-    h3 {
+    h4 {
         margin: 0 0 0.35rem;
         color: $color-text-primary;
         font-family: $font-family-secondary;
@@ -253,15 +302,57 @@
     }
 }
 
-.pieceStoneImage {
+.pieceMaterialImage,
+.pieceMaterialImagePlaceholder {
     width: 5.5rem;
     height: 5.5rem;
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 50%;
+}
+
+.pieceMaterialImage {
     object-fit: cover;
 }
 
-.pieceStoneTags {
+.pieceMaterialImagePlaceholder {
+    display: grid;
+    place-items: center;
+    background: rgba(198, 179, 153, 0.12);
+    color: $color-text-tertiary;
+    font-family: $font-family-secondary;
+    font-size: $font-size-xlarge;
+}
+
+.pieceMaterialContent {
+    min-width: 0;
+}
+
+.pieceMaterialAttributes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+    gap: 0.5rem;
+    margin: 0.8rem 0 0;
+
+    div {
+        min-width: 0;
+    }
+
+    dt {
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-size: $font-size-xsmall;
+    }
+
+    dd {
+        margin: 0.1rem 0 0;
+        color: $color-text-primary;
+        font-family: $font-family-primary;
+        font-size: $font-size-small;
+        overflow-wrap: anywhere;
+    }
+}
+
+.pieceMaterialTags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
@@ -399,8 +490,12 @@
         justify-content: center;
     }
 
-    .pieceStoneCard {
+    .pieceMaterialCard {
         grid-template-columns: 1fr;
+    }
+
+    .pieceCompositionGroupHeader {
+        flex-direction: column;
     }
 
     .relatedPiecesGrid {

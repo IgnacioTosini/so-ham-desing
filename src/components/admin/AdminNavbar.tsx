@@ -5,7 +5,8 @@ import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import {
     IoAddCircleOutline,
     IoAlbumsOutline,
-    IoColorFilterOutline,
+    IoCubeOutline,
+    IoGridOutline,
     IoHomeOutline,
     IoLogOutOutline,
     IoOpenOutline,
@@ -14,7 +15,8 @@ import {
 
 const navItems = [
     { href: "/admin", label: "General", icon: IoHomeOutline, match: (path: string) => path === "/admin" },
-    { href: "/admin/stones", label: "Piedras", icon: IoColorFilterOutline, match: (path: string) => path.startsWith("/admin/stones") },
+    { href: "/admin/categories", label: "Categorías", icon: IoGridOutline, match: (path: string) => path.startsWith("/admin/categories") },
+    { href: "/admin/catalog-items", label: "Insumos", icon: IoCubeOutline, match: (path: string) => path.startsWith("/admin/catalog-items") },
     { href: "/admin/products", label: "Productos", icon: IoAlbumsOutline, match: (path: string) => path.startsWith("/admin/products") },
     { href: "/admin/designs", label: "Diseños", icon: IoSparklesOutline, match: (path: string) => path.startsWith("/admin/designs") },
 ];
@@ -53,7 +55,7 @@ export default function AdminNavbar() {
                 </nav>
 
                 <div className="adminNavbarActions">
-                    <SmoothRouteLink href="/admin/stones/new" className="adminNavbarIconButton" aria-label="Crear nueva piedra" title="Nueva piedra">
+                    <SmoothRouteLink href="/admin/catalog-items/new" className="adminNavbarIconButton" aria-label="Crear nuevo insumo" title="Nuevo insumo">
                         <IoAddCircleOutline aria-hidden="true" />
                     </SmoothRouteLink>
                     <SmoothRouteLink href="/" className="adminNavbarButton secondary">

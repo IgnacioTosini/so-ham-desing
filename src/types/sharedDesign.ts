@@ -1,4 +1,5 @@
 import { PieceType } from "./product";
+import { SharedDesignConfiguration } from "./catalog";
 
 export interface SharedDesign {
     id: string;
@@ -6,5 +7,6 @@ export interface SharedDesign {
     type: PieceType;
     beads: (string | null)[];
     name: string;
+    configuration: SharedDesignConfiguration | null;
     createdAt: Date;
 }
