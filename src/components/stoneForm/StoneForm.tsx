@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, DragEvent, FormEvent, useMemo, useState } from "react";
+import { AdminFormSection } from "@/components/admin/AdminFormSection";
 import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { useRouter } from "next/navigation";
 import { createStone, updateStone } from "@/actions/stone.action";
@@ -131,7 +132,9 @@ export default function StoneForm({ mode, initialData }: StoneFormProps) {
     };
 
     return (
-        <form className="stoneForm" onSubmit={handleSubmit}>
+        <form className="stoneForm adminEditor" onSubmit={handleSubmit} aria-busy={isSaving}>
+            <div className="adminFormLayout">
+            <AdminFormSection title="Información de la piedra" description="Un nombre y una descripción que expresen su esencia.">
             <div className="stoneFormField">
                 <label htmlFor="stone-name">Nombre</label>
                 <input
@@ -145,17 +148,19 @@ export default function StoneForm({ mode, initialData }: StoneFormProps) {
             </div>
 
             <div className="stoneFormField">
-                <label htmlFor="stone-description">Descripcion</label>
+                <label htmlFor="stone-description">Descripción</label>
                 <textarea
                     id="stone-description"
                     value={description}
                     onChange={(event) => setDescription(event.target.value)}
-                    placeholder="Describe energia, sensacion o uso"
+                    placeholder="Describí su energía, sensación o uso"
                     rows={4}
                     required
                 />
             </div>
 
+            </AdminFormSection>
+            <AdminFormSection title="Imagen de la piedra" description="Elegí una foto clara para reconocerla en el catálogo." kind="images">
             <div className="stoneFormField">
                 <label htmlFor="stone-image-file">Imagen</label>
                 <div
@@ -191,7 +196,7 @@ export default function StoneForm({ mode, initialData }: StoneFormProps) {
                 <small>
                     {mode === "edit"
                         ? "Si no cargas una nueva imagen, se mantiene la actual. La nueva se sube al guardar."
-                        : "Selecciona una imagen. Se sube a Cloudinary al crear la piedra."}
+                        : "Seleccioná una imagen. Se cargará al guardar la piedra."}
                 </small>
                 {imagePreview ? (
                     <button
@@ -205,13 +210,15 @@ export default function StoneForm({ mode, initialData }: StoneFormProps) {
                             }
                         }}
                     >
-                        Quitar imagen
+                        {mode === "edit" ? "Restablecer imagen original" : "Quitar imagen"}
                     </button>
                 ) : null}
             </div>
 
+            </AdminFormSection>
+            <AdminFormSection title="Energía e intención" description="Agregá palabras que describan lo que transmite." kind="options" wide>
             <div className="stoneFormField">
-                <label htmlFor="stone-tags">Etiquetas de energia</label>
+                <label htmlFor="stone-tags">Etiquetas de energía</label>
                 <input
                     id="stone-tags"
                     type="text"
@@ -220,12 +227,16 @@ export default function StoneForm({ mode, initialData }: StoneFormProps) {
                     placeholder="calma, proteccion, claridad"
                     required
                 />
-                <small>Separalas por coma.</small>
+                <small>Separá las etiquetas con comas.</small>
             </div>
 
-            {error ? <p className="stoneFormError">{error}</p> : null}
+            </AdminFormSection>
+            </div>
+
+            {error ? <p className="stoneFormError" role="alert">{error}</p> : null}
 
             <div className="stoneFormActions">
+                <span className="adminFormSaveHint">Los cambios se aplican al guardar.</span>
                 <SmoothRouteLink href="/admin/stones" className="stoneFormButton secondary">
                     Cancelar
                 </SmoothRouteLink>

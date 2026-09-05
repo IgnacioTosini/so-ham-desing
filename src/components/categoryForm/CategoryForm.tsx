@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { createCategory, updateCategory, type CatalogAttributeTypeInput, type CatalogCategoryRoleInput } from "@/actions/catalog.action";
+import { AdminFormSection } from "@/components/admin/AdminFormSection";
 import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import "../catalogAdmin/_catalogAdmin.scss";
 
@@ -112,7 +113,9 @@ export default function CategoryForm({ mode, initialData }: CategoryFormProps) {
     };
 
     return (
-        <form className="catalogForm" onSubmit={handleSubmit}>
+        <form className="catalogForm adminEditor" onSubmit={handleSubmit} aria-busy={isSaving}>
+            <div className="adminFormLayout">
+            <AdminFormSection title="Información de la categoría" description="Organizá los materiales de tu colección." wide>
             <div className="catalogFormField">
                 <label htmlFor="category-name">Nombre</label>
                 <input id="category-name" value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Perlas" required />
@@ -139,6 +142,8 @@ export default function CategoryForm({ mode, initialData }: CategoryFormProps) {
                 <span>Categoría visible en el catálogo de insumos</span>
             </label>
 
+            </AdminFormSection>
+            <AdminFormSection title="Propiedades de los insumos" description="Definí los campos que tendrá cada material de esta categoría." kind="options" wide>
             <section className="attributeBuilder">
                 <div className="attributeBuilderHeader">
                     <div>
@@ -223,10 +228,14 @@ export default function CategoryForm({ mode, initialData }: CategoryFormProps) {
                     </div>
                 )}
             </section>
+            </AdminFormSection>
 
-            {error ? <p className="catalogFormError">{error}</p> : null}
+            </div>
+
+            {error ? <p className="catalogFormError" role="alert">{error}</p> : null}
 
             <div className="catalogFormActions">
+                <span className="adminFormSaveHint">Los cambios se aplican al guardar.</span>
                 <SmoothRouteLink href="/admin/categories" className="catalogButton secondary">Cancelar</SmoothRouteLink>
                 <button type="submit" className="catalogButton primary" disabled={isSaving}>
                     {isSaving ? "Guardando..." : mode === "edit" ? "Guardar cambios" : "Crear categoría"}

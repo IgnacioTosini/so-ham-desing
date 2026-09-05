@@ -328,7 +328,10 @@ export async function deleteStone(id: string) {
             return orphaned;
         });
 
-        const cloudinaryUrlsToDelete = new Set(orphanImages.map((image) => image.url));
+        const cloudinaryUrlsToDelete = new Set<string>();
+        for (const url of new Set(orphanImages.map((image) => image.url))) {
+            if (!(await isMainImageUrlReferenced(url))) cloudinaryUrlsToDelete.add(url);
+        }
         const stillReferencedMainImage = await isMainImageUrlReferenced(stone.imageUrl, id);
         if (stone.imageUrl && !stillReferencedMainImage) {
             cloudinaryUrlsToDelete.add(stone.imageUrl);
@@ -465,7 +468,11 @@ export async function updateStone(id: string, input: CreateStoneInput) {
         });
 
         if (orphanImages.length > 0) {
-            await deleteProjectImagesFromCloudinary(orphanImages.map((image) => image.url));
+            const unusedUrls: string[] = [];
+            for (const url of new Set(orphanImages.map((image) => image.url))) {
+                if (!(await isMainImageUrlReferenced(url))) unusedUrls.push(url);
+            }
+            await deleteProjectImagesFromCloudinary(unusedUrls);
         }
 
         if (previousStone.imageUrl !== stone.imageUrl) {

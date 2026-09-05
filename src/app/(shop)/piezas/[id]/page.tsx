@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import ProductGallery from "@/components/productGallery/ProductGallery";
 import { notFound } from "next/navigation";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { IoLogoWhatsapp } from "react-icons/io";
@@ -129,16 +130,7 @@ export default async function PieceDetailPage({ params }: PieceDetailPageProps) 
         <main className="pieceDetail">
             <SmoothScrollToTop routeKey={product.id} />
             <section className="pieceDetailHero">
-                <div className="pieceDetailMedia">
-                    <Image
-                        src={product.imageUrl}
-                        alt={product.name}
-                        width={860}
-                        height={980}
-                        className="pieceDetailImage"
-                        priority
-                    />
-                </div>
+                <ProductGallery images={gallery} name={product.name} />
 
                 <div className="pieceDetailIntro">
                     <SmoothRouteLink href="/#viewPieces" className="pieceDetailBack">
@@ -240,27 +232,6 @@ export default async function PieceDetailPage({ params }: PieceDetailPageProps) 
                     <p className="pieceDetailEmpty">Esta pieza todavía no tiene insumos asociados.</p>
                 )}
             </section>
-
-            {gallery.length > 1 && (
-                <section className="pieceDetailSection">
-                    <div className="pieceDetailSectionHeader">
-                        <p>Galería</p>
-                        <h2>Detalles visuales</h2>
-                    </div>
-                    <div className="pieceGallery">
-                        {gallery.map((imageUrl, index) => (
-                            <Image
-                                key={imageUrl}
-                                src={imageUrl}
-                                alt={`${product.name} detalle ${index + 1}`}
-                                width={420}
-                                height={420}
-                                className="pieceGalleryImage"
-                            />
-                        ))}
-                    </div>
-                </section>
-            )}
 
             {relatedProducts.length > 0 && (
                 <section className="pieceDetailSection relatedPieces">

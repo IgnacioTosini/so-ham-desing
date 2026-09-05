@@ -58,6 +58,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
                         name: product.name,
                         description: product.description,
                         imageUrl: product.imageUrl,
+                        images: product.images,
                         price: product.price,
                         type: product.type,
                         catalogItems: product.catalogItems.map(({ item }) => ({

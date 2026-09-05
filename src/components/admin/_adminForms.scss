@@ -1,0 +1,78 @@
+@use '@/styles/variables' as *;
+
+.adminEditor.productForm, .adminEditor.stoneForm, .adminEditor.catalogForm {
+    display: flex; flex-direction: column; gap: 1.25rem; width: 100%; min-width: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; color: #f2e9dc; font-family: $font-family-primary;
+    .adminFormLayout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; gap: 1.25rem; }
+    .adminFormSection { min-width: 0; overflow: hidden; border: 1px solid #c6b39926; border-radius: 14px; background: linear-gradient(135deg, #332d26, #2c2721); box-shadow: 0 8px 28px #00000012; }
+    .adminFormSectionWide, .adminFormVisibility { grid-column: 1 / -1; }
+    .adminFormSectionHeader { display: flex; align-items: center; gap: .85rem; padding: 1.3rem 1.5rem; border-bottom: 1px solid #c6b3991c;
+        h2 { margin: 0; color: #f3e6d4; font: 500 1.25rem/1.2 $font-family-secondary; }
+        p { margin: .35rem 0 0; color: #b7aa99; font-size: .75rem; line-height: 1.6; }
+    }
+    .adminFormSectionIcon { display: grid; place-items: center; flex: 0 0 36px; height: 36px; border: 1px solid #c6b39925; border-radius: 10px; background: #c6b3990a; color: #ceb493; svg { width: 18px; height: 18px; } }
+    .adminFormSectionBody { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.5rem; }
+    .adminFormFieldPair { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; }
+    .productFormField, .stoneFormField, .catalogFormField { min-width: 0; gap: .6rem;
+        > label { font: 500 .8rem/1.4 $font-family-primary; color: #e4d7c6; }
+        > input, > textarea, > select { width: 100%; min-height: 48px; padding: .8rem .9rem; border: 1px solid #c6b39935; border-radius: 8px; background: #211d18; color: #f2e8da; font: 400 1rem/1.5 $font-family-primary; transition: border-color .2s, box-shadow .2s;
+            &:focus { border-color: #d0b38c; box-shadow: 0 0 0 3px #c6b39912; outline: none; }
+            &::placeholder { color: #958877; font-size: .85rem; }
+        }
+        > textarea { min-height: 160px; resize: vertical; }
+        small { font: 400 .73rem/1.6 $font-family-primary; color: #b5a795; }
+        .adminFormCounter { text-align: right; font-variant-numeric: tabular-nums; }
+    }
+    input[type="checkbox"] { width: 17px; height: 17px; min-height: 0; flex-shrink: 0; accent-color: #d5b78f; }
+    button:focus-visible, a:focus-visible, [role="button"]:focus-visible, input[type="checkbox"]:focus-visible { outline: 2px solid #e0c39e; outline-offset: 3px; }
+    .catalogToggle { width: fit-content; max-width: 100%; padding: .85rem 1rem; border: 1px solid #c6b39925; border-radius: 8px; background: #211d1840; gap: .7rem; color: #cdbda8; line-height: 1.5; &:has(input:checked) { border-color: #c6b39960; background: #c6b3990d; } }
+    .productFormActions, .stoneFormActions, .catalogFormActions { position: sticky; bottom: 1rem; z-index: 5; display: flex; flex-direction: row; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: .75rem; margin: 0; padding: 1rem 1.25rem; border: 1px solid #c6b39935; border-radius: 12px; background: #28221ef2; backdrop-filter: blur(16px); box-shadow: 0 8px 32px #00000035;
+        .adminFormSaveHint { margin-right: auto; color: #b7a690; font-size: .73rem; }
+        > a, > button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; width: auto; padding: .7rem 1.2rem; border: 1px solid #c6b39940; border-radius: 8px; font: 500 .83rem $font-family-primary; text-decoration: none; cursor: pointer; }
+        .primary { background: #d7bea0; border-color: #d7bea0; color: #282018; &:hover { background: #e6d0b4; } }
+        .secondary { background: transparent; color: #dbccb8; &:hover { background: #ffffff09; } }
+        button:disabled { opacity: .5; cursor: wait; }
+    }
+    .productFormError, .stoneFormError, .catalogFormError { margin: 0; border: 1px solid #d78f7c40; border-radius: 8px; padding: 1rem; color: #efb3a3; background: #d7725a12; font: 400 .85rem/1.6 $font-family-primary; }
+    .catalogSelectionGroups { max-height: 26rem; scrollbar-width: thin; scrollbar-color: #8b765d transparent; }
+    .catalogSelectionGroup { border-radius: 10px; background: #211d1840; padding: 1rem; }
+    .catalogItemSelectionGrid .catalogItemCheckbox { padding: .65rem .85rem; border-radius: 8px; background: #211d18; input { width: 17px; height: 17px; padding: 0; } &:has(input:checked) { border-color: #c6b39980; background: #c6b39915; } }
+    .attributeBuilder, .dynamicAttributes { border: 0; padding: 0; }
+    .dynamicAttributes > div:first-child { display: none; }
+    .attributeBuilderHeader h2 { font: 500 .9rem $font-family-primary; }
+    .attributeBuilderHeader p { margin-top: .4rem; font-size: .75rem; line-height: 1.6; color: #b7aa99; }
+    .attributeRow { grid-template-columns: auto minmax(0, 1fr) minmax(0, .8fr) minmax(70px,.4fr); gap: .8rem; padding: 1rem; border-radius: 10px; background: #211d1860; .attributeRequired { grid-column: 2 / 4; } .catalogRemoveButton { grid-column: 4; } .optionsField { grid-column: 2 / -1; } }
+    .catalogSmallButton, .catalogRemoveButton, .stoneClearImageButton { border: 1px solid #c6b39935; border-radius: 8px; background: transparent; padding: .65rem .85rem; min-height: 42px; font: 500 .75rem $font-family-primary; color: #d9c8b1; cursor: pointer; &:hover { background: #c6b39910; } }
+    .catalogRemoveButton { color: #e9aa98; }
+    .catalogDropzone, .stoneDropzone { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; min-height: 260px; padding: 1rem; border: 1px dashed #c6b39965; border-radius: 10px; background: #211d1870; cursor: pointer;
+        &:hover, &.active { border-color: #d7bea0; background: #c6b3990a; }
+        img, .stoneDropzonePreview { width: 100%; height: 240px; max-height: 280px; object-fit: contain; border-radius: 6px; }
+        p { color: #bfaf9b; font: 400 .85rem/1.7 $font-family-primary; text-align: center; }
+    }
+    .productPhotos { margin: 0; padding: 0; border: 0; font-family: $font-family-primary;
+        legend { padding: 0; font-size: .8rem; font-weight: 500; color: #e0ceb7; }
+        > p { margin: .5rem 0; color: #b5a795; font-size: .73rem; }
+        button { min-height: 40px; font-size: .73rem; border-radius: 7px; background: #c6b3990a; border-color: #c6b39930; &:hover { background: #c6b39918; } }
+    }
+    .productPhotosUpload { gap: .75rem; padding: 1rem; margin: 1rem 0; background: #211d1860; border-color: #c6b39965; font-size: .83rem;
+        input { width: 100%; min-width: 0; color: #b5a795; font-size: .7rem; }
+        input::file-selector-button { border: 1px solid #c6b39950; border-radius: 6px; padding: .6rem .75rem; margin-right: .6rem; color: #e1c9a8; background: #c6b39915; cursor: pointer; }
+        small { color: #aa9b88; font-size: .65rem; }
+    }
+    .productPhotosGrid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: .85rem;
+        article { padding: .6rem; border: 1px solid #c6b39920; border-radius: 10px; background: #211d1840; }
+        strong { font-size: .7rem; font-weight: 500; color: #dfc7a5; padding: .2rem 0; }
+    }
+    .productPhotoEditor { padding: 1rem; border: 1px solid #c6b39940; border-radius: 10px; background: #211d1860; justify-items: stretch;
+        h3 { margin: 0; font: 500 1.3rem $font-family-secondary; } p { margin: 0; color: #b7aa99; font-size: .75rem; }
+        canvas { justify-self: center; } label { width: 100%; font-size: .75rem; color: #d1bda3; }
+    }
+    @media (max-width: 900px) { .adminFormLayout { grid-template-columns: 1fr; } .productPhotosGrid { grid-template-columns: repeat(auto-fill,minmax(145px,1fr)); } }
+    @media (max-width: 600px) {
+        .adminFormSectionHeader { padding: 1rem; } .adminFormSectionBody { padding: 1rem; }
+        .adminFormFieldPair, .catalogFormGrid.twoColumns { grid-template-columns: 1fr; }
+        .attributeRow { grid-template-columns: auto minmax(0,1fr); .catalogFormField, .optionsField, .attributeRequired, .catalogRemoveButton { grid-column: 2; } }
+        .productFormActions, .stoneFormActions, .catalogFormActions { bottom: .5rem; padding: .8rem; gap: .5rem; .adminFormSaveHint { width: 100%; } > a, > button { flex: 1; padding-inline: .6rem; } }
+        .productPhotosGrid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none; } }
+}

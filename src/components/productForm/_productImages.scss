@@ -1,0 +1,17 @@
+.productPhotos {
+    min-width: 0; border: 1px solid #ffffff25; border-radius: 8px; padding: 1rem; color: inherit;
+    p, small { font-size: .875rem; line-height: 1.5; }
+    button { padding: .55rem .7rem; border: 1px solid #ffffff30; border-radius: 6px; background: #39332c; color: #fff; cursor: pointer; }
+    button:disabled { opacity: .5; cursor: wait; }
+    button:focus-visible, input:focus-visible { outline: 2px solid #c6b399; outline-offset: 3px; }
+}
+.productPhotosUpload { display: grid; gap: .75rem; padding: 1.2rem; border: 1px dashed #c6b399; border-radius: 8px; margin: 1rem 0; input { max-width: 100%; } }
+.productPhotosGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;
+    article { display: flex; flex-direction: column; gap: .5rem; min-width: 0; }
+    img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 6px; }
+}
+.productPhotoEditor { margin-top: 1.5rem; display: grid; gap: .75rem; justify-items: start;
+    canvas { width: min(100%, 320px); height: auto; touch-action: none; cursor: grab; border-radius: 6px; background: #211e19; }
+    label { display: grid; gap: .35rem; width: min(100%, 400px); }
+    input { width: 100%; accent-color: #c6b399; }
+}

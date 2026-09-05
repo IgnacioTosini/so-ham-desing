@@ -5,6 +5,7 @@ import { DragEvent, FormEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { createCatalogItem, updateCatalogItem, type CatalogAttributeTypeInput } from "@/actions/catalog.action";
+import { AdminFormSection } from "@/components/admin/AdminFormSection";
 import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { useImagePreview } from "@/hooks/useImagePreview";
 import { uploadImageToCloudinary } from "@/lib/services/image-upload.service";
@@ -129,7 +130,9 @@ export default function CatalogItemForm({ mode, categories, initialCategoryId, i
     }
 
     return (
-        <form className="catalogForm" onSubmit={handleSubmit}>
+        <form className="catalogForm adminEditor" onSubmit={handleSubmit} aria-busy={isSaving}>
+            <div className="adminFormLayout">
+            <AdminFormSection title="Información del insumo" description="Identificá el material y la categoría a la que pertenece.">
             <div className="catalogFormGrid twoColumns">
                 <div className="catalogFormField">
                     <label htmlFor="item-category">Categoría</label>
@@ -160,6 +163,8 @@ export default function CatalogItemForm({ mode, categories, initialCategoryId, i
                 <textarea id="item-description" value={description} onChange={(event) => setDescription(event.target.value)} rows={3} placeholder="Detalle breve del insumo" />
             </div>
 
+            </AdminFormSection>
+            <AdminFormSection title="Imagen del insumo" description="Una referencia visual para reconocerlo al diseñar." kind="images">
             <div className="catalogFormField">
                 <label htmlFor="item-image">Imagen</label>
                 <div
@@ -195,7 +200,9 @@ export default function CatalogItemForm({ mode, categories, initialCategoryId, i
                 ) : null}
             </div>
 
+            </AdminFormSection>
             {selectedCategory?.attributes.length ? (
+                <AdminFormSection title={`Propiedades de ${selectedCategory.name}`} description="Completá las características de este material." kind="options" wide>
                 <section className="dynamicAttributes">
                     <div>
                         <h2>Atributos de {selectedCategory.name}</h2>
@@ -242,16 +249,22 @@ export default function CatalogItemForm({ mode, categories, initialCategoryId, i
                         ))}
                     </div>
                 </section>
+                </AdminFormSection>
             ) : null}
 
+            <div className="adminFormVisibility">
             <label className="catalogToggle">
                 <input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} />
                 <span>Disponible para usar en el simulador</span>
             </label>
+            </div>
 
-            {error ? <p className="catalogFormError">{error}</p> : null}
+            </div>
+
+            {error ? <p className="catalogFormError" role="alert">{error}</p> : null}
 
             <div className="catalogFormActions">
+                <span className="adminFormSaveHint">Los cambios se aplican al guardar.</span>
                 <SmoothRouteLink href="/admin/catalog-items" className="catalogButton secondary">Cancelar</SmoothRouteLink>
                 <button type="submit" className="catalogButton primary" disabled={isSaving || isUploading}>
                     {isUploading ? "Subiendo imagen..." : isSaving ? "Guardando..." : mode === "edit" ? "Guardar cambios" : "Crear insumo"}

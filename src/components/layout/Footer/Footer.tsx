@@ -50,7 +50,7 @@ export default function Footer() {
             <Image src="/soHamDesignLogo.png" alt="Logo de So Ham Design" width={56} height={56} className="footerLogo" />
             <div>
               <span className="footerEyebrow">Piedras naturales</span>
-              <h2 className="footerTitle">So Ham Design</h2>
+              <h2 className="footerTitle">So Ham Design by Pato</h2>
             </div>
           </div>
           <p className="footerBrandText">Joyas artesanales creadas con intención, energía y una historia propia.</p>
@@ -86,7 +86,7 @@ export default function Footer() {
       </div>
       <div className='footerContentFooter'>
         <p className='city'>Mar del Plata, Argentina</p>
-        <p className="copyright">© <span suppressHydrationWarning>{new Date().getFullYear()}</span> So Ham Design. Hecho con intención.</p>
+        <p className="copyright">© <span suppressHydrationWarning>{new Date().getFullYear()}</span> So Ham Design by Pato. Hecho con intención.</p>
         <p className='creator'>Diseñado por Ignacio Tosini</p>
       </div>
     </footer>

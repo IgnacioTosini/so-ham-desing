@@ -1,12 +1,12 @@
 "use client";
 
-import { ChangeEvent, DragEvent, FormEvent, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
+import { AdminFormSection } from "@/components/admin/AdminFormSection";
 import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { useRouter } from "next/navigation";
 import { createProduct, updateProduct } from "@/actions/product.action";
 import { uploadImageToCloudinary } from "@/lib/services/image-upload.service";
-import { useImagePreview } from "@/hooks/useImagePreview";
-import Image from "next/image";
+import ProductImages, { type ProductPhoto } from "./ProductImages";
 import { toast } from "react-toastify";
 import "./_productForm.scss";
 
@@ -17,6 +17,7 @@ interface ProductFormInitialData {
     name: string;
     description: string | null;
     imageUrl: string;
+    images?: Array<{ image: { url: string; order: number } }>;
     price: number;
     type: string;
     catalogItems?: Array<{ id: string; name: string }>;
@@ -48,26 +49,12 @@ export default function ProductForm({ mode, initialData, availableCatalogItems =
     const [error, setError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [isEditingPhoto, setIsEditingPhoto] = useState(false);
 
-    const imagePreviewHook = useImagePreview({
-        initialImageUrl: initialData?.imageUrl,
-        onError: setError,
+    const [photos, setPhotos] = useState<ProductPhoto[]>(() => {
+        const urls = [initialData?.imageUrl, ...(initialData?.images ?? []).slice().sort((a, b) => a.image.order - b.image.order).map(({ image }) => image.url)];
+        return Array.from(new Set(urls.filter((url): url is string => Boolean(url)))).map((url, index) => ({ id: `existing-${index}`, url }));
     });
-
-    const {
-        imageUrl,
-        imagePreview,
-        selectedImageFile,
-        isDragActive,
-        fileInputRef,
-        handleDragOver,
-        handleDragLeave,
-        handleDrop,
-        handleInputFileChange,
-        clickFileInput,
-        clearImage,
-        resetToInitial,
-    } = imagePreviewHook;
 
     const submitLabel = useMemo(() => {
         return mode === "create" ? "Crear producto" : "Guardar cambios";
@@ -89,22 +76,6 @@ export default function ProductForm({ mode, initialData, availableCatalogItems =
         return Array.from(groups.values());
     }, [availableCatalogItems]);
 
-    const handleDragOverWrapper = (event: DragEvent<HTMLDivElement>) => {
-        handleDragOver(event);
-    };
-
-    const handleDragLeaveWrapper = () => {
-        handleDragLeave();
-    };
-
-    const handleDropWrapper = (event: DragEvent<HTMLDivElement>) => {
-        handleDrop(event);
-    };
-
-    const handleInputFileChangeWrapper = (event: ChangeEvent<HTMLInputElement>) => {
-        handleInputFileChange(event);
-    };
-
     const toggleCatalogItem = (itemId: string) => {
         const newSelection = new Set(selectedCatalogItemIds);
         if (newSelection.has(itemId)) {
@@ -117,6 +88,7 @@ export default function ProductForm({ mode, initialData, availableCatalogItems =
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        if (isSaving || isEditingPhoto) return;
         setError(null);
         setIsSaving(true);
 
@@ -129,22 +101,22 @@ export default function ProductForm({ mode, initialData, availableCatalogItems =
                 throw new Error("El precio debe ser mayor a cero");
             }
 
-            if (mode === "create" && !imageUrl && !selectedImageFile) {
-                throw new Error("La imagen es obligatoria");
+            if (!photos.length) throw new Error("Agregá al menos una foto del producto.");
+            setIsUploading(true);
+            const uploadedPhotos: ProductPhoto[] = [];
+            for (const photo of photos) {
+                const uploaded = photo.file ? { id: photo.id, url: await uploadImageToCloudinary(photo.file) } : photo;
+                uploadedPhotos.push(uploaded);
+                setPhotos(current => current.map(item => item.id === photo.id ? uploaded : item));
             }
-
-            let finalImageUrl = imageUrl;
-            if (selectedImageFile) {
-                setIsUploading(true);
-                finalImageUrl = await uploadImageToCloudinary(selectedImageFile);
-                setIsUploading(false);
-            }
+            setIsUploading(false);
 
             const payload = {
                 name: name.trim(),
                 description: description.trim() || null,
                 price: Number(price),
-                imageUrl: finalImageUrl,
+                imageUrl: uploadedPhotos[0].url,
+                images: uploadedPhotos.map((photo, order) => ({ url: photo.url, alt: `${name.trim()} - foto ${order + 1}`, order })),
                 type: type as "BRACELET" | "NECKLACE",
                 catalogItemIds: Array.from(selectedCatalogItemIds),
             };
@@ -175,7 +147,9 @@ export default function ProductForm({ mode, initialData, availableCatalogItems =
     };
 
     return (
-        <form className="productForm" onSubmit={handleSubmit}>
+        <form className="productForm adminEditor" onSubmit={handleSubmit} aria-busy={isSaving}>
+            <div className="adminFormLayout">
+            <AdminFormSection title="Información del producto" description="Los detalles que van a ver en tu tienda.">
             <div className="productFormField">
                 <label htmlFor="product-name">Nombre</label>
                 <input
@@ -183,6 +157,7 @@ export default function ProductForm({ mode, initialData, availableCatalogItems =
                     type="text"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
+                    maxLength={80}
                     placeholder="Ej: Pulsera Claridad"
                     required
                 />
@@ -195,10 +170,14 @@ export default function ProductForm({ mode, initialData, availableCatalogItems =
                     value={description}
                     onChange={(event) => setDescription(event.target.value)}
                     placeholder="Descripción del producto (opcional)"
-                    rows={4}
+                    rows={6}
+                    maxLength={500}
+                    aria-describedby="product-description-count"
                 />
+                <small id="product-description-count" className="adminFormCounter">{description.length} / 500 caracteres</small>
             </div>
 
+            <div className="adminFormFieldPair">
             <div className="productFormField">
                 <label htmlFor="product-price">Precio (ARS)</label>
                 <input
@@ -225,64 +204,18 @@ export default function ProductForm({ mode, initialData, availableCatalogItems =
                 </select>
             </div>
 
-            <div className="productFormField">
-                <label htmlFor="product-image-file">Imagen</label>
-                <div
-                    className={`productDropzone ${isDragActive ? "active" : ""}`}
-                    onDrop={handleDropWrapper}
-                    onDragOver={handleDragOverWrapper}
-                    onDragLeave={handleDragLeaveWrapper}
-                    onClick={() => clickFileInput()}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(event) => {
-                        if (event.key === "Enter" || event.key === " ") {
-                            event.preventDefault();
-                            clickFileInput();
-                        }
-                    }}
-                >
-                    <input
-                        id="product-image-file"
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        className="productFileInput"
-                        onChange={handleInputFileChangeWrapper}
-                    />
-                    {imagePreview ? (
-                        <Image src={imagePreview} alt="Vista previa del producto" className="productDropzonePreview" width={250} height={250} />
-                    ) : (
-                        <p>Arrastra una imagen aqui o haz clic para seleccionarla</p>
-                    )}
-                    {isUploading ? <p className="productDropzoneUploading">Subiendo imagen...</p> : null}
-                </div>
-                <small>
-                    {mode === "edit"
-                        ? "Si no cargas una nueva imagen, se mantiene la actual. La nueva se sube al guardar."
-                        : "Selecciona una imagen. Se sube a Cloudinary al crear el producto."}
-                </small>
-                {imagePreview ? (
-                    <button
-                        type="button"
-                        className="productClearImageButton"
-                        onClick={() => {
-                            if (mode === "edit") {
-                                resetToInitial(initialData?.imageUrl ?? "");
-                            } else {
-                                clearImage();
-                            }
-                        }}
-                    >
-                        Quitar imagen
-                    </button>
-                ) : null}
             </div>
+            </AdminFormSection>
+            <AdminFormSection title="Fotos y portada" description="Mostrá tu pieza desde todos sus ángulos." kind="images">
+            <ProductImages photos={photos} onChange={setPhotos} disabled={isSaving} onError={setError} onEditingChange={setIsEditingPhoto} />
+            {isEditingPhoto && <p>Aplicá o cancelá el encuadre antes de guardar el producto.</p>}
+
+            </AdminFormSection>
 
             {catalogGroups.length > 0 && (
+                <AdminFormSection title="Composición de la pieza" description="Elegí los materiales que usaste en este diseño." kind="options" wide>
                 <div className="productFormField">
-                    <label>Insumos que componen la pieza</label>
-                    <small>Selecciona los materiales utilizados. Están ordenados por categoría.</small>
+                    <small>{selectedCatalogItemIds.size} insumos seleccionados</small>
                     <div className="catalogSelectionGroups">
                         {catalogGroups.map((group) => {
                             const selectedCount = group.items.filter((item) => selectedCatalogItemIds.has(item.id)).length;
@@ -314,16 +247,20 @@ export default function ProductForm({ mode, initialData, availableCatalogItems =
                         })}
                     </div>
                 </div>
+                </AdminFormSection>
             )}
 
-            {error ? <p className="productFormError">{error}</p> : null}
+            </div>
+
+            {error ? <p className="productFormError" role="alert">{error}</p> : null}
 
             <div className="productFormActions">
+                <span className="adminFormSaveHint">Los cambios se aplican al guardar.</span>
                 <SmoothRouteLink href="/admin/products" className="productFormButton secondary">
                     Cancelar
                 </SmoothRouteLink>
-                <button type="submit" className="productFormButton primary" disabled={isSaving || isUploading}>
-                    {isUploading ? "Subiendo imagen..." : isSaving ? "Guardando..." : submitLabel}
+                <button type="submit" className="productFormButton primary" disabled={isSaving || isUploading || isEditingPhoto}>
+                    {isUploading ? "Subiendo fotos..." : isSaving ? "Guardando..." : submitLabel}
                 </button>
             </div>
         </form>

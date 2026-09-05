@@ -328,7 +328,10 @@ export async function deleteProduct(id: string) {
             PRODUCT_TRANSACTION_OPTIONS
         );
 
-        const cloudinaryUrlsToDelete = new Set(orphanImages.map((image) => image.url));
+        const cloudinaryUrlsToDelete = new Set<string>();
+        for (const url of new Set(orphanImages.map((image) => image.url))) {
+            if (!(await isMainImageUrlReferenced(url))) cloudinaryUrlsToDelete.add(url);
+        }
         const stillReferencedMainImage = await isMainImageUrlReferenced(product.imageUrl, id);
         if (product.imageUrl && !stillReferencedMainImage) {
             cloudinaryUrlsToDelete.add(product.imageUrl);
@@ -467,7 +470,11 @@ export async function updateProduct(id: string, input: CreateProductInput) {
         );
 
         if (orphanImages.length > 0) {
-            await deleteProjectImagesFromCloudinary(orphanImages.map((image) => image.url));
+            const unusedUrls: string[] = [];
+            for (const url of new Set(orphanImages.map((image) => image.url))) {
+                if (!(await isMainImageUrlReferenced(url))) unusedUrls.push(url);
+            }
+            await deleteProjectImagesFromCloudinary(unusedUrls);
         }
 
         if (previousProduct.imageUrl !== product.imageUrl) {

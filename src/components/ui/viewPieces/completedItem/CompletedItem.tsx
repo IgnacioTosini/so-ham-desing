@@ -56,7 +56,7 @@ export const CompletedItem = ({ item }: Props) => {
             <h3>{item.name}</h3>
             <p className='viewPiecesItemDescription'>{item.description}</p>
           </div>
-          <p className='viewPiecesItemPrice'>${item.price}</p>
+          <p className='viewPiecesItemPrice'>${item.price.toLocaleString("es-AR")}</p>
         </div>
         <Link
           href={productHref}

@@ -22,13 +22,13 @@
 
         .productListContainer {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            justify-items: center;
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 245px), 1fr));
+            justify-items: stretch;
             align-items: stretch;
             gap: 1.5rem;
             width: 100%;
 
-            @media (max-width: 768px) {
+            @media (max-width: 560px) {
                 grid-template-columns: 1fr;
             }
         }

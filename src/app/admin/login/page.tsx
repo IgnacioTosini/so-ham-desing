@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { hasAdminSession } from "@/lib/adminAuth";
+import Link from "next/link";
+import { IoArrowBack, IoLockClosedOutline } from "react-icons/io5";
+import AdminLoginForm from "./AdminLoginForm";
 import "./_adminLogin.scss";
 
 export const metadata: Metadata = {
@@ -26,21 +29,21 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
 
     return (
         <div className="adminLoginPage">
+            <Link href="/" className="adminLoginBack"><IoArrowBack /> Volver a la tienda</Link>
+            <div className="adminLoginLayout">
+            <section className="adminLoginBrand">
+                <span className="adminLoginWordmark">so ham<span>DESIGN</span></span>
+                <div className="adminLoginBrandMessage"><span>EL ESPACIO DETRÁS DE CADA PIEZA</span><h2>Crear con intención.<br />Cuidar cada detalle.</h2><p>Tu colección, tus materiales y tus diseños, en un mismo lugar.</p></div>
+                <span className="adminLoginBrandFooter">Piezas únicas · Hechas a mano</span>
+            </section>
             <div className="adminLoginCard">
-                <h1>Acceso Admin</h1>
-                <p>Ingresa tu contraseña para administrar piedras y productos.</p>
-
-                {error === "invalid" ? <p className="adminLoginError">Contraseña incorrecta.</p> : null}
-                {error === "config" ? (
-                    <p className="adminLoginError">Falta configurar ADMIN_PASSWORD o ADMIN_SESSION_TOKEN.</p>
-                ) : null}
-
-                <form action="/api/admin/login" method="post">
-                    <input type="hidden" name="next" value={next} />
-                    <label htmlFor="password">Contraseña</label>
-                    <input id="password" name="password" type="password" required autoComplete="current-password" />
-                    <button type="submit">Entrar</button>
-                </form>
+                <span className="adminLoginIcon"><IoLockClosedOutline /></span>
+                <span className="adminLoginEyebrow">ADMINISTRACIÓN</span>
+                <h1>Bienvenida a tu espacio.</h1>
+                <p>Ingresá para seguir dando forma a tu colección.</p>
+                <AdminLoginForm next={next} error={error} />
+                <small className="adminLoginFootnote"><IoLockClosedOutline /> Acceso exclusivo para administración</small>
+            </div>
             </div>
         </div>
     );
