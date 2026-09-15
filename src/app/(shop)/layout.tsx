@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
-import { ToastContainer } from "react-toastify";
+import ProjectToasts from "@/components/ui/toast/ProjectToasts";
 import { Analytics } from "@vercel/analytics/next";
 import { getSiteUrl } from "@/utils/siteUrl";
-import 'react-toastify/dist/ReactToastify.css';
 
 const metadataBaseUrl = getSiteUrl();
 const ogImageUrl = "/soHamDesign.png?v=2";
@@ -70,7 +69,7 @@ export default function ShopLayout({
     <>
       <Navbar />
       {children}
-      <ToastContainer position="top-right" autoClose={2500} />
+      <ProjectToasts />
       <Analytics />
       <Footer />
     </>

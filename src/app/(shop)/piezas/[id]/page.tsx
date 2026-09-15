@@ -1,10 +1,12 @@
+import { cache, Suspense } from "react";
+import Link from "next/link";
 import type { Metadata } from "next";
 import Image from "next/image";
 import ProductGallery from "@/components/productGallery/ProductGallery";
 import { notFound } from "next/navigation";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { IoLogoWhatsapp } from "react-icons/io";
-import { getProductById, getProducts } from "@/actions/product.action";
+import { getProductById, getRelatedProducts } from "@/actions/product.action";
 import { BraceletSizeGuide } from "@/components/ui/braceletSizeGuide/BraceletSizeGuide";
 import { SmoothRouteLink } from "@/components/ui/SmoothRouteLink";
 import { buildWhatsappMessageCompletePiece } from "@/utils";
@@ -15,6 +17,8 @@ import "./_pieceDetail.scss";
 interface PieceDetailPageProps {
     params: Promise<{ id: string }>;
 }
+
+const getProduct = cache(getProductById);
 
 const getTypeLabel = (type: string) => (type === "NECKLACE" ? "Collar" : "Pulsera");
 const getTypePluralLabel = (type: string) => (type === "NECKLACE" ? "collares" : "pulseras");
@@ -40,7 +44,7 @@ const formatAttributeValue = (attribute: { type: string; unit: string | null; va
 
 export async function generateMetadata({ params }: PieceDetailPageProps): Promise<Metadata> {
     const { id } = await params;
-    const product = await getProductById(id);
+    const product = await getProduct(id);
 
     if (!product) {
         return {
@@ -73,7 +77,7 @@ export async function generateMetadata({ params }: PieceDetailPageProps): Promis
 
 export default async function PieceDetailPage({ params }: PieceDetailPageProps) {
     const { id } = await params;
-    const product = await getProductById(id);
+    const product = await getProduct(id);
 
     if (!product) notFound();
 
@@ -122,9 +126,7 @@ export default async function PieceDetailPage({ params }: PieceDetailPageProps) 
             .sort((a, b) => a.image.order - b.image.order)
             .map(({ image }) => image.url),
     ]);
-    const relatedProducts = (await getProducts())
-        .filter((relatedProduct) => relatedProduct.id !== product.id && relatedProduct.type === product.type)
-        .slice(0, 3);
+
 
     return (
         <main className="pieceDetail">
@@ -233,24 +235,33 @@ export default async function PieceDetailPage({ params }: PieceDetailPageProps) 
                 )}
             </section>
 
+            <Suspense fallback={null}>
+                <RelatedProducts id={product.id} type={product.type} />
+            </Suspense>
+        </main>
+    );
+}
+
+async function RelatedProducts({ id, type }: { id: string; type: "BRACELET" | "NECKLACE" }) {
+    const relatedProducts = await getRelatedProducts(id, type);
+    return <>
             {relatedProducts.length > 0 && (
                 <section className="pieceDetailSection relatedPieces">
                     <div className="pieceDetailSectionHeader">
                         <p>También puede resonar con vos</p>
-                        <h2>Más {getTypePluralLabel(product.type)}</h2>
+                        <h2>Más {getTypePluralLabel(type)}</h2>
                     </div>
                     <div className="relatedPiecesGrid">
                         {relatedProducts.map((relatedProduct) => (
-                            <SmoothRouteLink href={`/piezas/${relatedProduct.id}`} key={relatedProduct.id} className="relatedPieceCard">
+                            <Link href={`/piezas/${relatedProduct.id}`} key={relatedProduct.id} className="relatedPieceCard">
                                 <Image src={relatedProduct.imageUrl} alt={relatedProduct.name} width={260} height={260} />
                                 <span>{relatedProduct.name}</span>
                                 <p>{formatPrice(relatedProduct.price)}</p>
                                 <FaArrowRightLong />
-                            </SmoothRouteLink>
+                            </Link>
                         ))}
                     </div>
                 </section>
             )}
-        </main>
-    );
+    </>;
 }

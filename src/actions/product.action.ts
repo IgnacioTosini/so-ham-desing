@@ -197,6 +197,15 @@ export async function getProducts() {
     }
 }
 
+export async function getRelatedProducts(id: string, type: AccessoryType) {
+    return prisma.product.findMany({
+        where: { id: { not: id }, type },
+        orderBy: { createdAt: "desc" },
+        take: 3,
+        select: { id: true, name: true, imageUrl: true, price: true },
+    });
+}
+
 export async function getProductById(id: string) {
     try {
         const product = await prisma.product.findUnique({

@@ -1,5 +1,8 @@
 @use '@/styles/variables' as *;
 
+.pieceDetailLoadingImage { aspect-ratio: 4 / 5; border-radius: $radius-xl; background: rgba($color-text-tertiary, .12); }
+.pieceDetailLoadingText { height: 12rem; margin-top: 1.5rem; border-radius: $radius-xl; background: rgba($color-text-tertiary, .08); }
+
 .pieceDetail {
     min-height: 100dvh;
     padding: clamp(6.5rem, 11vw, 8rem) 1rem clamp(4rem, 8vw, 7rem);

@@ -25,6 +25,7 @@ import ProductGallery from "@/components/productGallery/ProductGallery";
 import AdminLoginForm from "@/app/admin/login/AdminLoginForm";
 
 beforeEach(() => {
+    vi.stubGlobal("ResizeObserver", class { observe() {} disconnect() {} unobserve() {} });
     vi.clearAllMocks(); mocks.save.mockResolvedValue({}); mocks.create.mockResolvedValue({}); mocks.upload.mockResolvedValue("https://img.test/new.jpg");
     URL.createObjectURL = vi.fn(() => "blob:test-photo"); URL.revokeObjectURL = vi.fn();
     HTMLDialogElement.prototype.showModal = function () { this.setAttribute("open", ""); };
@@ -141,6 +142,59 @@ describe("other model editors", () => {
 });
 
 describe("gallery and login interactions", () => {
+    it("keeps the center for buttons and the cursor position for wheel zoom", async () => {
+        const user = userEvent.setup();
+        render(<ProductGallery images={["/a.jpg"]} name="Sunset" />);
+        await user.click(screen.getByRole("button", { name: /Ampliar foto/ }));
+        const modal = within(screen.getByRole("dialog"));
+        const viewport = modal.getByRole("region");
+        Object.defineProperties(viewport, { clientWidth: { value: 400 }, clientHeight: { value: 500 } });
+        await user.click(modal.getByRole("button", { name: "Aumentar zoom" }));
+        expect(viewport.scrollLeft).toBe(100);
+        expect(viewport.scrollTop).toBe(125);
+        await user.click(modal.getByRole("button", { name: "Restablecer zoom" }));
+        expect(viewport.scrollLeft).toBe(0);
+        expect(viewport.scrollTop).toBe(0);
+        fireEvent.wheel(viewport, { deltaY: -100, clientX: 100, clientY: 200 });
+        expect(viewport.scrollLeft).toBeCloseTo(20);
+        expect(viewport.scrollTop).toBeCloseTo(40);
+    });
+    it("zooms with the wheel without scrolling the page and stays within the zoom limits", async () => {
+        const user = userEvent.setup();
+        render(<ProductGallery images={["/a.jpg"]} name="Sunset" />);
+        await user.click(screen.getByRole("button", { name: /Ampliar foto/ }));
+        const modal = within(screen.getByRole("dialog"));
+        const viewport = modal.getByRole("region");
+        expect(fireEvent.wheel(viewport, { deltaY: -100, cancelable: true })).toBe(false);
+        expect(modal.getByText("120%")).toBeInTheDocument();
+        fireEvent.wheel(viewport, { deltaY: 100 });
+        expect(modal.getByText("100%")).toBeInTheDocument();
+        for (let i = 0; i < 20; i++) fireEvent.wheel(viewport, { deltaY: -1000 });
+        expect(modal.getByText("300%")).toBeInTheDocument();
+        for (let i = 0; i < 20; i++) fireEvent.wheel(viewport, { deltaY: 1000 });
+        expect(modal.getByText("100%")).toBeInTheDocument();
+    });
+    it("zooms within the modal, resets on photo changes and keeps touch panning on the same photo", async () => {
+        const user = userEvent.setup();
+        render(<ProductGallery images={["/a.jpg", "/b.jpg"]} name="Sunset" />);
+        await user.click(screen.getByRole("button", { name: /Ampliar foto/ }));
+        const modal = within(screen.getByRole("dialog"));
+        expect(modal.getByRole("button", { name: "Reducir zoom" })).toBeDisabled();
+        await user.click(modal.getByRole("button", { name: "Aumentar zoom" }));
+        expect(modal.getByText("150%")).toBeInTheDocument();
+        const viewport = modal.getByRole("region");
+        fireEvent.touchStart(viewport, { touches: [{ clientX: 200 }] });
+        fireEvent.touchEnd(viewport, { changedTouches: [{ clientX: 20 }] });
+        expect(modal.getByAltText("Sunset, foto 1 ampliada")).toBeInTheDocument();
+        fireEvent.keyDown(viewport, { key: "+" });
+        expect(modal.getByText("200%")).toBeInTheDocument();
+        await user.click(modal.getByRole("button", { name: "Foto siguiente" }));
+        expect(modal.getByText("100%")).toBeInTheDocument();
+        expect(modal.getByAltText("Sunset, foto 2 ampliada")).toBeInTheDocument();
+        await user.click(modal.getByRole("button", { name: "Aumentar zoom" }));
+        await user.click(modal.getByRole("button", { name: "Restablecer zoom" }));
+        expect(modal.getByText("100%")).toBeInTheDocument();
+    });
     it("cycles through photos with arrows, thumbnails and keyboard", async () => {
         const user = userEvent.setup(); render(<ProductGallery images={["/a.jpg", "/b.jpg"]} name="Sunset" />);
         await user.click(screen.getByRole("button", { name: "Foto anterior" }));

@@ -31,7 +31,7 @@ export const Hero = () => {
         <p className='heroDescription'>Pulseras y collares creados uno a uno con piedras y cristales naturales.</p>
         <div className='buttonsContainer'>
           <button className='primaryButton' onClick={() => scrollSection('viewPieces')}>Ver piezas</button>
-          <button className='secondaryButton' onClick={() => scrollSection('createPiece')}>Crear tu pieza</button>
+          <button className='secondaryButton' onClick={() => scrollSection('simulator')}>Crear tu pieza</button>
           <SmoothRouteLink href="/disenos" className="sharedDesignsButton">
             <IoPeopleOutline aria-hidden="true" />
             Diseños compartidos

@@ -1,0 +1,61 @@
+@use '@/styles/variables' as *;
+
+.Toastify__toast-container.project-toasts {
+  --toastify-color-dark: #{$color-primary};
+  --toastify-text-color-dark: #{$color-text-primary};
+  --toastify-color-info: #{$color-text-secondary};
+  --toastify-color-success: #{$color-success};
+  --toastify-color-warning: #{$color-text-tertiary};
+  --toastify-color-error: #{$color-error};
+  --toastify-color-progress-dark: #{$color-text-tertiary};
+  --toastify-font-family: #{$font-family-primary};
+  --toastify-toast-width: 360px;
+  --toastify-toast-bd-radius: #{$radius-xl};
+  --toastify-toast-shadow: 0 8px 24px #{rgba($color-accent, 0.3)};
+  --toastify-spinner-color: #{$color-text-tertiary};
+  --toastify-spinner-color-empty-area: #{$color-tertiary};
+
+  .Toastify__toast {
+    --toast-accent: #{$color-text-tertiary};
+
+    padding: 18px 36px 18px 16px;
+    border: 1px solid $color-tertiary;
+    border-inline-start: 3px solid var(--toast-accent);
+    border-radius: $radius-xl;
+    margin-bottom: 12px;
+    font-size: $font-size-small;
+    font-weight: $font-weight-medium;
+    line-height: 1.5;
+
+    &--success { --toast-accent: #{$color-success}; }
+    &--error { --toast-accent: #{$color-error}; }
+    &--info { --toast-accent: #{$color-text-secondary}; }
+    &--warning { --toast-accent: #{$color-text-tertiary}; }
+  }
+
+  .Toastify__close-button {
+    top: 10px;
+    right: 10px;
+    color: $color-text-secondary;
+    opacity: 1;
+    border-radius: 4px;
+
+    &:hover { color: $color-text-primary; }
+
+    &:focus-visible {
+      outline: 2px solid $color-text-tertiary;
+      outline-offset: 3px;
+    }
+  }
+
+  .Toastify__progress-bar { height: 3px; }
+
+  @media (max-width: 480px) {
+    width: auto;
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+    left: max(12px, env(safe-area-inset-left));
+
+    .Toastify__toast { width: 100%; }
+  }
+}

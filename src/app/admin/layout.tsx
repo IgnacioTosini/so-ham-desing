@@ -1,7 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import AdminShell from "@/components/admin/AdminShell";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import ProjectToasts from "@/components/ui/toast/ProjectToasts";
 
 export default function AdminLayout({
   children,
@@ -11,7 +10,7 @@ export default function AdminLayout({
   return (
     <>
       <AdminShell>{children}</AdminShell>
-      <ToastContainer position="top-right" autoClose={2500} />
+      <ProjectToasts />
       <Analytics />
     </>
   );

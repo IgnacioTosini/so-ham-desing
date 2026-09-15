@@ -8,7 +8,7 @@ vi.mock("@/lib/adminAuth", () => ({ assertAdminSession: mocks.auth }));
 vi.mock("next/cache", () => ({ unstable_cache: (fn: unknown) => fn, revalidatePath: vi.fn(), revalidateTag: vi.fn() }));
 vi.mock("@/lib/services", () => ({ uploadImages: mocks.upload, deleteProjectImagesFromCloudinary: mocks.remove }));
 vi.mock("@/lib/services/cloudinary.service", () => ({ uploadBase64ImageToCloudinary: vi.fn() }));
-import { createProduct, updateProduct, deleteProduct } from "@/actions/product.action";
+import { createProduct, updateProduct, deleteProduct, getRelatedProducts } from "@/actions/product.action";
 import { createStone, updateStone, deleteStone } from "@/actions/stone.action";
 
 const input = { name: " Sunset ", price: 19000, type: "BRACELET" as const, images: [{ url: "https://img.test/a.jpg", order: 0 }, { url: "https://img.test/b.jpg", order: 1 }] };
@@ -24,6 +24,19 @@ beforeEach(() => {
     mocks.db.product.update.mockResolvedValue({ id: "p", imageUrl: input.images[0].url });
     mocks.db.product.create.mockResolvedValue({ id: "new" });
     vi.spyOn(console, "error").mockImplementation(() => {});
+});
+
+describe("related products", () => {
+    it("limits the query to three matching cards without loading their relations", async () => {
+        mocks.db.product.findMany.mockResolvedValue([]);
+        await getRelatedProducts("current", "BRACELET");
+        expect(mocks.db.product.findMany).toHaveBeenCalledWith({
+            where: { id: { not: "current" }, type: "BRACELET" },
+            orderBy: { createdAt: "desc" },
+            take: 3,
+            select: { id: true, name: true, imageUrl: true, price: true },
+        });
+    });
 });
 
 describe("stone persistence", () => {
