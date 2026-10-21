@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: PieceDetailPageProps): Promis
     }
 
     const title = `${product.name} | ${getTypeLabel(product.type)} artesanal`;
-    const description = product.description || `${getTypeLabel(product.type)} artesanal con piedras naturales de So Ham Design.`;
+    const description = product.description || `${getTypeLabel(product.type)} artesanal con piedras naturales de So Ham by Pato.`;
 
     return {
         title,

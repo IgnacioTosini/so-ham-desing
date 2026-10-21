@@ -14,7 +14,7 @@ export default function PreparingWhatsappPage() {
         <main className="preparingWhatsapp">
             <section className="preparingWhatsappCard" aria-live="polite">
                 <span className="preparingWhatsappMonogram" aria-hidden="true">SH</span>
-                <p className="preparingWhatsappEyebrow">SO HAM DESIGN</p>
+                <p className="preparingWhatsappEyebrow">So Ham by Pato</p>
                 <h1>Preparando tu diseño</h1>
                 <p>En un momento vas a continuar en WhatsApp.</p>
                 <span className="preparingWhatsappLoader" aria-hidden="true" />

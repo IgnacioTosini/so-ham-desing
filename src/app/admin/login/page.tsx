@@ -8,7 +8,7 @@ import "./_adminLogin.scss";
 
 export const metadata: Metadata = {
     title: "Login admin",
-    description: "Acceso al área de administración de So Ham Design.",
+    description: "Acceso al área de administración de So Ham by Pato.",
     robots: {
         index: false,
         follow: false,

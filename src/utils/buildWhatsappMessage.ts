@@ -35,7 +35,7 @@ export const buildWhatsappMessagePreview = ({
 }) => {
     const pieceName = piece === "NECKLACE" ? "un collar" : "una pulsera";
     const message = [
-        `¡Hola! Diseñé ${pieceName} en So Ham Design ✨`,
+        `¡Hola! Diseñé ${pieceName} en So Ham by Pato ✨`,
         "",
         "Podés ver mi diseño acá:",
         previewUrl,

@@ -69,9 +69,9 @@ export default async function PreviewByCodePage({ params, searchParams }: Props)
                             <IoArrowBack aria-hidden="true" />
                             {backLabel}
                         </SmoothRouteLink>
-                        <SmoothRouteLink href="/" className="previewBrand" aria-label="Ir al inicio de So Ham Design">
+                        <SmoothRouteLink href="/" className="previewBrand" aria-label="Ir al inicio de So Ham by Pato">
                             <Image src="/soHamDesignLogo.png" alt="" width={40} height={40} />
-                            <span>So Ham Design</span>
+                            <span>So Ham by Pato</span>
                         </SmoothRouteLink>
                     </header>
 
@@ -89,7 +89,7 @@ export default async function PreviewByCodePage({ params, searchParams }: Props)
                             <span className="previewPieceType">{pieceLabel} compartido</span>
                             <h1>{design.name || 'Diseño sin nombre'}</h1>
                             <p className="previewLead">
-                                Una combinación creada componente por componente en el simulador de So Ham Design.
+                                Una combinación creada componente por componente en el simulador de So Ham by Pato.
                             </p>
 
                             <dl className="previewStats">

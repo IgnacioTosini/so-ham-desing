@@ -71,7 +71,7 @@ describe("WhatsApp message builders", () => {
 
         const message = url.searchParams.get("text");
 
-        expect(message).toContain("Diseñé una pulsera en So Ham Design");
+        expect(message).toContain("Diseñé una pulsera en So Ham by Pato");
         expect(message).toContain("https://example.com/preview/abc123");
         expect(message).toContain("Quisiera consultar por este diseño.");
         expect(message).not.toContain("contorno de muñeca");
@@ -84,6 +84,6 @@ describe("WhatsApp message builders", () => {
             previewUrl: "https://example.com/preview/collar123",
         }));
 
-        expect(url.searchParams.get("text")).toContain("Diseñé un collar en So Ham Design");
+        expect(url.searchParams.get("text")).toContain("Diseñé un collar en So Ham by Pato");
     });
 });

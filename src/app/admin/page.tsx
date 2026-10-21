@@ -5,7 +5,7 @@ import "./_admin.scss";
 
 export const metadata: Metadata = {
     title: "Panel de administración",
-    description: "Panel de administración de So Ham Design para gestionar categorías, insumos y productos.",
+    description: "Panel de administración de So Ham by Pato para gestionar categorías, insumos y productos.",
     robots: {
         index: false,
         follow: false,

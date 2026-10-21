@@ -47,10 +47,10 @@ export default function Footer() {
       <div className='footerContent'>
         <div className='footerContentInfoBrand'>
           <div className="footerBrandHeader">
-            <Image src="/soHamDesignLogo.png" alt="Logo de So Ham Design" width={56} height={56} className="footerLogo" />
+            <Image src="/soHamDesignLogo.png" alt="Logo de So Ham by Pato" width={56} height={56} className="footerLogo" />
             <div>
               <span className="footerEyebrow">Piedras naturales</span>
-              <h2 className="footerTitle">So Ham Design by Pato</h2>
+              <h2 className="footerTitle">So Ham by Pato by Pato</h2>
             </div>
           </div>
           <p className="footerBrandText">Joyas artesanales creadas con intención, energía y una historia propia.</p>
@@ -72,13 +72,13 @@ export default function Footer() {
           </a>
 
           <div className='footerContentInfoLinks'>
-            <a href="https://www.instagram.com/soham_design_bypato/" target="_blank" rel="noopener noreferrer" className='instagramLink instagram' aria-label="Instagram de So Ham Design">
+            <a href="https://www.instagram.com/soham_design_bypato/" target="_blank" rel="noopener noreferrer" className='instagramLink instagram' aria-label="Instagram de So Ham by Pato">
               <IoLogoInstagram />
             </a>
-            <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className='whatsappLink whatsapp' aria-label="WhatsApp de So Ham Design">
+            <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className='whatsappLink whatsapp' aria-label="WhatsApp de So Ham by Pato">
               <IoLogoWhatsapp />
             </a>
-            <a href="https://www.tiktok.com/@soham_desingbypato?lang=es-419" target="_blank" rel="noopener noreferrer" className='tiktokLink tiktok' aria-label="TikTok de So Ham Design">
+            <a href="https://www.tiktok.com/@soham_desingbypato?lang=es-419" target="_blank" rel="noopener noreferrer" className='tiktokLink tiktok' aria-label="TikTok de So Ham by Pato">
               <IoLogoTiktok />
             </a>
           </div>
@@ -86,7 +86,7 @@ export default function Footer() {
       </div>
       <div className='footerContentFooter'>
         <p className='city'>Mar del Plata, Argentina</p>
-        <p className="copyright">© <span suppressHydrationWarning>{new Date().getFullYear()}</span> So Ham Design by Pato. Hecho con intención.</p>
+        <p className="copyright">© <span suppressHydrationWarning>{new Date().getFullYear()}</span> So Ham by Pato by Pato. Hecho con intención.</p>
         <p className='creator'>Diseñado por Ignacio Tosini</p>
       </div>
     </footer>

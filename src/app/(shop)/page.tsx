@@ -7,8 +7,8 @@ import { Simulator } from "@/components/sections/simulator/Simulator";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "So Ham Design | Joyas artesanales con piedras naturales",
-  description: "Descubre piezas artesanales y crea tu joya personalizada con piedras naturales en So Ham Design.",
+  title: "So Ham by Pato | Joyas artesanales con piedras naturales",
+  description: "Descubre piezas artesanales y crea tu joya personalizada con piedras naturales en So Ham by Pato.",
   alternates: {
     canonical: "/",
   },

@@ -14,8 +14,8 @@ export function PreviewShareButton({ designName }: Props) {
         // Never expose the admin-only navigation hint in a public link.
         const shareUrl = `${window.location.origin}${window.location.pathname}`;
         const shareData = {
-            title: `${designName} | So Ham Design`,
-            text: `Mirá el diseño ${designName} de So Ham Design.`,
+            title: `${designName} | So Ham by Pato`,
+            text: `Mirá el diseño ${designName} de So Ham by Pato.`,
             url: shareUrl,
         };
 

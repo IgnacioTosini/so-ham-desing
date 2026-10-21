@@ -47,7 +47,7 @@ export default function ProductGallery({ images, name }: { images: string[]; nam
         </button>)}</div>}
         <dialog ref={dialog} className="productGalleryModal" aria-label={`Fotos ampliadas de ${name}`} onCancel={() => setOpen(false)} onClick={event => { if (event.target === event.currentTarget) setOpen(false); }}>
             {open && <div className="productGalleryModalContent">
-                <div className="productGalleryModalHeader"><div><span>SO HAM DESIGN</span><p>{name}</p></div><button type="button" className="productGalleryClose" autoFocus onClick={() => setOpen(false)} aria-label="Cerrar fotos ampliadas"><IoClose /><span>Cerrar</span></button></div>
+                <div className="productGalleryModalHeader"><div><span>So Ham by Pato</span><p>{name}</p></div><button type="button" className="productGalleryClose" autoFocus onClick={() => setOpen(false)} aria-label="Cerrar fotos ampliadas"><IoClose /><span>Cerrar</span></button></div>
                 <ZoomableImage key={images[active]} src={images[active]} alt={`${name}, foto ${active + 1} ampliada`} />
                 {controls}
             </div>}

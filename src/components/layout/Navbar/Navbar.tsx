@@ -128,7 +128,7 @@ export default function Navbar() {
                 <SmoothRouteLink href="/" className="navbarBrand" onClick={handleHomeNavigation} aria-label="Ir al inicio">
                     <Image src="/soHamDesignLogo.png" alt="" width={38} height={38} className="navbarLogo" priority />
                     <span className="navbarBrandText">
-                        <span className="navbarTitle">So Ham Design</span>
+                        <span className="navbarTitle">So Ham by Pato</span>
                         <span className="navbarSubtitle">Piedras naturales</span>
                     </span>
                 </SmoothRouteLink>

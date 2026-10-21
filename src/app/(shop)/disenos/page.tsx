@@ -9,7 +9,7 @@ import './_sharedDesignsPage.scss';
 
 export const metadata: Metadata = {
     title: 'Diseños compartidos',
-    description: 'Explora pulseras y collares creados por la comunidad de So Ham Design.',
+    description: 'Explora pulseras y collares creados por la comunidad de So Ham by Pato.',
     alternates: {
         canonical: '/disenos',
     },
