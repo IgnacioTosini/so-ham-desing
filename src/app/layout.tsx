@@ -9,7 +9,7 @@ const ogImageUrl = "/soHamDesign.png?v=2";
 export const metadata: Metadata = {
   metadataBase: new URL(metadataBaseUrl),
   title: {
-    default: "So Ham by Pato | Joyas artesanales con piedras naturales",
+    default: "So Ham So Ham by Pato | Joyas artesanales con piedras naturales",
     template: "%s | So Ham by Pato",
   },
   description: "Diseño de joyas artesanales con piedras naturales. Crea tu pieza personalizada y descubre colecciones con intención.",
